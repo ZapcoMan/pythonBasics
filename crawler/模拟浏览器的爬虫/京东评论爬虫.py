@@ -121,4 +121,4 @@ while current_page < max_pages:
 with open('all_comments.json', 'w', encoding='utf-8') as f:
     json.dump(all_comments, f, ensure_ascii=False, indent=4)
 
-print("所有评论已保存到 all_comments.json 文件中")
+print("所有评论已保存到 京东评论区.json 文件中")
