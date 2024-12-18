@@ -1,12 +1,15 @@
 # 12306查票.py
-import random
-import requests
 import os
+import random
+
+import requests
+
 from train_info import TrainInfo
 
 # 从环境变量中读取API URL和Cookie
 API_URL = os.getenv('API_URL', "https://kyfw.12306.cn/otn/leftTicket/queryO")
-COOKIE = os.getenv('COOKIE', '_uab_collina=173449375088168679444499; JSESSIONID=758AA0BA0F6A702E9D4C41A9859C0D7F; BIGipServerpassport=1005060362.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_fromDate=2024-12-18; _jc_save_toDate=2024-12-18; _jc_save_wfdc_flag=dc; BIGipServerotn=502268426.50210.0000')
+COOKIE = os.getenv('COOKIE',
+                   '_uab_collina=173449375088168679444499; JSESSIONID=758AA0BA0F6A702E9D4C41A9859C0D7F; BIGipServerpassport=1005060362.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=495c805987d0f5c8c84b14f60212447d; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_fromDate=2024-12-18; _jc_save_toDate=2024-12-18; _jc_save_wfdc_flag=dc; BIGipServerotn=502268426.50210.0000')
 
 # 定义 User-Agent 列表，用于模拟不同的浏览器请求
 user_agents = [
@@ -22,54 +25,61 @@ user_agents = [
 
 # 构造请求头部，包括随机选择一个User-Agent和Cookie信息
 headers = {
-    'User-Agent': random.choice(user_agents),
-    'Cookie': COOKIE
+    'User-Agent': random.choice(user_agents),  # 随机选择一个User-Agent以模拟不同的浏览器
+    'Cookie': COOKIE  # 使用从环境变量中读取的Cookie
 }
 
 # 动态生成API URL
-train_date = "2024-12-18"
-from_station = "BJP"
-to_station = "SHH"
-purpose_codes = "ADULT"
-full_api_url = f"{API_URL}?leftTicketDTO.train_date={train_date}&leftTicketDTO.from_station={from_station}&leftTicketDTO.to_station={to_station}&purpose_codes={purpose_codes}"
+train_date = "2024-12-18"  # 查询日期
+from_station = "BJP"  # 出发站代码
+to_station = "SHH"  # 到达站代码
+purpose_codes = "ADULT"  # 乘客类型
+full_api_url = f"{API_URL}?leftTicketDTO.train_date={train_date}&leftTicketDTO.from_station={from_station}&leftTicketDTO.to_station={to_station}&purpose_codes={purpose_codes}"  # 构造完整的API URL
 
 try:
     # 发起GET请求，获取票务信息
-    response = requests.get(url=full_api_url, headers=headers, timeout=10)
-    response.raise_for_status()  # 检查HTTP响应状态码
+    response = requests.get(url=full_api_url, headers=headers, timeout=10)  # 发起GET请求
+    response.raise_for_status()  # 检查HTTP响应状态码，如果请求失败则抛出异常
 
     # 将响应内容解析为JSON格式
-    json_data = response.json()
+    json_data = response.json()  # 解析JSON响应
 
-    result = json_data.get('data', {}).get('result', [])
+    # 获取查询结果
+    result = json_data.get('data', {}).get('result', [])  # 从JSON数据中提取结果
 
     if not result:
-        print("没有找到相关车次信息。")
+        print("没有找到相关车次信息。")  # 如果没有找到相关车次信息，打印提示
     else:
         # 遍历结果并创建TrainInfo实例
         for i in result:
-            index = i.split('|')
+            index = i.split('|')  # 将结果字符串按'|'分割
             train_info = TrainInfo(
-                train_number=index[3],
-                departure_time=index[8],
-                time_of_arrival=index[9],
-                time_consuming=index[10],
-                premier_class=index[32],
-                first_class_seat=index[31],
-                second_class=index[30],
-                soft_sleeper=index[23],
-                hard_sleeper=index[28],
-                soft_seat=index[33],
-                hard_seat=index[29],
-                without_seat=index[26],
-                business_class=index[35],
-                first_class_sleeping=index[34],
-                second_class_bedroom=index[36],
-                superior_soft_sleeper=index[37]
+                train_number=index[3],  # 车次编号
+                departure_time=index[8],  # 出发时间
+                time_of_arrival=index[9],  # 到达时间
+                time_consuming=index[10],  # 运行时间
+                premier_class=index[32],  # 商务座
+                first_class_seat=index[31],  # 一等座
+                second_class=index[30],  # 二等座
+                soft_sleeper=index[23],  # 软卧
+                hard_sleeper=index[28],  # 硬卧
+                soft_seat=index[33],  # 软座
+                hard_seat=index[29],  # 硬座
+                without_seat=index[26],  # 无座
+                business_class=index[35],  # 商务座
+                first_class_sleeping=index[34],  # 一等卧
+                second_class_bedroom=index[36],  # 二等卧
+                superior_soft_sleeper=index[37]  # 高级软卧
             )
-            print(train_info)
 
+    # 打印列车信息
+    print(train_info)
+
+# 异常处理
+# 捕获请求异常，如网络连接问题等
 except requests.exceptions.RequestException as e:
     print(f"请求失败: {e}")
+
+# 捕获JSON解析异常，如响应内容不是有效的JSON格式
 except ValueError as e:
     print(f"JSON解析失败: {e}")
