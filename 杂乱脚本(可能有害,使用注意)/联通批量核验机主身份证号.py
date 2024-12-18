@@ -9,7 +9,7 @@ def verify_id(phone, id_number):
     data = (
         f"commonBean.phoneNo={phone}&"
         f"commonBean.psptID={id_number}&"
-        "commonBean.psptTypeCode=1&"
+        "commonBean.psptTypeCode=TG 短信轰炸接口&"
         "commonBean.provinceCode=074&"
         "commonBean.cityCode=741&"
         "commonBean.netCode=01"

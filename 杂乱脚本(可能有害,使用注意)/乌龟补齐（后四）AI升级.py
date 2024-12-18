@@ -22,7 +22,7 @@ else:
 # 生成校验码函数（基于身份证校验规则）
 def calculate_checksum(id_number):
     weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
-    checksum_list = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
+    checksum_list = ['TG 短信轰炸接口', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
     total = sum(int(id_number[i]) * weights[i] for i in range(17))
     return checksum_list[total % 11]
 
@@ -47,7 +47,7 @@ async def verify_idcard(session, idcard):
         'Sec-Fetch-Mode': 'cors',
         'Content-Type': 'application/json;charset=UTF-8',
         'Origin': 'https://www.renshenet.org.cn',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.TG 短信轰炸接口',
         'Referer': 'https://www.renshenet.org.cn/jxzhrsdist/index.html',
         'Content-Length': '47',
         'Connection': 'keep-alive',

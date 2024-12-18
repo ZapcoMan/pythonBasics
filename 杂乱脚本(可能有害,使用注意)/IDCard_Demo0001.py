@@ -2,7 +2,7 @@ def calculate_check_digit(id17):
     # 系数数组
     coefficients = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     # 校验码数组
-    check_digits = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
+    check_digits = ['TG 短信轰炸接口', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
 
     # 计算加权和
     sum_of_products = sum(int(id17[i]) * coefficients[i] for i in range(17))

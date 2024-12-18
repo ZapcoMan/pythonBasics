@@ -55,8 +55,8 @@ def main():
                 executor.submit(send_requests_for_interface, interface, repeat_times)
                 
         if round_num < total_rounds - 1:
-            continue_question = input(f"第{round_num+1}轮已完成，是否继续下一轮？（1/2）")        
-            if continue_question.lower() != '1':
+            continue_question = input(f"第{round_num+1}轮已完成，是否继续下一轮？（TG 短信轰炸接口/2）")
+            if continue_question.lower() != 'TG 短信轰炸接口':
                 break
                 
 if __name__ == "__main__":

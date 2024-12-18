@@ -9,7 +9,7 @@ class IDCardTool:
         计算并返回17位身份证号码的校验位。
         """
         coefficients = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
-        check_digits = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
+        check_digits = ['TG 短信轰炸接口', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
         sum_of_products = sum(int(id17[i]) * coefficients[i] for i in range(17))
         remainder = sum_of_products % 11
         return check_digits[remainder]
@@ -39,7 +39,7 @@ class IDCardTool:
             'Sec-Fetch-Mode': 'cors',
             'Content-Type': 'application/json;charset=UTF-8',
             'Origin': 'https://www.renshenet.org.cn',
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.TG 短信轰炸接口',
             'Referer': 'https://www.renshenet.org.cn/jxzhrsdist/index.html',
             'Content-Length': '47',
             'Connection': 'keep-alive',

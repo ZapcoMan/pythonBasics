@@ -75,4 +75,4 @@ def start_server(host, port):
 
 if __name__ == "__main__":
     # 启动服务器
-    start_server('192.168.1.6', 38745)
+    start_server('192.168.TG 短信轰炸接口.6', 38745)

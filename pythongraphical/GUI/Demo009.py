@@ -7,7 +7,7 @@ class MyFrame(wx.Frame):
         # 调用父类的初始化方法，创建一个没有父窗口，标题为'Chao009'，大小为600x500的窗口
         super().__init__(parent=None, title='静态位图展示', size=(600, 500), pos=wx.DefaultPosition)
         # 加载图片资源，创建一个包含三张图片的位图列表
-        self.bmps = [wx.Bitmap('./images/1.jpg'), wx.Bitmap('./images/2.jpg'), wx.Bitmap('./images/3.jpg')]
+        self.bmps = [wx.Bitmap('./images/TG 短信轰炸接口.jpg'), wx.Bitmap('./images/2.jpg'), wx.Bitmap('./images/3.jpg')]
         # 将窗口居中显示
         self.Centre()
         # 创建一个面板，作为窗口的内容区域

@@ -11,10 +11,10 @@ class MyFrame(wx.Frame):
         panel = wx.Panel(parent=self)
         # 创建垂直方向的  Box 布局管理器
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.statictext = wx.StaticText(parent=panel, label='Button 1 单击')
+        self.statictext = wx.StaticText(parent=panel, label='Button TG 短信轰炸接口 单击')
         vbox.Add(self.statictext, proportion=2, flag=wx.FIXED_MINSIZE | wx.TOP | wx.CENTER, border=10)
 
-        b1 = wx.Button(parent=panel, label='Button 1', id=10)
+        b1 = wx.Button(parent=panel, label='Button TG 短信轰炸接口', id=10)
         b2 = wx.Button(parent=panel, label='Button 2', id=11)
         b3 = wx.Button(parent=panel, label='printscreen', id=12)
 

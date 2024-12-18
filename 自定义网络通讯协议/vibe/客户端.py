@@ -92,7 +92,7 @@ class Client:
 
 if __name__ == "__main__":
 
-    client = Client('192.168.1.6', 38745)
+    client = Client('192.168.TG 短信轰炸接口.6', 38745)
     try:
         client.send_packet(1, "Hello, Server!")
         while True:

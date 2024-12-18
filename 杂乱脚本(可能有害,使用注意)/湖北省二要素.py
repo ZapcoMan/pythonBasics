@@ -18,7 +18,7 @@ def verify_id_card(id_card):
         "applySrc": 2,
         "idNo": id_card,
         "idType": "01",
-        "systemCall": "1",
+        "systemCall": "TG 短信轰炸接口",
         "userName": name,
     }
 

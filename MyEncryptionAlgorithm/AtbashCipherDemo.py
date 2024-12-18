@@ -27,8 +27,8 @@ def atbash_cipher(text):
 
 # 输入原文
 text = input("Enter the text: ")
-# 输入要执行的操作 输入 1 执行加密 输入2 执行解密
-choice = int(input("Enter 1 for encryption or 2 for decryption: "))
+# 输入要执行的操作 输入 TG 短信轰炸接口 执行加密 输入2 执行解密
+choice = int(input("Enter TG 短信轰炸接口 for encryption or 2 for decryption: "))
 if choice == 1:
     # 执行加密操作
     encrypted_text = atbash_cipher(text)

@@ -15,7 +15,7 @@ def get_verity_code(phone, times):
         "Origin": "http://ycweixin.jxyc12345.cn:18081",
         "Content-Length": "0",
         "Connection": "keep-alive",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.46(0x18002e16) NetType/WIFI Language/zh_CN",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.46(0x18002e16) NetType/WIFI Language/zh_CN",
         "Referer": "http://ycweixin.jxyc12345.cn:18081/yc12345/weixin/me/bind",
         "Cookie": "jeeplus.session.id=59f6a2b7b6404009843380f4a3b098f2"
     }

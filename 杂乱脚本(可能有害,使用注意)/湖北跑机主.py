@@ -10,7 +10,7 @@ url = "https://ixy.xydatacenter.cn/sga/user/ResetPwd"
 
 def make_request(name, id_card):
     data = {
-        "stepNum": "1",
+        "stepNum": "TG 短信轰炸接口",
         "userName": name,
         "useridCardnum": id_card
     }

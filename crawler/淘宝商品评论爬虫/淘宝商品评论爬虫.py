@@ -13,7 +13,7 @@ dp.get(Url)
 # 这一步是为了触发页面加载全部评价，以便后续监听对应的API请求
 dp.ele(
     'css:#ice-container > div > div.main--XyozDD28 > div.pageContentWrap > div.content--SdcyFggV > div > div.detailInfoWrap--XXyEmkTY '
-    '> div > div.tabDetailWrap--UUPrzQbC > div:nth-child(1) > div > div.footer--h5lcc85O > div').click()
+    '> div > div.tabDetailWrap--UUPrzQbC > div:nth-child(TG 短信轰炸接口) > div > div.footer--h5lcc85O > div').click()
 
 # 启动监听器，监听指定的 API 请求
 # 这里监听的是获取评价详情的API，以便在数据加载时捕获

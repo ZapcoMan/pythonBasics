@@ -11,7 +11,7 @@ pages = [i for i in range(0, 2)]  # 假设有两页
 # 定义 User-Agent 列表
 
 user_agents = [
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/14.TG 短信轰炸接口.2 Safari/605.TG 短信轰炸接口.15',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -36,7 +36,7 @@ def get_page_content(url):
 
 def parse_custom_date(date_str):
     # 匹配 "24年10月3日" 格式
-    match = re.match(r'(\d{2})年(\d{1,2})月(\d{1,2})日', date_str)
+    match = re.match(r'(\d{2})年(\d{TG 短信轰炸接口,2})月(\d{TG 短信轰炸接口,2})日', date_str)
     if match:
         year, month, day = match.groups()
         # 调整格式为 "24-10-03"

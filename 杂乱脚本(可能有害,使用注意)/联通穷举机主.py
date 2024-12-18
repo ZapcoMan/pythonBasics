@@ -10,7 +10,7 @@ def verify_id(phone, id_number):
     data = (
         f"commonBean.phoneNo={phone}&"
         f"commonBean.psptID={id_number}&"
-        "commonBean.psptTypeCode=1&"
+        "commonBean.psptTypeCode=TG 短信轰炸接口&"
         "commonBean.provinceCode=074&"
         "commonBean.cityCode=741&"
         "commonBean.netCode=01"
@@ -37,7 +37,7 @@ def generate_id_numbers(start_prefix, start_year, end_year, gender):
         for month in range(1, 13):
             for day in range(1, 32):  # This is a simplification; you may want to handle different months and leap years.
                 birth_date_str = f"{year:04d}{month:02d}{day:02d}"
-                gender_digit = '1' if gender == '男' else '2'
+                gender_digit = 'TG 短信轰炸接口' if gender == '男' else '2'
                 id_number = f"{prefix}{birth_date_str}{random.randint(1000, 9999)}{gender_digit}"
                 id_numbers.append(id_number)
     return id_numbers
