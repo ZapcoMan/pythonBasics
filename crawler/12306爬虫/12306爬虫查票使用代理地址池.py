@@ -42,9 +42,11 @@ response = requests.get(url=API_URL, headers=headers, proxies=proxy)
 # 将响应内容解析为JSON格式
 json_data = response.json()
 
+# 处理并打印票务信息
 result = json_data.get('data').get('result')
 for i in result:
     index = i.split('|')
+    # 解析每列车的票务信息
     trainNumber = index[3]
     departureTime = index[8]
     timeOfArrival = index[9]
@@ -61,6 +63,7 @@ for i in result:
     firstClassSleeping = index[34]
     secondClassBedroom = index[36]
     superiorSoftSleeper = index[37]
+    # 将票务信息整理为字典格式
     dit = {
         '车次': trainNumber,
         '出发时间': departureTime,
@@ -78,10 +81,9 @@ for i in result:
         '一等卧': firstClassSleeping,
         '二等卧': secondClassBedroom,
         '高级软卧': superiorSoftSleeper
-
     }
+    # 打印当前列车的票务信息
     print(dit)
-    # dit 输出进 json 文件中
+    # 将票务信息追加到json文件中
     with open('12306.json', 'a', encoding='utf-8') as f:
         json.dump(dit, f, ensure_ascii=False)
-
