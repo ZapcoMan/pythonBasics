@@ -1,50 +1,50 @@
 import json
 from DrissionPage import ChromiumPage
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 # 实例化浏览器对象
-dp = ChromiumPage()
+def fetch_comments(page_number):
+    dp = ChromiumPage()
 
-# 设置访问地址
-Url = "https://item.jd.com/100076766489.html"
+    # 设置访问地址
+    Url = "https://item.jd.com/100076766489.html"
 
-# 监听数据包
-# 这里指定监听的URL是京东商品页面的评论接口，以便后续获取评论数据
-dp.listen.start('https://api.m.jd.com/?appid=item-v3&functionId=pc_club_productPageComments')
+    # 监听数据包
+    dp.listen.start('https://api.m.jd.com/?appid=item-v3&functionId=pc_club_productPageComments')
 
-# 访问商品页面
-dp.get(Url)
+    # 访问商品页面
+    dp.get(Url)
 
-# 点击查看评论
-# 通过CSS选择器定位到评论按钮并点击，以触发评论数据的加载
-dp.ele('css:#detail > div.tab-main.large > ul > li:nth-child(5)').click()
+    # 点击查看评论
+    dp.ele('css:#detail > div.tab-main.large > ul > li:nth-child(5)').click()
 
-# 初始化评论列表
-all_comments = []
+    # 初始化评论列表
+    all_comments = []
 
-# 最大页数限制，防止无限循环
-max_pages = 20
-current_page = 0
+    # 跳转到指定页数
+    if page_number > 1:
+        for _ in range(page_number - 1):
+            next_button = dp.ele('css:#comment-0 > div.com-table-footer > div > div > a.ui-pager-next')
+            if next_button and not next_button.attr('class').find('disabled') != -1:
+                next_button.click()
+                time.sleep(2)  # 可能需要根据实际情况调整等待时间
+            else:
+                break
 
-while current_page < max_pages:
     # 等待数据包加载
-    # 这里等待监听到的评论数据包加载完成，以便获取数据
     resp = dp.listen.wait()
 
     # 获取响应数据
-    # 从监听到的数据包中提取评论的JSON数据
     json_data = resp.response.body
 
     # 解析JSON数据
-    # 检查 json_data 的类型
     if isinstance(json_data, str):
-        # 如果是字符串，则进行解析
         data = json.loads(json_data)
     elif isinstance(json_data, dict):
-        # 如果已经是字典，则直接使用
         data = json_data
     else:
-        # 其他类型，抛出异常
         raise TypeError("json_data 必须是 str 或 dict 类型")
 
     # 定义注释信息
@@ -99,26 +99,31 @@ while current_page < max_pages:
 
     # 处理每个评论
     for i, comment in enumerate(data['comments']):
-        # 添加注释信息
         comment['_comments'] = comments_info
-        # 将评论添加到列表中
         all_comments.append(comment)
 
-    # 查找“下一页”按钮
-    next_button = dp.ele('css:#comment-0 > div.com-table-footer > div > div > a.ui-pager-next')
+    dp.close()
+    return all_comments
 
-    if next_button and not next_button.attr('class').find('disabled') != -1:
-        # 点击“下一页”按钮
-        next_button.click()
-        # 等待页面加载
-        time.sleep(2)  # 可能需要根据实际情况调整等待时间
-        current_page += 1
-    else:
-        # 如果没有“下一页”按钮或按钮被禁用，退出循环
-        break
+
+# 最大页数限制，防止无限循环
+max_pages = 20
+
+# 使用多线程加速爬虫
+all_comments = []
+with ThreadPoolExecutor(max_workers=5) as executor:
+    future_to_page = {executor.submit(fetch_comments, page): page for page in range(1, max_pages + 1)}
+    for future in as_completed(future_to_page):
+        page = future_to_page[future]
+        try:
+            comments = future.result()
+            all_comments.extend(comments)
+            print(f"完成第 {page} 页的评论抓取")
+        except Exception as e:
+            print(f"第 {page} 页的评论抓取失败: {e}")
 
 # 将所有评论写入同一个文件
-with open('all_comments.json', 'w', encoding='utf-8') as f:
+with open('京东评论区.json', 'w', encoding='utf-8') as f:
     json.dump(all_comments, f, ensure_ascii=False, indent=4)
 
 print("所有评论已保存到 京东评论区.json 文件中")
