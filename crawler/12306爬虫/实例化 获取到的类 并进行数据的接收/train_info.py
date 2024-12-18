@@ -1,5 +1,3 @@
-# train_info.py
-
 class TrainInfo:
     def __init__(self, train_number, departure_time, time_of_arrival, time_consuming,
                  premier_class, first_class_seat, second_class, soft_sleeper, hard_sleeper,
