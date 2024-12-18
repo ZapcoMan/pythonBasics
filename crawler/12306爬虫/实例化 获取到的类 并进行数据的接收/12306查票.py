@@ -1,6 +1,7 @@
+# 12306查票.py
 import random
-
 import requests
+from train_info import TrainInfo
 
 # 定义API URL，此处的URL为12306查询票务信息的接口地址
 API_URL = (
@@ -13,7 +14,7 @@ user_agents = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/14.TG 短信轰炸接口.2 Safari/605.TG 短信轰炸接口.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
@@ -32,43 +33,26 @@ response = requests.get(url=API_URL, headers=headers)
 json_data = response.json()
 
 result = json_data.get('data').get('result')
+
+# 遍历结果并创建TrainInfo实例
 for i in result:
     index = i.split('|')
-    trainNumber = index[3]
-    departureTime = index[8]
-    timeOfArrival = index[9]
-    timeConsuming = index[10]
-    premierClass = index[32]
-    firstClassSeat = index[31]
-    secondClass = index[30]
-    softSleeper = index[23]
-    hardSleeper = index[28]
-    softSeat = index[33]
-    hardSeat = index[29]
-    withoutSeat = index[26]
-    businessClass = index[35]
-    firstClassSleeping = index[34]
-    secondClassBedroom = index[36]
-    superiorSoftSleeper = index[37]
-    dit = {
-        '车次': trainNumber,
-        '出发时间': departureTime,
-        '到达时间': timeOfArrival,
-        '耗时': timeConsuming,
-        '特等座': premierClass,
-        '一等座': firstClassSeat,
-        '二等座': secondClass,
-        '软卧': softSleeper,
-        '硬卧': hardSleeper,
-        '软座': softSeat,
-        '硬座': hardSeat,
-        '无座': withoutSeat,
-        '商务座': businessClass,
-        '一等卧': firstClassSleeping,
-        '二等卧': secondClassBedroom,
-        '高级软卧': superiorSoftSleeper
-
-    }
-    print(dit)
-
-
+    train_info = TrainInfo(
+        train_number=index[3],
+        departure_time=index[8],
+        time_of_arrival=index[9],
+        time_consuming=index[10],
+        premier_class=index[32],
+        first_class_seat=index[31],
+        second_class=index[30],
+        soft_sleeper=index[23],
+        hard_sleeper=index[28],
+        soft_seat=index[33],
+        hard_seat=index[29],
+        without_seat=index[26],
+        business_class=index[35],
+        first_class_sleeping=index[34],
+        second_class_bedroom=index[36],
+        superior_soft_sleeper=index[37]
+    )
+    print(train_info)
