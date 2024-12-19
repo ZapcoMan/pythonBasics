@@ -96,8 +96,6 @@ class DatabaseConnection:
             logger.error(f"执行插入时出错：{e}")
             raise
 
-
-
     def close(self):
         if self.connection:
             self.connection.close()

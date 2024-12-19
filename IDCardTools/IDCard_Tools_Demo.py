@@ -9,7 +9,7 @@ if __name__ == "__main__":
     print(id_card_regions)
 
     tool = IDCardTool()
-    idcard_prefix = "37152619990604"
-    name = "朱振宇"
+    idcard_prefix = "3715260604"
+    name = "XXX"
     gender = "女"
     tool.run(idcard_prefix, name, gender)
