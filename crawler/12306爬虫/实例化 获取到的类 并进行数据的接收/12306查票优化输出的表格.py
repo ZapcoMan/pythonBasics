@@ -1,25 +1,12 @@
-import json
 import random
 
 import requests
 from prettytable import PrettyTable
 from train_info import TrainInfo
 # 定义API URL，此处的URL为12306查询票务信息的接口地址
-
-# 读取 city.json 文件
-with open('city.json', 'r', encoding='utf-8') as f:
-    city_data = json.load(f)
-    fromStation = input('请输入出发的城市：')
-    toStation = input("请输入目的地：")
-    # goDateTime = input("请输入出发时间")
-
-# 动态生成API URL
-train_date = "2024-12-19"  # 查询日期
-from_station = city_data[fromStation]  # 出发站代码
-to_station = city_data[toStation]  # 到达站代码
-print(f"出发站代码:{from_station}，到达站代码：{to_station}")
-
-API_URL = f"https://kyfw.12306.cn/otn/leftTicket/queryO?leftTicketDTO.train_date=2024-12-19&leftTicketDTO.from_station={from_station}&leftTicketDTO.to_station={to_station}&purpose_codes=ADULT"
+API_URL = (
+    "https://kyfw.12306.cn/otn/leftTicket/queryO?leftTicketDTO.train_date=2024-12-19&leftTicketDTO."
+    "from_station=BJP&leftTicketDTO.to_station=SHH&purpose_codes=ADULT")
 
 # 定义 User-Agent 列表，用于模拟不同的浏览器请求
 user_agents = [

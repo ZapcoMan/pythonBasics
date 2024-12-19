@@ -1,4 +1,5 @@
 # 12306查票.py
+import json
 import os
 import random
 
@@ -9,7 +10,7 @@ from train_info import TrainInfo
 # 从环境变量中读取API URL和Cookie
 API_URL = os.getenv('API_URL', "https://kyfw.12306.cn/otn/leftTicket/queryO")
 COOKIE = os.getenv('COOKIE',
-                   '_uab_collina=173449375088168679444499; JSESSIONID=003C9E88F16CE95CAA005B9B6C852578; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; BIGipServerotn=1658388746.50210.0000; BIGipServerpassport=921174282.50215.0000; route=6f50b51faa11b987e576cdb301e545c4; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19')
+                   'guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19; route=6f50b51faa11b987e576cdb301e545c4; BIGipServerotn=871367178.38945.0000')
 
 # 定义 User-Agent 列表，用于模拟不同的浏览器请求
 user_agents = [
@@ -29,13 +30,19 @@ headers = {
     'Cookie': COOKIE  # 使用从环境变量中读取的Cookie
 }
 
+# 读取 city.json 文件
+with open('city.json', 'r', encoding='utf-8') as f:
+    city_data = json.load(f)
+    fromStation = input('请输入出发的城市：')
+    toStation = input("请输入目的地：")
+    # goDateTime = input("请输入出发时间")
+
 # 动态生成API URL
 train_date = "2024-12-19"  # 查询日期
-from_station = "BJP"  # 出发站代码
-to_station = "SHH"  # 到达站代码
-
+from_station = city_data[fromStation]  # 出发站代码
+to_station = city_data[toStation]  # 到达站代码
+print(f"出发站代码:{from_station}，到达站代码：{to_station}")
 purpose_codes = "ADULT"  # 乘客类型
-
 full_api_url = f"{API_URL}?leftTicketDTO.train_date={train_date}&leftTicketDTO.from_station={from_station}&leftTicketDTO.to_station={to_station}&purpose_codes={purpose_codes}"  # 构造完整的API URL
 
 try:
