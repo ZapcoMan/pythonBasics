@@ -1,7 +1,8 @@
-import parsel
-import requests
 import random
-"""B站视频源码"""
+
+import requests
+from bs4 import BeautifulSoup
+
 url = "https://q.10jqka.com.cn/index/index/board/all/field/zdf/order/desc/page/2/ajax/1/"
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -18,10 +19,18 @@ headers = {
     'Cookie': 'v=A5yLApe4F8vdieMXldnpddaibLFMFUS_wrBULnadqfhqHzLvniUQzxLJJMLF'
 }
 response = requests.get(url, headers=headers)
-responseText = response.text
-print(response.text)
-selector = parsel.Selector(responseText)
-trs = selector.css('.m-table tr')[1:]
 
+# print(response.text)
 
+soup = BeautifulSoup(response.text, 'html.parser')
+table = soup.find('table', {'class': 'm-table m-pager-table'})
+rows = table.tbody.find_all('tr')
+stock_data = []
+for row in rows:
+    cols = row.find_all('td')
+    data = [col.text.strip() for col in cols]
+    stock_data.append(data)
 
+# 打印或保存数据
+for stock in stock_data:
+    print(stock)
