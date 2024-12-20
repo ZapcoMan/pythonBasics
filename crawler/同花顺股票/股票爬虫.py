@@ -19,9 +19,13 @@ headers = {
 }
 response = requests.get(url, headers=headers)
 responseText = response.text
-print(response.text)
+# print(response.text)
 selector = parsel.Selector(responseText)
 trs = selector.css('.m-table tr')[1:]
+for tr in trs:
+    info = tr.css('td::text').getall()
+    print(info)
+
 
 
 
