@@ -1,3 +1,4 @@
+import json
 import random
 
 import requests
@@ -20,4 +21,7 @@ headers = {
 
 }
 response = requests.get(url=Url, headers=headers)
-print(response.json())
+jsonData = response.json()
+# 将 jsonData 保存成json 文件
+with open('b站评论.json', 'w', encoding='utf-8') as f:
+    json.dump(jsonData, f, ensure_ascii=False, indent=4)
