@@ -4,7 +4,14 @@ import execjs
 import requests
 import parsel
 import csv
+
+from numpy.core.defchararray import ljust
 from prettytable import PrettyTable
+from tqdm import tqdm
+from colorama import init, Fore, Style
+
+# 初始化colorama
+init(autoreset=True)
 
 # 打开CSV文件，准备写入数据
 f = open('data.csv', mode='w', encoding='utf-8', newline='')
@@ -45,10 +52,8 @@ table.field_names = [
     '市盈率',
 ]
 
-# 循环遍历每一页数据，范围从第1页到第265页
-for page in range(1, 11):
-    # 打印当前正在采集的页数
-    # print(f'正在采集第{page}页的数据内容')
+# 使用tqdm添加进度条，并设置颜色，循环遍历每一页数据，范围从第1页到第265页
+for page in tqdm(range(1, 11), desc="正在采集数据", bar_format=f"{Fore.GREEN}{{l_bar}}{{bar}}{Fore.RESET}"):
     # 读取JavaScript文件内容，用于获取请求所需的cookie值
     js_file = open('同花顺.js', encoding='utf-8').read()
     # 编译JavaScript代码
@@ -75,8 +80,6 @@ for page in range(1, 11):
     }
     # 构造请求URL，根据页数变化
     url = f'https://q.10jqka.com.cn/index/index/board/all/field/zdf/order/desc/page/{page}/ajax/1/'
-    # 输出一下cookie的值
-    # print(f'第{page}页的cookie的值为{cookie}')
     # 发送HTTP请求，获取网页内容
     response = requests.get(url=url, headers=headers, cookies=cookie)
 
@@ -108,8 +111,6 @@ for page in range(1, 11):
         }
         # 将数据字典写入CSV文件
         csv_writer.writerow(dit)
-        # 打印当前行的数据字典
-        # print(dit)
         # 添加数据到PrettyTable
         table.add_row(dit.values())
 
