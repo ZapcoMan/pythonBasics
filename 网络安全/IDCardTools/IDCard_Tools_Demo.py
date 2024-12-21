@@ -1,6 +1,6 @@
 # 示例调用
-from IDCardTools.IDCardTools import IDCardTool
-from IDCardTools.QQNumberInfo import QQNumberInfo
+from 网络安全.IDCardTools.IDCardTools import IDCardTool
+from 网络安全.IDCardTools.QQNumberInfo import QQNumberInfo
 
 if __name__ == "__main__":
     # 使用示例

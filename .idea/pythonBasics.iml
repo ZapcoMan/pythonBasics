@@ -10,7 +10,7 @@
   <component name="PyNamespacePackagesService">
     <option name="namespacePackageFolders">
       <list>
-        <option value="$MODULE_DIR$/mysqlConnection" />
+        <option value="$MODULE_DIR$/基础/mysqlConnection" />
       </list>
     </option>
   </component>
