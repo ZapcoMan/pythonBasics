@@ -53,7 +53,7 @@ table.field_names = [
 ]
 
 # 使用tqdm添加进度条，并设置颜色，循环遍历每一页数据，范围从第1页到第265页
-for page in tqdm(range(1, 270), desc="正在采集数据", bar_format=f"{Fore.GREEN}{{l_bar}}{{bar}}{Fore.RESET}"):
+for page in tqdm(range(1, 10), desc="正在采集数据", bar_format=f"{Fore.GREEN}{{l_bar}}{{bar}}{Fore.RESET}"):
     # 读取JavaScript文件内容，用于获取请求所需的cookie值
     js_file = open('同花顺.js', encoding='utf-8').read()
     # 编译JavaScript代码
@@ -136,3 +136,4 @@ for page in tqdm(range(1, 270), desc="正在采集数据", bar_format=f"{Fore.GR
 
 # 打印PrettyTable
 print(table)
+
