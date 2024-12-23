@@ -46,7 +46,7 @@ table.field_names = [
 ]
 
 # 循环遍历每一页数据，范围从第1页到第265页
-for page in range(1, 11):
+for page in range(6, 11):
     # 打印当前正在采集的页数
     # print(f'正在采集第{page}页的数据内容')
     # 读取JavaScript文件内容，用于获取请求所需的cookie值
@@ -57,7 +57,8 @@ for page in range(1, 11):
     v = js_code.call('zy')
     # 构造cookie字典
     cookie = {
-        'v': v
+        'v': v,
+
     }
     user_agents = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
