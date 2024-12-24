@@ -1,7 +1,18 @@
 import json
+import random
 
 import requests
 
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+]
 cookies = {
     'stockx_device_id': '9259aa4e-6453-4641-9e4a-34bccc918d5a',
     'stockx_session_id': 'b91f667a-ed0a-404d-aec3-1fa916766aab',
@@ -55,7 +66,7 @@ headers = {
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
     'selected-country': 'CN',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'User-Agent': random.choice(user_agents),
     'x-abtest-ids': 'ab_0xdjj_web.true,ab_12dul_all.neither,ab_1ncl6_web.true,ab_2ki60_web.neither,ab_2lofw_web.true,ab_2m3ew_web.true,ab_3opqo_web.true,ab_3qc6g_web.neither,ab_5wzq0_web.true,ab_82d7l_web.neither1,ab_8dhfg_web.neither,ab_8ht34_web.true,ab_8stea_web.neither,ab_8x8am_web.true,ab_8zx87_web.true,ab_90n02_web.true,ab_9v8xl_web.variant,ab_9zi8a_web.true,ab_aa_continuous_all.web_a,ab_account_selling_guidance_web.variant,ab_aoxjj_web.true,ab_ayu9e_web.true,ab_checkout_buying_table_redesign_web.variant,ab_checkout_cutoff_date_web.variant,ab_chk_place_order_verbage_web.true,ab_cs_seller_shipping_extension_web.variant,ab_discovery_color_filter_all.false,ab_drc_chk_sell_intra_zone_all_in_support_web.variant,ab_ebguu_web.true,ab_efoch_web.true,ab_ekirh_web.variant_2,ab_enable_3_CTAs_web.variant,ab_epnox_web.true,ab_eqctr_web.true,ab_eu3zm_web.neither,ab_gift_cards_v1_web.true,ab_growth_appsflyer_smart_banner_web.variant_2,ab_growth_ignore_rv_products_in_rfy_v2_web.true,ab_hex3z_web.true,ab_home_as_seen_on_instagram_v2_web.true,ab_home_carousel_current_asks_bids_web.true,ab_home_page_reordering_web.variant_1,ab_home_show_value_props_web.variant_2,ab_hsaxr_web.true,ab_hzpar_all.neither,ab_i9gt9_web.true,ab_k358k_web.neither,ab_k3z78_web.true,ab_kvcr0_web.true,ab_ljut9_web.true,ab_merchandising_module_pdp_v2_web.variant,ab_mh0wn_web.neither,ab_n0kpl_web.neither,ab_n87do_web.neither,ab_ncs63_web.true,ab_nz3j1_web.true,ab_o95do_web.neither,ab_og9wl_web.true,ab_phx04_web.true,ab_pirate_most_popular_around_you_module_web.neither,ab_pirate_product_cell_favorite_web_v1.true,ab_q2nhm_web.true,ab_q704p_web.true,ab_r84zi_web.variant,ab_sa2jv_web.0,ab_search_static_ranking_v5_web.variant,ab_sx1wr_web.neither,ab_u13ie_web.true,ab_uaa6m_web.true,ab_ubnt3_web.neither,ab_vhfbq_web.neither,ab_w2cvj_web.true,ab_web_aa_continuous.false,ab_xbqne_web.true,ab_xr2kh_web.variant1,ab_y8s2m_web.neither2,ab_z25fu_web.true',
     'x-operation-name': 'FetchProductCollection',
     'x-stockx-device-id': '9259aa4e-6453-4641-9e4a-34bccc918d5a',
@@ -85,4 +96,4 @@ json_data = response.json()
 # json_data 保存成 json 格式的文件
 with open('data.json', 'w') as f:
     json.dump(json_data, f)
-    print(json_data)
+print(json_data)
