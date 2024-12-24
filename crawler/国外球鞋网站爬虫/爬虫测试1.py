@@ -92,7 +92,7 @@ response = requests.post('https://stockx.com/api/p/e', cookies=cookies, headers=
 # 将响应内容解析为 JSON 格式
 json_data = response.json()
 # 将获取到的 JSON 数据保存到本地文件 data.json 中
-with open('data.json', 'w') as f:
+with open('爬虫测试1.json', 'w') as f:
     json.dump(json_data, f)
 # 打印解析后的 JSON 数据
 print(json_data)
