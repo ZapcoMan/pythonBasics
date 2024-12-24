@@ -2,7 +2,7 @@ import json
 import random
 
 import requests
-
+# 定义用户代理列表，用于模拟不同的浏览器请求
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
@@ -13,6 +13,7 @@ user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
 ]
+# 定义请求所需的 cookies，包含多个与网站交互的会话信
 cookies = {
     'stockx_device_id': '9259aa4e-6453-4641-9e4a-34bccc918d5a',
     'stockx_session_id': 'b91f667a-ed0a-404d-aec3-1fa916766aab',
@@ -45,7 +46,7 @@ cookies = {
     '_dd_s': 'rum=0&expire=1735023214360&logs=1&id=04f244f5-ed86-4114-a0fc-420df8fe7075&created=1735022149989',
     '_pxhd': 'grFFHCUXClJZOD1eqFxq79OIqH05u5p7yLS18s-A7M75cxIKXcAjd5i-ptaKrfxy9nZBxd3sA0lOtgRBs2SYYg==:rbpnSTfZZwfVX1GVDJ/ZQJ9-k1198QTMapHjFKeNQ-LpG8YSs/mmgPSLaolh9hEKCcP9nZb87y1q36NxpgdqY4syieZlMztR6qf-4OQuwoiLZHluFsWksbW/sSFCVnxFphfhiacKhRzFC5zvXHPfwA==',
 }
-
+# 定义请求头，包含各种 HTTP 头信息，如接受的内容类型、语言、来源
 headers = {
     'accept': 'application/json',
     'accept-language': 'en-US',
@@ -72,7 +73,7 @@ headers = {
     'x-stockx-device-id': '9259aa4e-6453-4641-9e4a-34bccc918d5a',
     'x-stockx-session-id': 'b91f667a-ed0a-404d-aec3-1fa916766aab',
 }
-
+# 定义发送给服务器的 JSON 数据，包含查询语句和变量
 json_data = {
     'query': 'query FetchProductCollection($id: String, $country: String!, $currencyCode: CurrencyCode!, $limit: Int!, $marketName: String, $page: Int!) {\n  productCollection(id: $id) {\n    tileType\n    priceType\n    footnotesType\n    trackingEvent\n    helpMessage\n    ...ResultsFragment\n    seeAllCTA {\n      title\n      url\n      urlType\n    }\n    title\n  }\n}\n\nfragment ResultsFragment on ProductCollection {\n  results(page: $page, limit: $limit) {\n    edges {\n      isAd\n      adIdentifier\n      adInventoryId\n      adServiceLevel\n      node {\n        ... on Product {\n          ...HomeProductDetailsFragment\n        }\n        ... on Variant {\n          __typename\n          id\n          sizeChart {\n            baseSize\n            baseType\n            displayOptions {\n              size\n              type\n            }\n          }\n          product {\n            ...HomeProductDetailsFragment\n          }\n          market(currencyCode: $currencyCode) {\n            ...HomeMarketFragment\n          }\n          ...FavoriteVariantFragment\n        }\n      }\n    }\n    pageInfo {\n      total\n    }\n  }\n}\n\nfragment HomeProductDetailsFragment on Product {\n  __typename\n  id\n  title\n  brand\n  browseVerticals\n  gender\n  productCategory\n  categories {\n    default {\n      alias\n    }\n  }\n  primaryCategory\n  listingType\n  name\n  urlKey\n  uuid\n  sizeDescriptor\n  ...FavoriteProductFragment\n  variants {\n    id\n  }\n  media {\n    smallImageUrl\n  }\n  market(currencyCode: $currencyCode) {\n    state(country: $country, market: $marketName) {\n      askServiceLevels {\n        expressExpedited {\n          count\n          lowest {\n            amount\n          }\n        }\n        expressStandard {\n          count\n          lowest {\n            amount\n          }\n        }\n      }\n    }\n    ...HomeMarketFragment\n  }\n  traits(filterTypes: [RELEASE_DATE, RETAIL_PRICE]) {\n    name\n    value\n  }\n}\n\nfragment HomeMarketFragment on Market {\n  currencyCode\n  state(country: $country, market: $marketName) {\n    highestBid {\n      amount\n      updatedAt\n    }\n    lowestAsk {\n      amount\n      updatedAt\n    }\n    askServiceLevels {\n      expressExpedited {\n        lowest {\n          amount\n        }\n      }\n      expressStandard {\n        lowest {\n          amount\n        }\n      }\n    }\n  }\n  statistics {\n    lastSale {\n      amount\n    }\n    last72Hours {\n      salesCount\n    }\n    annual {\n      salesCount\n    }\n    last90Days {\n      averagePrice\n    }\n  }\n}\n\nfragment FavoriteProductFragment on Product {\n  favorite\n}\n\nfragment FavoriteVariantFragment on Variant {\n  favorite\n}',
     'variables': {
@@ -85,15 +86,13 @@ json_data = {
     },
     'operationName': 'FetchProductCollection',
 }
-
+# 发送 POST 请求到 StockX API 端点，并获取响应数据
 response = requests.post('https://stockx.com/api/p/e', cookies=cookies, headers=headers, json=json_data)
+
+# 将响应内容解析为 JSON 格式
 json_data = response.json()
-# 注意：json_data不会被请求序列化
-# 与原始请求完全相同。
-# #data = '{"query":"query FetchProductCollection（$id: String, $country: String）$currencyCode: currencyCode ！$limit: Int！， $marketName: String, $page: Int!) {\\n productCollection(id: $id) {\\n tileType\\n priceType\\n footnotesType\\n trackingEvent\\n helpMessage\\n…ResultsFragment\\n seeAllCTA \\n title\\n url\\n urlType\\n \n title\\n \n\ n\ n\ n\ nfragment ResultsFragment on ProductCollection {\\n results(page: $page, limit: $limit) {\\n edges \\n isAd\\n adIdentifier\\n adInventoryId\\n adServiceLevel\\n node {\\n…产品{\\n…HomeProductDetailsFragment\\n}\\n…on Variant {\\n __typename\\n id\\n sizeChart {\\n baseSize\\n baseType\\n displayOptions {\\n size\\n type\\n}\\n \n product {\\n…HomeProductDetailsFragment\\n}\\n market(currencyCode: $currencyCode) {\\n…\\n}\\n…FavoriteVariantFragment\\n \n\ n\ n\ n\ n pageInfo \\n\ n total\\n \n\ n\ n\ n\ n\ n\ n\ n title\\n brand\\n browseVerticals\\n gender\\n productCategory\\n categories \\n categories \\n default \\n alias\\n \\n\ n primaryCategory\\n listingType\\n name\\n urlKey\\n uuid\\n sizeDescriptor\\n…FavoriteProductFragment \ \ n变体{\ \ \ n \ n id} \ \ n媒体{\ \ n smallImageUrl \ \} \ \ n市场(currencyCode: $ currencyCode) {\ \ n状态(国家:国家,美元市场:美元marketName) {\ \ n askServiceLevels {\ \ n expressExpedited {\ \ n           数\ \ n           {\ \ n最低             \ \ n量           }\\ n         }\\ n expressStandard {\ \ n           数\ \ n           {\ \ n最低             \ \ n量           }\\ n         }\\ n} \ \ n} \ \ n…\\n}\\n traits(filterTypes: [RELEASE_DATE, RETAIL_PRICE]) {\\n name\\n value\\n}\\n\\n \\n\\n \\nfragment homarketfragment on Market {\\n currencyCode\\n state(国家：$country，市场：$marketName) {\\n highestBid {\\n amount\\n updatedAt\\n \n \n lowestAsk {\\n amount\\n \\n \n \n \n askServiceLevels {\\n expressExpedited {\\n最低价\\n amount\\n \n \n \n \n \n \n \n \n \n \n \n statistics {\\n lastSale {\\n amount\\n \n \\n \ 72hours {\\n \n salesCount\\n \n \n annual {\\n \n \n \n \n \nlast90Days {\\n averagePrice\\n}\\n}\\n\ n\ n\ nfragment FavoriteProductFragment on Product {\\n favorite\\n}\\n\\n \nfragment favoriteevariantfragment on Variant {\\n favorite\\n}","variables":{"id":"blt5392ddf45c086b81","limit":6,"country":"CN","currencyCode":"USD","marketName":"US","page":0},"operationName":"FetchProductCollection“} ”
-# #response = requests.post（'https://stockx.com/api/p/e', cookies=cookies, headers=headers, data=data）
-# print(json_data)
-# json_data 保存成 json 格式的文件
+# 将获取到的 JSON 数据保存到本地文件 data.json 中
 with open('data.json', 'w') as f:
     json.dump(json_data, f)
+# 打印解析后的 JSON 数据
 print(json_data)
