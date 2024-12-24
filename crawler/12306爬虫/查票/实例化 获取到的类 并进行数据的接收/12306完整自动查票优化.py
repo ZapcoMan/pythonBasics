@@ -6,7 +6,8 @@ from train_info import TrainInfo
 import os
 
 # 从环境变量中获取Cookie信息
-COOKIE = os.getenv('TRAIN_COOKIE', '_uab_collina=173449375088168679444499; JSESSIONID=60CD7C21677293CF3570C9946BE42019; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19; route=6f50b51faa11b987e576cdb301e545c4; BIGipServerotn=871367178.38945.0000; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; BIGipServerotn=1658388746.50210.0000; BIGipServerpassport=921174282.50215.0000; route=6f50b51faa11b987e576cdb301e545c4; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19')
+COOKIE = os.getenv('TRAIN_COOKIE',
+                   '_uab_collina=173449375088168679444499; JSESSIONID=60CD7C21677293CF3570C9946BE42019; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19; route=6f50b51faa11b987e576cdb301e545c4; BIGipServerotn=871367178.38945.0000; _jc_save_fromStation=%u5317%u4EAC%2CBJP; _jc_save_toStation=%u4E0A%u6D77%2CSHH; _jc_save_wfdc_flag=dc; BIGipServerotn=1658388746.50210.0000; BIGipServerpassport=921174282.50215.0000; route=6f50b51faa11b987e576cdb301e545c4; _jc_save_fromDate=2024-12-19; _jc_save_toDate=2024-12-19')
 
 # 定义API URL模板
 API_URL_TEMPLATE = "https://kyfw.12306.cn/otn/leftTicket/queryO?leftTicketDTO.train_date={train_date}&leftTicketDTO.from_station={from_station}&leftTicketDTO.to_station={to_station}&purpose_codes=ADULT"
@@ -22,14 +23,16 @@ except json.JSONDecodeError:
     print("城市映射文件 city.json 格式错误")
     exit(1)
 
+
 # 获取用户输入的出发城市和目的地，并进行验证
-def get_city_code(prompt, city_data):
+def get_city_code(prompt, cityData):
     while True:
         city_name = input(prompt).strip()
-        if city_name in city_data:
-            return city_data[city_name]
+        if city_name in cityData:
+            return cityData[city_name]
         else:
             print(f"无效的城市名: {city_name}，请重新输入")
+
 
 from_station = get_city_code('请输入出发的城市：', city_data)
 to_station = get_city_code("请输入目的地：", city_data)
@@ -66,7 +69,8 @@ try:
             # 解析JSON数据，并使用PrettyTable进行格式化输出
             json_data = response.json()
             tb = PrettyTable()
-            tb.field_names = ['序号', '车次', '出发时间', '到达时间', '耗时', '特等座', '一等座', '二等座', '软卧', '硬卧',
+            tb.field_names = ['序号', '车次', '出发时间', '到达时间', '耗时', '特等座', '一等座', '二等座', '软卧',
+                              '硬卧',
                               '软座', '硬座', '无座', '商务座', '一等卧', '二等卧', '高级软卧']
             page = 1
             result = json_data.get('data', {}).get('result', [])
@@ -97,7 +101,8 @@ try:
                 # 将列车信息添加到表格中
                 tb.add_row([page, train_info.train_number, train_info.departure_time, train_info.time_of_arrival,
                             train_info.time_consuming, train_info.premier_class, train_info.first_class_seat,
-                            train_info.second_class, train_info.soft_sleeper, train_info.hard_sleeper, train_info.soft_seat,
+                            train_info.second_class, train_info.soft_sleeper, train_info.hard_sleeper,
+                            train_info.soft_seat,
                             train_info.hard_seat, train_info.without_seat, train_info.business_class,
                             train_info.first_class_sleeping,
                             train_info.second_class_bedroom, train_info.superior_soft_sleeper

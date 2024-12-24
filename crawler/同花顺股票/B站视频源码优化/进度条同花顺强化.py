@@ -1,4 +1,3 @@
-# 导入所需的库
 import random
 import execjs
 import requests
