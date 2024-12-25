@@ -14,6 +14,10 @@ from typing import List
 
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        """
+        使用双端队列 deque 维护滑动窗口内的最大值。
+        通过遍历数组 nums，对于每个窗口位置，确保 deque 的第一个元素是窗口内的最大值。
+        """
         deque = collections.deque()
         res, n = [], len(nums)
         for i, j in zip(range(1 - k, n + 1 - k), range(n)):
@@ -34,6 +38,11 @@ class Solution:
         :type nums: List[int]
         :type k: int
         :rtype: List[int]
+        """
+        """
+        解决滑动窗口最大值问题的另一种方法。
+        通过维护一个变量 first 来记录当前窗口内的最大值。
+        遍历数组 nums，更新每个窗口位置的最大值。
         """
         if not nums:
             return []
