@@ -50,12 +50,17 @@ class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         current_node = head
         res = []
-        # 遍历链表，将值存入列表。
-        while current_node is not None:
-            res.append(current_node.val)
-            current_node = current_node.next
+        try:
+            # 遍历链表，将值存入列表。
+            while current_node is not None:
+                res.append(current_node.val)
+                current_node = current_node.next
+        except AttributeError as e:
+            print(f"AttributeError: {e}")
+            return False
         # 检查列表是否对称。
         return res == res[::-1]
+
 
 
 if __name__ == '__main__':
