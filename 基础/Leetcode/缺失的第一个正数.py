@@ -9,3 +9,21 @@
 请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
 
 """
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        n = len(nums)
+        hash_size = n + 1
+        # 可能的答案为1, 2, ..., n + 1
+        # 处理掉取值范围外的数
+        for i in range(n):
+            if nums[i] <= 0 or nums[i] >= hash_size:
+                nums[i] = 0
+        for i in range(n):
+            if nums[i] % hash_size != 0:
+                pos = (nums[i] % hash_size) - 1
+                # 先取余再加，防止数字过大
+                nums[pos] = (nums[pos] % hash_size) + hash_size
+        for i in range(n):
+            if nums[i] < hash_size:
+                return i + 1
+        return hash_size
