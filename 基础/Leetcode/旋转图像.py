@@ -73,6 +73,11 @@ class Solution:
                 move_4_points(top, j, right - left)
             left, right, top, bottom = left + 1, right - 1, top + 1, bottom - 1
 
+
+
+
+
+
 if __name__ == '__main__':
     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     Solution().rotate(matrix)
