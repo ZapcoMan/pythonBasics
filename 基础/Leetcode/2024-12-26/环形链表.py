@@ -10,3 +10,25 @@
 。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。
 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
 """
+from typing import Optional
+
+
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+
+
+
