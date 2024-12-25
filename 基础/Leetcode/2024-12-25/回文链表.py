@@ -10,11 +10,13 @@
 """
 from typing import Optional
 
+
 # 单链表的定义。
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
 
 # 解决方案类，用于检测链表是否为回文。
 class Solution:
@@ -44,6 +46,7 @@ class Solution:
         return True
 
     # 优化代码，使用列表存储链表值后判断是否回文。
+
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         current_node = head
         res = []
@@ -53,3 +56,13 @@ class Solution:
             current_node = current_node.next
         # 检查列表是否对称。
         return res == res[::-1]
+
+
+if __name__ == '__main__':
+    # 实例化
+    solution = Solution()
+    head = ListNode(1)
+    head.next = ListNode(2)
+    head.next.next = ListNode(2)
+    head.next.next.next = ListNode(1)
+    print(solution.isPalindrome(head))
