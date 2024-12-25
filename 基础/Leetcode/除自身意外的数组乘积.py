@@ -10,6 +10,9 @@
 
 请 不要使用除法，且在 O(n) 时间复杂度内完成此题。
 """
+from typing import List
+
+
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         n = len(nums)
@@ -22,4 +25,26 @@ class Solution:
             suf[i] = suf[i + 1] * nums[i + 1]
 
         return [p * s for p, s in zip(pre, suf)]
+
+
+
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        zero_cnt = 0
+        p = 1
+        for x in nums:
+            if x == 0:
+                zero_cnt += 1
+            else:
+                p *= x
+        n = len(nums)
+        ans = [0] * n
+        if zero_cnt == 0:
+            for i, x in enumerate(nums):
+                ans[i] = p // x
+        elif zero_cnt == 1:
+            for i, x in enumerate(nums):
+                if x == 0:
+                    ans[i] = p
+        return ans
+
 
