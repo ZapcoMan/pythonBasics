@@ -38,7 +38,7 @@ class Solution:
             prev = prev.next
             head = head.next
         return True
-
+    # 优化代码
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         current_node = head
         res = []
