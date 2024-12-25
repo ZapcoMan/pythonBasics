@@ -45,31 +45,11 @@ class Solution:
         # 如果所有位置都被标记，那么缺失的最小正整数是n+1
         return hash_size
 
-    def firstMissingPositive(self, nums: List[int]) -> int:
-        """
-        寻找缺失的最小正整数，针对特定测试用例优化的版本。
 
-        Args:
-            nums: 一个整数列表。
-
-        Returns:
-            返回缺失的最小正整数。
-        """
-        # 从1开始检查每个正整数是否在列表中
-        i = 1
-        # 针对特定大测试用例的优化
-        if (len(nums) == 100000):
-            if 3991 not in nums:
-                return 3991
-            elif 99998 not in nums:
-                return 99998
-            elif 100000 not in nums:
-                return 100000
-            else:
-                return 100001
-        # 持续增加i，直到找到第一个不在列表中的正整数
-        while 1:
-            if i not in nums:
-                return i
-            i = i + 1
+        def firstMissingPositive(self, nums: List[int]) -> int:
+            s = set(nums)
+            for i in range(1, len(nums) + 1):
+                if i not in s:
+                    return i
+            return len(nums) + 1
 
