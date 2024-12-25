@@ -5,6 +5,7 @@
 # @Project : pythonBasics
 from typing import List
 
+
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
@@ -48,3 +49,9 @@ class Solution:
         if first_col_has_zero:
             for i in range(rows):
                 matrix[i][0] = 0
+
+
+if __name__ == '__main__':
+    matrix = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
+    Solution().setZeroes(matrix)
+
