@@ -18,7 +18,6 @@ class ListNode:
         self.next = next
 
 
-
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         slow = fast = head
@@ -40,36 +39,10 @@ class Solution:
             head = head.next
         return True
 
-from typing import Optional
-
-from functorch.dim import stack
-
-
-# 单链表的定义。
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-
-
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        slow = fast = head
-        while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
-
-        prev = None
-        while slow:
-            tmp = slow.next
-            slow.next = prev
-            prev = slow
-            slow = tmp
-        # 注意反转后 prev 为头结点
-        while prev:  # Tips
-            if prev.val != head.val:
-                return False
-            prev = prev.next
-            head = head.next
-        return True
+        current_node = head
+        res = []
+        while current_node is not None:
+            res.append(current_node.val)
+            current_node = current_node.next
+        return res == res[::-1]
