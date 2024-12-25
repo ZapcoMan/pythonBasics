@@ -1,6 +1,7 @@
-import random
-import requests
 import json
+import random
+
+import requests
 
 # 定义API URL，此处的URL为12306查询票务信息的接口地址
 API_URL = (
