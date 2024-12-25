@@ -17,15 +17,30 @@ from typing import List
 class Solution:
     @staticmethod
     def trap(height: List[int]) -> int:
+        """
+        计算给定高度数组所能 trap (捕捉/存储) 的雨水量。
+
+        参数:
+        height: List[int] - 一个整数列表，表示每个位置的高度。
+
+        返回:
+        int - 所能 trap 的雨水总量。
+        """
+        # 初始化总水量
         ans = 0
+        # 初始化左右指针的最大高度
         h1 = 0
         h2 = 0
+        # 遍历高度数组
         for i in range(len(height)):
+            # 更新从左边开始的最大高度
             h1 = max(h1, height[i])
+            # 更新从右边开始的最大高度
             h2 = max(h2, height[-i - 1])
+            # 累加当前位置的储水量
             ans = ans + h1 + h2 - height[i]
+        # 减去重复计算的部分
         return ans - len(height) * h1
-
 
 """
 最优解

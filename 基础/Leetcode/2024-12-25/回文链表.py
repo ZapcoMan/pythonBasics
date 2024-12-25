@@ -46,7 +46,6 @@ class Solution:
         return True
 
     # 优化代码，使用列表存储链表值后判断是否回文。
-
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         current_node = head
         res = []
@@ -62,7 +61,6 @@ class Solution:
         return res == res[::-1]
 
 
-
 if __name__ == '__main__':
     # 实例化
     solution = Solution()
@@ -71,3 +69,4 @@ if __name__ == '__main__':
     head.next.next = ListNode(2)
     head.next.next.next = ListNode(1)
     print(solution.isPalindrome(head))
+
