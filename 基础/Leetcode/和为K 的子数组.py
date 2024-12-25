@@ -44,13 +44,35 @@ class Solution:
         return count
 """
 class Solution:
+    """
+    该类提供了一个方法，用于计算数组中和为 k 的连续子数组的数量。
+    """
+
     @staticmethod
     def subarraySum(nums: List[int], k: int) -> int:
+        """
+        计算数组中和为 k 的连续子数组的数量。
+
+        参数:
+        nums: 整数数组。
+        k: 目标和。
+
+        返回:
+        满足条件的子数组数量。
+        """
+        # 初始化满足条件的子数组数量为 0
         ans = 0
+        # 使用字典记录每个前缀和出现的次数，初始化时前缀和 0 出现一次
         dic = {0: 1}
+        # 初始化前缀和为 0
         s = 0
+        # 遍历数组中的每个元素
         for v in nums:
+            # 将当前元素加到前缀和中
             s += v
+            # 如果当前前缀和减去目标和 k 的值在字典中存在，则将其出现次数加到 ans 中
             ans += dic.get(s - k, 0)
+            # 更新字典，将当前前缀和的出现次数加 1
             dic[s] = dic.get(s, 0) + 1
+        # 返回满足条件的子数组数量
         return ans
