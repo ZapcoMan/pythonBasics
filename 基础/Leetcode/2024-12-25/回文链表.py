@@ -13,7 +13,7 @@ from typing import Optional
 from functorch.dim import stack
 
 
-# Definition for singly-linked list.
+# 单链表的定义。
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
