@@ -1,22 +1,11 @@
 # -*- coding: utf-8 -*-
-# @Time    : 25 12月 2024 9:50 上午
+# @Time    : 25 12月 2024 9:50 上午
 # @Author  : codervibe
 # @File    : 找出字符串中所有的字母异位词.py
 # @Project : pythonBasics
 """
 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
 """
-from typing import List
-
-# -*- coding: utf-8 -*-
-# @Time    : 25 12月 2024 9:50 上午
-# @Author  : codervibe
-# @File    : 找出字符串中所有的字母异位词.py
-# @Project : pythonBasics
-"""
-给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
-"""
-
 from typing import List
 
 
@@ -66,5 +55,5 @@ class Solution:
 
 
 if __name__ == '__main__':
-    print(Solution().findAnagrams("cbaebabacd", "abc"))
+    print(Solution().findAnagrams("cbaebadcaewcadfabcabccbadecabdcabcdbaeabacd", "abc"))
     print(Solution().findAnagrams("abab", "ab"))
