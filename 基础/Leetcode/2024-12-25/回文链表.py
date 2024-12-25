@@ -10,8 +10,6 @@
 """
 from typing import Optional
 
-from functorch.dim import stack
-
 
 # 单链表的定义。
 class ListNode:
@@ -20,30 +18,26 @@ class ListNode:
         self.next = next
 
 
+
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        # 给你一个单链表的头节点 head ，请你判断该链表是否为
-        # 回文链表
-        if not head:
-            return True
-        while head:
-            if head.val != stack.pop():
-                return False
-            head = head.next
-            return True
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
 
-        def reverseList(head: ListNode) -> ListNode:
-            pre = None
-            cur = head
-            while cur:
-                tmp = cur.next
-                cur.next = pre
-                pre = cur
-                cur = tmp
-            return pre
-
-        while head:
-            if head.val != stack.pop():
+        prev = None
+        while slow:
+            tmp = slow.next
+            slow.next = prev
+            prev = slow
+            slow = tmp
+        # 注意反转后 prev 为头结点
+        while prev:  # Tips
+            if prev.val != head.val:
                 return False
+            prev = prev.next
             head = head.next
-            return True
+        return True
+
+
