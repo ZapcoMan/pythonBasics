@@ -49,6 +49,9 @@ class Solution:
         """
 
         def next_position(i, j, di, dj, steps):
+            """
+            计算下一个位置。
+            """
             while steps:
                 if not (left <= i + di <= right and top <= j + dj <= bottom):
                     di, dj = dj, -di
@@ -56,6 +59,9 @@ class Solution:
             return i, j, di, dj
 
         def move_4_points(i, j, steps):
+            """
+            移动四个点的位置。
+            """
             to_be_moved, di, dj = matrix[i][j], 0, 1
             for _ in range(4):
                 next_i, next_j, di, dj = next_position(i, j, di, dj, steps)
@@ -66,7 +72,6 @@ class Solution:
             for j in range(left, right):
                 move_4_points(top, j, right - left)
             left, right, top, bottom = left + 1, right - 1, top + 1, bottom - 1
-
 
 if __name__ == '__main__':
     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
