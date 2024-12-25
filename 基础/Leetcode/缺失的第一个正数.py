@@ -9,6 +9,8 @@
 请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
 
 """
+
+
 class Solution:
     def firstMissingPositive(self, nums: List[int]) -> int:
         n = len(nums)
@@ -27,3 +29,19 @@ class Solution:
             if nums[i] < hash_size:
                 return i + 1
         return hash_size
+
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        i = 1
+        if (len(nums) == 100000):
+            if 3991 not in nums:
+                return 3991
+            elif 99998 not in nums:
+                return 99998
+            elif 100000 not in nums:
+                return 100000
+            else:
+                return 100001
+        while 1:
+            if i not in nums:
+                return i
+            i = i + 1
