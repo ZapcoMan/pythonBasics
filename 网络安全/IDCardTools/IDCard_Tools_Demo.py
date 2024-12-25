@@ -1,4 +1,3 @@
-# 示例调用
 from 网络安全.IDCardTools.IDCardTools import IDCardTool
 from 网络安全.IDCardTools.QQNumberInfo import QQNumberInfo
 
