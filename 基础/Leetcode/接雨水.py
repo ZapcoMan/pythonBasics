@@ -10,8 +10,13 @@ from typing import List
 
 """
 此方法未使用，故已注释
+
+"""
+
+
 class Solution:
-    def trap(self, height: List[int]) -> int:
+    @staticmethod
+    def trap(height: List[int]) -> int:
         ans = 0
         h1 = 0
         h2 = 0
@@ -20,11 +25,13 @@ class Solution:
             h2 = max(h2, height[-i - 1])
             ans = ans + h1 + h2 - height[i]
         return ans - len(height) * h1
-"""
+
 
 """
 最优解
 """
+
+
 class Solution:
     @staticmethod
     def trap(height: List[int]) -> int:
