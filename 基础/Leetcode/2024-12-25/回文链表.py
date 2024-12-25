@@ -10,21 +10,24 @@
 """
 from typing import Optional
 
-
 # 单链表的定义。
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
-
+# 解决方案类，用于检测链表是否为回文。
 class Solution:
+    # 使用快慢指针和链表反转的方法检测回文。
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        # 初始化快慢指针。
         slow = fast = head
+        # 使用快慢指针找到链表的中点。
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
 
+        # 反转中点之后的链表。
         prev = None
         while slow:
             tmp = slow.next
@@ -32,17 +35,21 @@ class Solution:
             prev = slow
             slow = tmp
         # 注意反转后 prev 为头结点
+        # 比较前半部分和反转后的后半部分链表是否相同。
         while prev:  # Tips
             if prev.val != head.val:
                 return False
             prev = prev.next
             head = head.next
         return True
-    # 优化代码
+
+    # 优化代码，使用列表存储链表值后判断是否回文。
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         current_node = head
         res = []
+        # 遍历链表，将值存入列表。
         while current_node is not None:
             res.append(current_node.val)
             current_node = current_node.next
+        # 检查列表是否对称。
         return res == res[::-1]
