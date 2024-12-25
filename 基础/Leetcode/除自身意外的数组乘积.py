@@ -40,8 +40,6 @@ class Solution:
         # 返回前缀乘积和后缀乘积的乘积结果
         return [p * s for p, s in zip(pre, suf)]
 
-
-
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         """
         计算数组中每个元素对应的除自身以外所有元素的乘积，优化处理包含0的情况。
@@ -75,4 +73,6 @@ class Solution:
         return ans
 
 
-
+if __name__ == '__main__':
+    # 实例化
+    solution = Solution()
