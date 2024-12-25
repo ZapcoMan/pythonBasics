@@ -46,10 +46,21 @@ class Solution:
         return hash_size
 
 
-        def firstMissingPositive(self, nums: List[int]) -> int:
-            s = set(nums)
-            for i in range(1, len(nums) + 1):
-                if i not in s:
-                    return i
-            return len(nums) + 1
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        """
+        使用集合寻找缺失的最小正整数。
 
+        Args:
+            nums: 一个整数列表。
+
+        Returns:
+            返回缺失的最小正整数。
+        """
+        # 创建一个集合，用于快速查找
+        s = set(nums)
+        # 从1开始遍历到列表长度加1，寻找第一个不在集合中的数
+        for i in range(1, len(nums) + 1):
+            if i not in s:
+                return i
+        # 如果所有数都在集合中，那么缺失的最小正整数是列表长度加1
+        return len(nums) + 1
