@@ -43,6 +43,8 @@ class Solution:
 
         return count
 """
+
+
 class Solution:
     """
     该类提供了一个方法，用于计算数组中和为 k 的连续子数组的数量。
@@ -76,3 +78,16 @@ class Solution:
             dic[s] = dic.get(s, 0) + 1
         # 返回满足条件的子数组数量
         return ans
+
+
+def subarraySum(nums: List[int], k: int, strList: List[str]) -> int:
+    """
+    重写方法
+    :param nums:
+    :param k:
+    :param strList:
+    """
+    for num in nums:
+        print(num)
+    for s in strList:
+        print(s)
