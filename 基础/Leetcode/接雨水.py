@@ -39,11 +39,11 @@ class Solution:
         """
         if not height:
             return 0
-
+        # 初始化每个柱子
         left, right = 0, len(height) - 1
         left_max, right_max = height[left], height[right]
         water_trapped = 0
-
+        # 如果左边低于右边 就接左边 否则就去接右边
         while left < right:
             # 移动指针以找到可以接水的区域
             if height[left] < height[right]:
