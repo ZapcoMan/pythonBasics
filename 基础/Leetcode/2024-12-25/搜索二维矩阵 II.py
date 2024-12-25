@@ -9,3 +9,14 @@
 每行的元素从左到右升序排列。
 每列的元素从上到下升序排列。
 """
+from typing import List
+
+# 官方题解
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        for row in matrix:
+            for element in row:
+                if element == target:
+                    return True
+        return False
+
