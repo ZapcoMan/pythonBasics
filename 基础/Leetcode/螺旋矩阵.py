@@ -43,6 +43,35 @@ class Solution:
 
         return res
 
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        m = len(matrix)
+        n = len(matrix[0])
+        ans = [matrix[0][0]]
+        matrix[0][0] = '0'
+        a = [0, 0]
+        b = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        k = 0
+        c = [0, 0]
+        flag = 0
+        while 1:
+            c[0] = a[0] + b[k][0]
+            c[1] = a[1] + b[k][1]
+            count = 0
+            while c[0] < 0 or c[0] >= m or c[1] < 0 or c[1] >= n or matrix[c[0]][c[1]] == '0':
+                k = (k + 1) % 4
+                c[0] = a[0] + b[k][0]
+                c[1] = a[1] + b[k][1]
+                count += 1
+                if count == 2:
+                    flag = 1
+                    break
+            if flag == 1:
+                break
+            a[0] = c[0]
+            a[1] = c[1]
+            ans.append(matrix[a[0]][a[1]])
+            matrix[a[0]][a[1]] = '0'
+        return ans
 
 
 if __name__ == '__main__':
