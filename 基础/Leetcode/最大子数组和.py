@@ -9,3 +9,22 @@
 子数组
 是数组中的一个连续部分。
 """
+from typing import List
+
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        for i in range(1, len(nums)):
+            nums[i] += max(nums[i - 1], 0)
+        return max(nums)
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        ans = nums[0]
+        i = 0
+        for n in nums:
+            i += n
+            if i > ans:
+                ans = i
+            if i < 0:
+                i = 0
+        return ans
