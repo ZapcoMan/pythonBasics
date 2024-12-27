@@ -23,8 +23,15 @@ class Node:
 
 
 class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
-        if not head: return
+    def copyRandomList(self, head: 'Node') -> None:
+        """
+        深拷贝一个带有随机指针的链表。
+
+        :param head: 原链表的头节点。
+        :return: 新链表的头节点。
+        """
+        if not head:
+            return
         dic = {}
         # 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
         cur = head
@@ -39,6 +46,3 @@ class Solution:
             cur = cur.next
         # 5. 返回新链表的头节点
         return dic[head]
-
-
-
