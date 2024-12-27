@@ -58,3 +58,29 @@ class Solution:
 
         return res.next
 
+def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    对链表进行升序排序。
+
+    参数:
+        head (Optional[ListNode]): 需要排序的链表的头节点。
+
+    返回:
+        Optional[ListNode]: 排序后链表的新头节点。
+    """
+    # 初始化当前节点为链表的头节点
+    cur = head
+    # 创建一个列表用于存储链表中的节点
+    nodeList = []
+    # 遍历链表，将每个节点断开并加入到 nodeList 中
+    while cur:
+        # 保存当前节点的下一个节点
+        tmp = cur.next
+        # 断开当前节点与后续节点的连接
+        cur.next = None
+        # 将当前节点添加到 nodeList 列表中
+        nodeList.append(cur)
+        # 移动到下一个节点
+        cur = tmp
+    # 根据节点的值对 nodeList 列表进行排序
+    nodeList.sort(key=lambda x: x.val)
