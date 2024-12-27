@@ -7,7 +7,6 @@
 给你一个链表数组，每个链表都已经按升序排列。
 请你将所有链表合并到一个升序链表中，返回合并后的链表。
 """
-from heapq import heapify, heappop, heappush
 from typing import Optional, List
 
 
@@ -16,26 +15,44 @@ class ListNode:
         self.val = val
         self.next = next
 
+
 class Solution:
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         """
-        合并K个升序链表为一个升序链表。
+        合并两个有序链表。
 
         参数:
-        lists: List[Optional[ListNode]] - 一个包含多个升序链表的列表
+        list1: 第一个有序链表。
+        list2: 第二个有序链表。
 
         返回:
-        Optional[ListNode] - 合并后的升序链表的头节点
+        合并后的有序链表。
         """
-        cur = dummy = ListNode()  # 哨兵节点，作为合并后链表头节点的前一个节点
-        h = [head for head in lists if head]  # 初始把所有链表的头节点入堆
-        heapify(h)  # 堆化
-        while h:  # 循环直到堆为空
-            node = heappop(h)  # 剩余节点中的最小节点
-            if node.next:  # 下一个节点不为空
-                heappush(h, node.next)  # 下一个节点有可能是最小节点，入堆
-            cur.next = node  # 合并到新链表中
-            cur = cur.next  # 准备合并下一个节点
-        return dummy.next  # 哨兵节点的下一个节点就是新链表的头节点
+        cur = dummy = ListNode()  # 用哨兵节点简化代码逻辑
+        while list1 and list2:
+            if list1.val < list2.val:
+                cur.next = list1  # 把 list1 加到新链表中
+                list1 = list1.next
+            else:  # 注：相等的情况加哪个节点都是可以的
+                cur.next = list2  # 把 list2 加到新链表中
+                list2 = list2.next
+            cur = cur.next
+        cur.next = list1 if list1 else list2  # 拼接剩余链表
+        return dummy.next
 
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        """
+        合并K个有序链表。
 
+        参数:
+        lists: 包含K个有序链表的列表。
+
+        返回:
+        合并后的有序链表。
+        """
+        m = len(lists)
+        if m == 0: return None  # 注意输入的 lists 可能是空的
+        if m == 1: return lists[0]  # 无需合并，直接返回
+        left = self.mergeKLists(lists[:m // 2])  # 合并左半部分
+        right = self.mergeKLists(lists[m // 2:])  # 合并右半部分
+        return self.mergeTwoLists(left, right)  # 最后把左半和右半合并
