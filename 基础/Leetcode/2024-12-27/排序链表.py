@@ -58,29 +58,35 @@ class Solution:
 
         return res.next
 
+
 def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
     """
     对链表进行升序排序。
 
+    将链表转换为节点列表，根据节点的值对列表进行排序，然后重新连接节点以形成排序后的链表。
+
     参数:
-        head (Optional[ListNode]): 需要排序的链表的头节点。
+    head (Optional[ListNode]): 需要排序的链表的头节点。
 
     返回:
-        Optional[ListNode]: 排序后链表的新头节点。
+    Optional[ListNode]: 返回排序后链表的新头节点。如果输入链表为空，则返回 None。
     """
-    # 初始化当前节点为链表的头节点
+
+    # 将链表节点逐个拆解并存入列表中
     cur = head
-    # 创建一个列表用于存储链表中的节点
     nodeList = []
-    # 遍历链表，将每个节点断开并加入到 nodeList 中
     while cur:
-        # 保存当前节点的下一个节点
         tmp = cur.next
-        # 断开当前节点与后续节点的连接
         cur.next = None
-        # 将当前节点添加到 nodeList 列表中
         nodeList.append(cur)
-        # 移动到下一个节点
         cur = tmp
-    # 根据节点的值对 nodeList 列表进行排序
+
+    # 对节点列表按照节点值进行排序
     nodeList.sort(key=lambda x: x.val)
+
+    # 重新连接排序后的节点
+    for i in range(len(nodeList) - 1):
+        nodeList[i].next = nodeList[i + 1]
+
+    # 返回排序后链表的新头节点，如果原链表为空则返回 None
+    return nodeList[0] if head else None
