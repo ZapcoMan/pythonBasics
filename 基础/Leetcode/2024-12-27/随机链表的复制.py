@@ -23,7 +23,7 @@ class Node:
 
 
 class Solution:
-    def copyRandomList(self, head: 'Node') -> None:
+    def copyRandomList(self, head: 'Node') -> Node | None:
         """
         深拷贝一个带有随机指针的链表。
 
