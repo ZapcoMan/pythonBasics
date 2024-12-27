@@ -1,5 +1,5 @@
-from 网络安全.IDCardTools.IDCardTools import IDCardTool
-from 网络安全.IDCardTools.QQNumberInfo import QQNumberInfo
+from 网络安全.社工.IDCardTools.IDCardTools import IDCardTool
+from 网络安全.社工.IDCardTools.QQNumberInfo import QQNumberInfo
 
 if __name__ == "__main__":
     # 使用示例
