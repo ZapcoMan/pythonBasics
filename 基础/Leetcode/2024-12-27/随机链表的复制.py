@@ -48,17 +48,29 @@ class Solution:
         return dic[head]
 
     def copyRandomList(self, head: 'Node') -> Node | None:
+        """
+        复制一个带有随机指针的链表。
+
+        参数:
+        head: 'Node' - 链表的头节点。
+
+        返回:
+        Node | None - 复制后的链表的头节点，如果原链表为空则返回None。
+        """
+        # 1. 如果原链表为空，则直接返回None
         if not head:
             return
+        # 2. 创建一个字典，用于存储原节点和对应复制节点的映射关系
         dic = {}
         # 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
         cur = head
         while cur:
             dic[cur] = Node(cur.val)
             cur = cur.next
+        # 4. 重新遍历原链表，构建新节点的 next 和 random 指向
         cur = head
-        # 4. 构建新节点的 next 和 random 指向
         while cur:
+            # 通过字典映射，为新节点设置next和random指针
             dic[cur].next = dic.get(cur.next)
             dic[cur].random = dic.get(cur.random)
             cur = cur.next
