@@ -45,12 +45,23 @@ def analyze_binary_data(image_path):
         binary_data = file.read()
 
     # 打印前100个字节的十六进制表示
-    print("前100个字节的十六进制表示:")
-    print(binary_data[:100].hex())
+    print("十六进制表示:")
+    data_hex = binary_data.hex()
+    print(data_hex)
+    # 查找 FF D9 并将 后面的 内容 转换成字符串 打印出来
+    print("隐藏的消息:")
+
+    for i in range(len(data_hex)):
+        if data_hex[i:i+4] == 'ffd9':
+            print(f"找到 FF D9 在第 {i} 个字节。")
+            print(f"后面的内容: {data_hex[i+4:]}")
+
+
+
 
 
 # 图片路径
-image_path = 'img/黑客海报.jpg'  # 替换为你的图片路径
+image_path = '最终的GitHub地址中的图片.jpg'  # 替换为你的图片路径
 
 # 检查EXIF数据
 print("正在检查EXIF数据...")
