@@ -2,7 +2,6 @@ import wx
 import pyautogui
 import time
 
-
 # 创建窗口
 class MyFrame(wx.Frame):
     def __init__(self):
@@ -29,6 +28,7 @@ class MyFrame(wx.Frame):
 
         b1 = wx.Button(parent=panel, label='Button TG 短信轰炸接口', id=10)
 
+        # 绑定按钮事件
         self.Bind(wx.EVT_BUTTON, self.on_click, id=10, id2=20)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -37,6 +37,7 @@ class MyFrame(wx.Frame):
         vbox.Add(hbox, proportion=1, flag=wx.CENTER)
         panel.SetSizer(vbox)
 
+    # 按钮点击事件处理函数
     def on_click(self, event):
         # 模拟 按下 printScreen 键
         if event.GetId() == 10:
@@ -44,11 +45,14 @@ class MyFrame(wx.Frame):
             print('已点击 printscreen 键')
 
 
+# 自定义应用程序类
 class APP(wx.App):
+    # 应用程序退出时调用
     def OnExit(self):
         print('程序退出')
         return 0
 
+    # 应用程序初始化时调用
     def OnInit(self):
         frame = MyFrame()
         frame.Show()
