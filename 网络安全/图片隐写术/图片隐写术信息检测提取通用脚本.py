@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-# @Time    : 29 12月 2024 9:46 上午
+# @Time    : 29 12月 2024 9:46 上午
 # @Author  : codervibe
 # @File    : 图片隐写术信息检测提取通用脚本.py
 # @Project : pythonBasics
 import os
-
 
 def get_file_type_by_hex(file_path):
     """
@@ -35,24 +34,27 @@ def get_file_type_by_hex(file_path):
         b'\x77\x4f\x46\x46': ('WOFF', None),
         b'\x77\x4f\x46\x32': ('WOFF2', None),
         b'\x52\x61\x72\x21\x1a\x07\x00': ('RAR', b'\x52\x61\x72\x21\x1a\x07\x00'),
+        b'ID3': ('MP3', None),
+        b'RIFF': ('WAV', None),  # 注意：需要进一步检查 'WAVE' 标志
+        b'fLaC': ('FLAC', None),
+        b'\xff\xf1': ('AAC', None),
+        b'\xff\xf9': ('AAC', None),
+        b'OggS': ('OGG', None),
+        b'ftyp': ('M4A', None),  # 注意：需要进一步检查 'm4a' 标志
     }
 
-    # 读取文件的前几个字节
+    # 读取整个文件的二进制内容
     with open(file_path, 'rb') as file:
-        file_header = file.read(8)
-        file.seek(0, 2)  # 移动到文件末尾
-        file_size = file.tell()
-        file.seek(-1024, 2)  # 从末尾读取1024字节
-        file_footer = file.read(1024)
+        file_content = file.read()
 
     # 判断文件类型
-    for magic, (file_type, footer_magic) in magic_numbers.items():
-        if file_header.startswith(magic):
+    for magic, (fileType, footer_magic) in magic_numbers.items():
+        if file_content.startswith(magic):
             if footer_magic:
                 # 查找文件结尾
-                footer_index = file_footer.find(footer_magic)
+                footer_index = file_content.find(footer_magic)
                 if footer_index != -1:
-                    extra_content = file_footer[footer_index + len(footer_magic):]
+                    extra_content = file_content[footer_index + len(footer_magic):]
                     if extra_content:
                         # 检查多余的内容是否是一个文件
                         for extra_magic, (extra_file_type, _) in magic_numbers.items():
@@ -62,17 +64,22 @@ def get_file_type_by_hex(file_path):
                                 with open(extra_file_path, 'wb') as extra_file:
                                     extra_file.write(extra_content)
                                 print(f"多余内容是文件：{extra_file_path}")
-                                return file_type
+                                return fileType
                         # 如果多余的内容不是文件，则打印出来
-                        print(f"多余内容不是已知文件：{extra_content.hex()}")
+                        print(f"多余内容不是已知文件：\n{extra_content.hex()}")
+                    else:
+                        print("文件中没有隐藏的信息。")
                 else:
                     print("未找到文件结尾。")
-            return file_type
+            else:
+                print("文件类型已识别，但该文件类型没有定义文件结尾。")
+            return fileType
 
+    print("文件类型未知，且没有检测到隐藏的信息。")
     return "未知"
 
 
 # 示例用法
-file_path = 'example.png'
+file_path = '黑客海报.jpg'
 file_type = get_file_type_by_hex(file_path)
 print(f"文件 {file_path} 的类型是：{file_type}")

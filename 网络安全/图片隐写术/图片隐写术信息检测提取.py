@@ -10,7 +10,7 @@ from stegano import lsb
 
 # 图片路径
 # 替换为你的图片路径
-image_path = '最终的GitHub地址中的图片.jpg'
+image_path = '黑客海报.jpg'
 
 # 检查EXIF数据
 print("正在检查EXIF数据...")
