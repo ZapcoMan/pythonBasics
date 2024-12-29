@@ -1,6 +1,8 @@
 import wx
 import pyautogui
-import time
+
+# 定义图标路径常量
+ICON_PATH = "powershell.ico"
 
 # 创建窗口
 class MyFrame(wx.Frame):
@@ -10,18 +12,14 @@ class MyFrame(wx.Frame):
                          style=wx.DEFAULT_FRAME_STYLE & ~wx.MAXIMIZE_BOX)
         self.Centre()
 
-        # 图标的路径
         # 加载图标
-        icon = wx.Icon("powershell.ico", wx.BITMAP_TYPE_ICO)
-
-        # 设置框架的图标
-        self.SetIcon(icon)
-
-        # 等待一段时间，让操作系统加载图标
-        time.sleep(1)
+        try:
+            icon = wx.Icon(ICON_PATH, wx.BITMAP_TYPE_ICO)
+            self.SetIcon(icon)
+        except Exception as e:
+            print(f"加载图标失败: {e}")
 
         panel = wx.Panel(parent=self)
-        # 创建垂直方向的  Box 布局管理器
         vbox = wx.BoxSizer(wx.VERTICAL)
         self.statictext = wx.StaticText(parent=panel, label='Button TG 短信轰炸接口 单击')
         vbox.Add(self.statictext, proportion=2, flag=wx.FIXED_MINSIZE | wx.TOP | wx.CENTER, border=10)
@@ -29,7 +27,7 @@ class MyFrame(wx.Frame):
         b1 = wx.Button(parent=panel, label='Button TG 短信轰炸接口', id=10)
 
         # 绑定按钮事件
-        self.Bind(wx.EVT_BUTTON, self.on_click, id=10, id2=20)
+        self.Bind(wx.EVT_BUTTON, self.on_click, b1)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(b1, 0, wx.EXPAND | wx.BOTTOM, 5)
@@ -39,10 +37,12 @@ class MyFrame(wx.Frame):
 
     # 按钮点击事件处理函数
     def on_click(self, event):
-        # 模拟 按下 printScreen 键
-        if event.GetId() == 10:
-            pyautogui.press('printscreen')
-            print('已点击 printscreen 键')
+        try:
+            if event.GetId() == 10:
+                pyautogui.press('printscreen')
+                print('已点击 printscreen 键')
+        except Exception as e:
+            print(f"模拟按键失败: {e}")
 
 
 # 自定义应用程序类
