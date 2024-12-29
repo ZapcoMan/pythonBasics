@@ -1,5 +1,6 @@
 import turtle
 
+
 def draw_circle(color, position):
     try:
         turtle.color(color)
@@ -10,6 +11,7 @@ def draw_circle(color, position):
         turtle.penup()
     except Exception as e:
         print(f"Error drawing circle: {e}")
+
 
 if __name__ == '__main__':
     # 设置画笔宽度为10像素
