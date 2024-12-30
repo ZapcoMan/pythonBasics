@@ -11,6 +11,7 @@ import threading
 from multiprocessing import Queue
 
 import requests
+from requests import RequestException
 
 # 定义 User-Agent 列表，用于模拟不同的浏览器请求
 user_agents = [
@@ -29,38 +30,53 @@ headers = {
 }
 
 
-# statusCodeList = ['200', '304', '302']
-
-
 class DirPathScan(threading.Thread):
+    """
+    敏感路径扫描类，继承自 threading.Thread 类
+    """
+
     def __init__(self, queue):
+        """
+        初始化敏感路径扫描类
+        :param queue: 任务队列，用于存储待扫描的URL
+        """
         super().__init__()
         threading.Thread.__init__(self)
         self.queue = queue
 
     def run(self):
+        """
+        线程运行方法，从队列中获取URL并进行扫描
+        """
         # 获取队列中的Url
         while not self.queue.empty():
             url = self.queue.get()
             try:
-                res = requests.get(url=url, headers=headers)
+                res = requests.get(url=url, headers=headers, timeout=2)
 
                 if res.status_code == 200:
-                    print(f"{url} 存在敏感路径")
-                if res.status_code == 403:
-                    print(f"{url} 存在敏感路径")
-                if res.status_code == 404:
-                    print(f"{url} 存在敏感路径")
-            except Exception as e:
-                pass
+                    print(f"{url} 存在敏感路径 状态码:{res.status_code}")
+                # if res.status_code == 403:
+                #     print(f"{url} 存在敏感路径 状态码:{res.status_code}\n")
+                # if res.status_code == 404:
+                #     print(f"{url} 存在敏感路径 状态码:{res.status_code}\n")
+
+            except RequestException as e:
+                print(f"请求 {url} 时发生错误: {e}")
 
 
-def start(url, count, ext):
+def start(url, count, filePath):
+    """
+    敏感路径扫描的启动函数
+    :param url: 需要扫描的基础URL
+    :param count: 线程数量
+    :param ext: 扩展名，用于选择字典文件
+    """
     queue = Queue()
-    # 打开扫描用的字典
-    file = open('%s.txt' % ext, "r")
-    for i in file:
-        queue.put(url + i.rstrip('\n'))
+    # 指定字典文件的完整路径
+    with open(filePath, "r") as file:
+        for i in file:
+            queue.put(url + i.rstrip('\n'))
     # 多线程
     threads = []
     threading_count = int(count)
@@ -71,9 +87,8 @@ def start(url, count, ext):
     for t in threads:
         t.join()
 
-
 if __name__ == '__main__':
     url = 'https://www.baidu.com'
-    ext = 'PHP'
-    count = 16
-    start(url=url, count=count, ext=ext)
+    filePath = 'PHP.txt'
+    count = 32
+    start(url=url, count=count, filePath=filePath)
