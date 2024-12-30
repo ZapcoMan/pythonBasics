@@ -5,10 +5,15 @@
 # @Project : pythonBasics
 import whois
 
-
 def is_registered(domain):
     """
     检查域名是否已被注册
+
+    参数:
+    domain (str): 待检查的域名
+
+    返回:
+    bool: 域名是否已注册
     """
     try:
         whois_info = whois.whois(domain)
