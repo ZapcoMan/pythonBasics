@@ -6,34 +6,49 @@
 """
 从whoisInfoCollect模块导入is_registered函数，用于检查域名是否已注册。
 """
-from whoisInfoCollect import is_registered
+import re
+
 import whois
 
-"""
-获取用户输入的域名。
-"""
-domain = input("请输入域名：")
+from whoisInfoCollect import is_registered
 
-"""
-检查域名是否已注册，如果已注册，则获取并打印whois信息。
-"""
-if is_registered(domain=domain):
-    """
-    使用whois库获取域名的whois信息。
-    """
-    whois_info = whois.whois(domain)
 
+def validate_domain(domain):
     """
-    打印完整的whois信息。
+    验证域名格式是否正确。
     """
-    print(f"whois_info：{whois_info}")
+    pattern = r"^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$"
+    return re.match(pattern, domain) is not None
 
-    """
-    打印域名注册商信息。
-    """
-    print(f"whois_info.registrar:{whois_info.registrar}")
 
+def get_whois_info(domain):
     """
-    打印whois服务器信息，注意这里有一个拼写错误'serrver'，应该为'server'。
+    获取并打印域名的whois信息。
     """
-    print(f"whois serrver:{whois_info.serrver}")
+    try:
+        whois_info = whois.whois(domain)
+        print(f"whois_info: {whois_info}")
+
+        # 确保字段存在再打印
+        if hasattr(whois_info, 'registrar'):
+            print(f"Registrar: {whois_info.registrar}")
+        if hasattr(whois_info, 'server'):
+            print(f"Whois Server: {whois_info.whois_server}")
+    except Exception as e:
+        print(f"获取whois信息时发生错误: {e}")
+
+
+domain = input("请输入域名：").strip()
+
+# 检查输入是否为空或无效域名
+if not domain or not validate_domain(domain):
+    print("无效的域名，请重新输入。")
+    # return
+
+try:
+    if is_registered(domain=domain):
+        get_whois_info(domain)
+    else:
+        print("该域名未注册。")
+except Exception as e:
+    print(f"检查域名注册状态时发生错误: {e}")
