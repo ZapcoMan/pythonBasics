@@ -31,7 +31,8 @@ if __name__ == '__main__':
         "google.com",
         "amazon.com",
         "facebook.com",
-        "twitter.com"
+        "twitter.com",
+        "jqm3w.com"
     }
     for domain in domainList:
         # print(f'{domain}')
