@@ -54,7 +54,7 @@ def monitor(securityLog):
                 deniedDict[group[1]] = '1'
                 time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
                 print('{} 加入黑名单 {}'.format(time_str, group[1]))
-                print('{} >>>> add ip:{} to host.deny for invalid user'.format(time_str, group[1]))
+                print('{} >>>> add ip:{} to host.deny for invalid user 用户名无效'.format(time_str, group[1]))
                 continue
             # 搜索有效用户密码错误的IP地址
             group = re.search('Failed password for invalid user \w+ from (\d+\.\d+\.\d+\.\d+) port \d+.+user not known', str(line))
@@ -72,7 +72,7 @@ def monitor(securityLog):
                     deniedDict[ip] = '1'
                     time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
                     print('{} 加入黑名单 {}'.format(time_str, ip))
-                    print('{} >>>> add ip:{} to host.deny for invalid password'.format(time_str, ip))
+                    print('{} >>>> add ip:{} to host.deny for invalid password 密码无效次数超过阈值 自动封禁'.format(time_str, ip))
 
 if __name__ == '__main__':
     # 程序入口，启动监控安全日志的功能
