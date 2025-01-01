@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 31 12月 2024 8:21 上午
 # @Author  : codervibe
-# @File    : automaticallyBlockIP.py
+# @File    : autoMaticallyBlockIP.py
 # @Project : pythonBasics
 # 自动封禁IP
 # 安全日志
@@ -16,6 +16,7 @@ hostDeny = '/etc/hosts.deny'
 # 定义封禁阈值，即密码错误的次数达到多少次后触发封禁
 BlockThreshold = 5
 
+
 def getDenies():
     """
     读取黑名单文件，将已经封禁的IP地址加载到内存中
@@ -28,6 +29,7 @@ def getDenies():
         if group:
             deniedDict[group[1]] = '1'
     return deniedDict
+
 
 def monitor(securityLog):
     """
@@ -72,7 +74,9 @@ def monitor(securityLog):
                     deniedDict[ip] = '1'
                     time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
                     print('{} 加入黑名单 {}'.format(time_str, ip))
-                    print('{} >>>> add ip:{} to host.deny for invalid password 密码无效次数超过阈值 自动封禁'.format(time_str, ip))
+                    print('{} >>>> add ip:{} to host.deny for invalid password 密码无效次数超过阈值 自动封禁'.format(
+                        time_str, ip))
+
 
 if __name__ == '__main__':
     # 程序入口，启动监控安全日志的功能
