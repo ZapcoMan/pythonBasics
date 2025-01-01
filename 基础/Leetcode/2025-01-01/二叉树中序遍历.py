@@ -34,3 +34,39 @@ class Solution:
         ans = []
         dfs(root)
         return ans
+    # 第二个方法 栈实现非递归遍历
+    # 定义一个栈
+    # 将树的左节点依次入栈
+    # 左节点为空时，弹出栈顶元素并处理
+    # 重复2 - 3的操作
+
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        ans,stk = [],[]
+        while root or stk:
+            if root:
+                stk.append(root)
+                root =root.left
+            else:
+                root =stk.pop()
+                ans.append(root.val)
+                root = root.right
+        return ans
+    # 方法三
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        ans = []
+        while root:
+            if root.left is None:
+                ans.append(root.val)
+                root = root.right
+            else:
+                prev = root.left
+                while prev.right and prev.right != root:
+                    prev = prev.right
+                if prev.right is None:
+                    prev.right = root
+                    root = root.left
+                else:
+                    ans.append(root.val)
+                    prev.right = None
+                    root = root.right
+        return  ans
