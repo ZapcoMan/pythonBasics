@@ -11,16 +11,15 @@
 所有左子树和右子树自身必须也是二叉搜索树。
 """
 
-
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
 
-
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
+        # 初始化递归函数，设置初始最小值和最大值
         return self.dg(root, -(2 ** 32), 2 ** 32)  #这里我直接粗暴地将最小值和最大值设置为一个足够小（大）的数，你可以设置你认为的最优解
 
     def dg(self, root, min_v, max_v):
@@ -29,11 +28,13 @@ class Solution:
         if root == None:  # 如果当前节点为空，证明已经递归到叶子节点，返回True
             return True
 
+        # 检查当前节点值是否在允许的范围内
         if root.val < max_v and root.val > min_v:  # 如果当前节点值符合规定，继续进行之后的递归
             pass
         else:  # 如果不符合规定，之间返回 False
             return False
 
+        # 递归检查左子树和右子树
         if self.dg(root.left, min_v, root.val) == False:  # 对左子树进行递归，此时最大值应该为当前节点值
             return False
         if self.dg(root.right, root.val, max_v) == False:  # 对右子树进行递归，此时最小值应该为当前节点值
