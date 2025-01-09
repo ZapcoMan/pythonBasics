@@ -4,4 +4,5 @@
 # @File    : 第一个python脚本.py
 # @Project : pythonBasics
 if __name__ == '__main__':
+    # 主函数
     print('Hello,world')
