@@ -14,8 +14,12 @@ PASSWORD = b"password"
 # 设置日志记录
 logging.basicConfig(filename='honeypot.log', level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')
 
-
 def handle_client(client_socket):
+    """
+    处理客户端连接的函数。
+
+    :param client_socket: 客户端套接字。
+    """
     try:
         with client_socket:
             ip_address = client_socket.getpeername()[0]
@@ -50,8 +54,10 @@ def handle_client(client_socket):
     finally:
         client_socket.close()
 
-
 def start_server():
+    """
+    启动蜜罐服务器的函数。
+    """
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind(('0.0.0.0', TARGET_PORT))
@@ -62,7 +68,6 @@ def start_server():
         client_socket, addr = server_socket.accept()
         client_handler = threading.Thread(target=handle_client, args=(client_socket,))
         client_handler.start()
-
 
 if __name__ == "__main__":
     start_server()
