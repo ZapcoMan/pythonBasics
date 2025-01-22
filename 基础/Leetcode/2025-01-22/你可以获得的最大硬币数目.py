@@ -15,3 +15,7 @@ Bob 将会取走最后一堆。
 
 返回你可以获得的最大硬币数目。
 """
+class Solution:
+    def maxCoins(self, piles: List[int]) -> int:
+        piles.sort()
+        return sum(piles[len(piles)//3::2])
