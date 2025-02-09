@@ -37,7 +37,7 @@ def send_request(data):
         "Priority": "u=1, i"
     }
     response = requests.post(url, headers=headers, json=data)
-    time.sleep(0.1)  # 延迟50毫秒
+    time.sleep(1)  # 延迟50毫秒
     return response.status_code, response.json()
 
 
@@ -56,3 +56,6 @@ with ThreadPoolExecutor(max_workers=15) as executor:
     for future in futures:
         status_code, response_json = future.result()
         print(f"Status Code: {status_code}, Response: {response_json}")
+        if status_code == "429":
+            break
+
