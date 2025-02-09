@@ -15,10 +15,18 @@ boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的�
 
 """
 class Trie:
-
+    """
+    Trie类初始化方法。
+    """
     def __init__(self):
         self.root = {}
 
+    """
+    向前缀树中插入一个单词。
+    
+    参数:
+    word: 需要插入的单词。
+    """
     def insert(self, word: str) -> None:
         cur = self.root
         for c in word:
@@ -27,6 +35,15 @@ class Trie:
             cur = cur[c]
         cur["isEnd"] = True  # value can be anything
 
+    """
+    在前缀树中搜索一个单词。
+    
+    参数:
+    word: 需要搜索的单词。
+    
+    返回:
+    如果单词存在于前缀树中，则返回True；否则返回False。
+    """
     def search(self, word: str) -> bool:
         cur = self.root
         for c in word:
@@ -35,6 +52,15 @@ class Trie:
             cur = cur[c]
         return "isEnd" in cur
 
+    """
+    检查前缀树中是否存在以给定前缀开头的单词。
+    
+    参数:
+    prefix: 需要检查的前缀。
+    
+    返回:
+    如果前缀树中存在以给定前缀开头的单词，则返回True；否则返回False。
+    """
     def startsWith(self, prefix: str) -> bool:
         cur = self.root
         for c in prefix:
