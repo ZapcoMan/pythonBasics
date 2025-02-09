@@ -56,9 +56,12 @@ data_list = [data] * 50  # 发送500次相同的请求
 # 使用线程池发送请求
 with ThreadPoolExecutor(max_workers=25) as executor:
     futures = [executor.submit(send_request, data) for data in data_list]
+    number200 = 0
     for future in futures:
         status_code, response_json = future.result()
         print(f"Status Code: {status_code}, Response: {response_json}")
+        if status_code == 201:
+            number200 += 1
         if status_code == "429":
             break
-
+    print(number200)
