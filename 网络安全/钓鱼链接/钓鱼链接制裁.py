@@ -2,7 +2,10 @@ import requests
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor
-
+"""
+群友找到的一个钓鱼链接
+模拟不同的设备 请求 钓鱼链接 
+"""
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
@@ -37,7 +40,7 @@ def send_request(data):
         "Priority": "u=1, i"
     }
     response = requests.post(url, headers=headers, json=data)
-    time.sleep(1)  # 延迟50毫秒
+    time.sleep(20)  # 延迟50毫秒
     return response.status_code, response.json()
 
 
@@ -51,7 +54,7 @@ data = {
 data_list = [data] * 50  # 发送500次相同的请求
 
 # 使用线程池发送请求
-with ThreadPoolExecutor(max_workers=15) as executor:
+with ThreadPoolExecutor(max_workers=25) as executor:
     futures = [executor.submit(send_request, data) for data in data_list]
     for future in futures:
         status_code, response_json = future.result()
