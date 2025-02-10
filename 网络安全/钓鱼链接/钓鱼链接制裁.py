@@ -2,10 +2,12 @@ import requests
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor
+
 """
 群友找到的一个钓鱼链接
-模拟不同的设备 请求 钓鱼链接 
+模拟不同的设备请求钓鱼链接
 """
+# 定义一系列用户代理，模拟不同设备和浏览器
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
@@ -17,10 +19,18 @@ user_agents = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
 ]
 
+# 目标钓鱼网站URL
 url = "https://figystre.pro/api/check-credentials"
 
-
 def send_request(data):
+    """
+    发送请求函数
+    模拟不同设备的请求头，向指定URL发送POST请求
+    参数:
+        data: 请求的数据负载
+    返回:
+        响应状态码和JSON解析后的响应内容
+    """
     headers = {
         "Host": "figystre.pro",
         "Content-Length": "60",
@@ -42,7 +52,6 @@ def send_request(data):
     response = requests.post(url, headers=headers, json=data)
     time.sleep(20)  # 延迟50毫秒
     return response.status_code, response.json()
-
 
 # 单个数据对象
 data = {
