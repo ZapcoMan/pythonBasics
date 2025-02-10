@@ -22,6 +22,7 @@ user_agents = [
 # 目标钓鱼网站URL
 url = "https://figystre.pro/api/check-credentials"
 
+
 def send_request(data):
     """
     发送请求函数
@@ -52,6 +53,7 @@ def send_request(data):
     response = requests.post(url, headers=headers, json=data)
     time.sleep(20)  # 延迟50毫秒
     return response.status_code, response.json()
+
 
 # 单个数据对象
 data = {
