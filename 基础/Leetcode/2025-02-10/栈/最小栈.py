@@ -16,17 +16,46 @@ int getMin() 获取堆栈中的最小元素。
 """
 class MinStack:
     def __init__(self):
-        self.stack = []
-        self.min_stack = []
+        """
+        初始化MinStack对象。
+        """
+        self.stack = []  # 主栈，用于存储所有元素
+        self.min_stack = []  # 辅助栈，用于存储最小元素
+
     def push(self, x: int) -> None:
+        """
+        将元素x推入主栈。
+        如果辅助栈为空或x小于等于辅助栈顶元素，也将x推入辅助栈。
+
+        参数:
+        x (int): 要推入栈的元素值。
+        """
         self.stack.append(x)
         if not self.min_stack or x <= self.min_stack[-1]:
             self.min_stack.append(x)
+
     def pop(self) -> None:
+        """
+        删除主栈顶部的元素。
+        如果删除的元素是最小元素，则也从辅助栈中删除。
+        """
         if self.stack.pop() == self.min_stack[-1]:
             self.min_stack.pop()
-    def top(self) -> int:
-        return self.stack[-1]
-    def getMin(self) -> int:
-        return self.min_stack[-1]
 
+    def top(self) -> int:
+        """
+        获取主栈顶部的元素。
+
+        返回:
+        int: 主栈顶部的元素值。
+        """
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        """
+        获取主栈中的最小元素。
+
+        返回:
+        int: 主栈中的最小元素值。
+        """
+        return self.min_stack[-1]
