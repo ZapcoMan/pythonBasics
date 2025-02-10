@@ -51,7 +51,7 @@ data = {
 }
 
 # 创建多个相同的请求数据
-data_list = [data] * 50  # 发送500次相同的请求
+data_list = [data] * 500  # 发送500次相同的请求
 
 # 使用线程池发送请求
 with ThreadPoolExecutor(max_workers=25) as executor:
@@ -64,4 +64,4 @@ with ThreadPoolExecutor(max_workers=25) as executor:
             number200 += 1
         if status_code == "429":
             break
-    print(number200)
+    print(f"number200{number200}")
