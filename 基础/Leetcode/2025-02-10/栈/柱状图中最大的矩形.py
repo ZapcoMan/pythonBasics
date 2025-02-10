@@ -46,3 +46,8 @@ class Solution:
 
         # 返回最大面积
         return ans
+
+
+if __name__ == '__main__':
+    Solution.largestRectangleArea(Solution, [2, 4])
+    Solution.largestRectangleArea(Solution, [2, 1, 5, 6, 2, 3])
