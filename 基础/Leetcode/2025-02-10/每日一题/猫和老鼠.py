@@ -25,28 +25,47 @@
 如果猫获胜，则返回 2；
 如果平局，则返回 0 。
 """
+# 定义游戏中的洞、老鼠起始位置、猫起始位置
 HOLE, MOUSE_START, CAT_START = 0, 1, 2
+# 定义老鼠回合和猫回合
 MOUSE_TURN, CAT_TURN = 0, 1
+# 定义老鼠胜利、猫胜利和平局的结果
 MOUSE_WIN, CAT_WIN, TIE = 1, 2, 0
 
 
 class Solution:
     def catMouseGame(self, graph: List[List[int]]) -> int:
+        """
+        解决猫和老鼠游戏的问题，判断最终胜利者。
+
+        :param graph: 游戏地图，由节点和其相邻节点列表组成
+        :return: 返回游戏结果，1代表老鼠胜利，2代表猫胜利，0代表平局
+        """
         def get_prev_states(state):
+            """
+            获取当前状态的前一个状态。
+
+            :param state: 当前状态，包括老鼠位置、猫位置和当前回合
+            :return: 返回前一个状态的列表
+            """
             m, c, t = state
-            pt = t ^ 1
+            pt = t ^ 1  # 上一个回合
             pre = []
             if pt == CAT_TURN:
+                # 如果是猫回合，遍历猫的前一个可能位置
                 for pc in graph[c]:
                     if pc != HOLE:
                         pre.append((m, pc, pt))
             else:
+                # 如果是老鼠回合，遍历老鼠的前一个可能位置
                 for pm in graph[m]:
                     pre.append((pm, c, pt))
             return pre
 
         n = len(graph)
+        # 初始化游戏结果数组
         ans = [[[0, 0] for _ in range(n)] for _ in range(n)]
+        # 初始化每个状态的度数
         degree = [[[0, 0] for _ in range(n)] for _ in range(n)]
         for i in range(n):
             for j in range(1, n):
@@ -54,7 +73,9 @@ class Solution:
                 degree[i][j][CAT_TURN] = len(graph[j])
             for j in graph[HOLE]:
                 degree[i][j][CAT_TURN] -= 1
+        # 初始化队列，用于广度优先搜索
         q = deque()
+        # 初始化已知结果的状态
         for j in range(1, n):
             ans[0][j][MOUSE_TURN] = ans[0][j][CAT_TURN] = MOUSE_WIN
             q.append((0, j, MOUSE_TURN))
@@ -63,6 +84,7 @@ class Solution:
             ans[i][i][MOUSE_TURN] = ans[i][i][CAT_TURN] = CAT_WIN
             q.append((i, i, MOUSE_TURN))
             q.append((i, i, CAT_TURN))
+        # 广度优先搜索，更新所有状态的结果
         while q:
             state = q.popleft()
             t = ans[state[0]][state[1]][state[2]]
@@ -80,5 +102,5 @@ class Solution:
                         if degree[pm][pc][pt] == 0:
                             ans[pm][pc][pt] = t
                             q.append(prev_state)
+        # 返回老鼠和猫起始位置的结果
         return ans[MOUSE_START][CAT_START][MOUSE_TURN]
-
