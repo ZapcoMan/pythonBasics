@@ -21,6 +21,7 @@ def scan_port(ip):
         s.connect((ip, 27017))  # 尝试连接到 MongoDB 默认端口 27017
         print(f"[+] {ip} 的 27017 端口上有 MongoDB 服务")
         s.close()
+        check_mongo_connect(ip)
     except socket.error:
         print("[-] 27017 端口已关闭")
         return
@@ -32,6 +33,8 @@ def check_mongo_connect(ip):
 
     :param ip: 需要检查的 IP 地址
     """
+
+    print(f"[+] {ip} 正在尝试链接......")
     try:
         client = pymongo.MongoClient(ip, 27017, socketTimeoutMS=3000)  # 创建 MongoDB 客户端连接
         dbnames = client.list_database_names()  # 获取数据库名称列表
