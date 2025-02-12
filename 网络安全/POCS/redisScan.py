@@ -7,6 +7,7 @@
 import socket
 import redis
 
+
 def scan_port(ip):
     """
     检查指定 IP 的 Redis 端口是否开放。
@@ -32,12 +33,17 @@ def check_redis_connect(ip):
     :param ip: 需要检查的 IP 地址
     """
     try:
-        r = redis.StrictRedis(host=ip, port=6379, socket_timeout=3)
+        r = redis.StrictRedis(host=ip, port=6379, socket_timeout=0.3)
         info = r.info()  # 获取 Redis 服务器信息
         if info:
-            print(f"[+] {ip} 存在未授权访问")
+            print(f"[+] {ip}  存在未授权访问")
+            print(f"[+] {r.client_list()}")
         else:
             print(f"[-] {ip} 不存在未授权访问")
     except redis.ConnectionError:
         print(f"[-] 无法连接到 {ip}:6379")
         return
+
+
+if __name__ == '__main__':
+    scan_port('127.0.0.1')
