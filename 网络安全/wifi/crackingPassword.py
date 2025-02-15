@@ -1,4 +1,5 @@
 import itertools
+import logging
 import time
 
 import pywifi
@@ -6,7 +7,8 @@ from pywifi import const
 
 import MyThread
 
-
+# 配置日志记录
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 # 测试连接，返回链接结果
 def 破解(密码):
     # 抓取网卡接口
@@ -34,12 +36,22 @@ def 破解(密码):
         网卡.remove_all_network_profiles()
         # 设定新的连接文件
         tep_profile = 网卡.add_network_profile(连接文件)
-        网卡.connect(tep_profile)
-        # wifi连接时间
-        time.sleep(3)
-        if 网卡.status() == const.IFACE_CONNECTED:
-            return True
-        else:
+        try:
+            网卡.connect(tep_profile)
+            # wifi连接时间
+            time.sleep(3)
+            if 网卡.status() == const.IFACE_CONNECTED:
+                return True
+            else:
+                return False
+        except pywifi.exceptions.InterfaceError as e:
+            logging.error(f"接口错误: {e}")
+            return False
+        except pywifi.exceptions.ConnectionError as e:
+            logging.error(f"连接错误: {e}")
+            return False
+        except Exception as e:
+            logging.error(f"未知错误: {e}")
             return False
     else:
         print("已有wifi连接:%s" % 密码)
@@ -61,7 +73,14 @@ def 破解密码(name, x):
             # else:
             # 跳出当前循环，进行下一次循环
             # print("线程%s密码破解中....密码校对: " % name, 密码)
-        except:
+        except pywifi.exceptions.InterfaceError as e:
+            logging.error(f"线程{name}接口错误: {e}")
+            continue
+        except pywifi.exceptions.ConnectionError as e:
+            logging.error(f"线程{name}连接错误: {e}")
+            continue
+        except Exception as e:
+            logging.error(f"线程{name}未知错误: {e}")
             continue
 
 
