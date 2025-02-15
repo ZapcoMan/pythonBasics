@@ -42,7 +42,7 @@ def scan_port(ip, port=6379):
     s.settimeout(0.3)  # 设置超时时间
     try:
         s.connect((ip, port))  # 尝试连接到 Redis 默认端口 6379
-        print(f"\033[92m[+] {ip} 的 6379 端口上有 Redis 服务\033[0m")
+        print(f"\033[92m[+] {ip} 的 {port} 端口上有 Redis 服务\033[0m")
         s.close()
         check_redis_connect(ip)
     except socket.error:
@@ -62,7 +62,7 @@ def check_redis_connect(ip, port=6379):
         info = r.info()
 
         # 新增操作系统判断
-        os_type = info.get('os').strip().lower()  # 从Redis信息中获取操作系统类型
+        os_type = info.get('os', 'linux').strip().lower()  # 从Redis信息中获取操作系统类型
         print(f"\033[92m[+] 目标操作系统类型: {os_type}\033[0m")
         if info:
             print(f"\033[92m[+] {ip}  存在未授权访问（运行系统：{os_type.upper()}）\033[0m")
@@ -133,4 +133,4 @@ def exp_crontab(redis_client):
 
 
 if __name__ == '__main__':
-    scan_port("123.58.224.8", 47241)
+    scan_port("123.58.224.8", 50721)
