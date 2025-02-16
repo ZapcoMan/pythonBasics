@@ -13,7 +13,7 @@ array = [
 for i in array:
     # 读取文件内容
     try:
-        with open('./phone_location.sql', 'r', encoding='UTF-8') as file:
+        with open('phone_location.sql', 'r', encoding='UTF-8') as file:
             content = file.read()
 
         # 使用 grep 和 awk 的功能
