@@ -15,11 +15,7 @@ shellcode_bytes = bytes.fromhex(shellcode)
 shellcode_base64 = base64.b64encode(shellcode_bytes)
 print(f"Base64编码后的shellcode: {shellcode_base64.decode('utf-8')}")
 
-
-
 print("============================================================================================")
-
-
 
 # 将base64编码后的字节对象解码为字节对象
 shellcode_b64decoded = base64.b64decode(shellcode_base64)
