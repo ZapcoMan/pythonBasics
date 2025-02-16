@@ -7,7 +7,7 @@ import requests
 
 url = "https://edith.xiaohongshu.com/api/sns/v1/system_service/vfc_code"
 params = {
-    "phone": "15763540934",
+    "phone": "15066427783",
     "zone": "86",
     "type": "login"
 }
