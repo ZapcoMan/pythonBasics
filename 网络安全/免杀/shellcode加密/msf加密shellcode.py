@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 16 2月 2025 7:57 下午
 # @Author  : codervibe
-# @File    : msf免杀加密.py
+# @File    : msf加密shellcode.py
 # @Project : pythonBasics
 import base64
 
