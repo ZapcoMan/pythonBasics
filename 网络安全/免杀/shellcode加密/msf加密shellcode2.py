@@ -12,16 +12,19 @@ shellcode = 'fc4883e4f0e8c8000000415141505251564831d265488b5260488b5218488b52204
 # 将十六进制字符串转换为字节对象
 shellcode_bytes = bytes.fromhex(shellcode)
 
-# 替换 shellcode 中的 a 为 c
+# 替换 sc 中的 a 为 c
 shellcode_bytes = shellcode_bytes.replace(b'a', b'c').replace(b'z', b'f')
-# 还原
-print(shellcode_bytes)
+# 替换之后
+print(f"shellcode_bytes:{shellcode_bytes}")
 # 将字节对象进行base64编码
 shellcode_base64 = base64.b64encode(shellcode_bytes)
 print(f"Base64编码后的shellcode: {shellcode_base64.decode('utf-8')}")
-
+print("============================================================================================\n")
 # base64解码
 shellcode_base64 = base64.b64decode(shellcode_base64)
-shellcode_r = shellcode_base64.replace(b'c', b'a').replace(b'f', b'z')
+# 替换还原
+shellcode_r = shellcode_base64.replace(b'f', b'z').replace(b'c', b'a')
+
 shellcode_hex = shellcode_r.hex()
 print(shellcode_hex)
+print(shellcode_hex == shellcode)

@@ -21,3 +21,4 @@ print("=========================================================================
 shellcode_b64decoded = base64.b64decode(shellcode_base64)
 shellcode_hex = shellcode_b64decoded.hex()
 print(f"解码后转换成十六进制的shellcode: {shellcode_hex}")
+print(shellcode_hex == shellcode)
