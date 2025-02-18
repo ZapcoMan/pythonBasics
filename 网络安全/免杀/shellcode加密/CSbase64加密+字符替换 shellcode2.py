@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Time    : 17 2月 2025 8:06 上午
 # @Author  : codervibe
-# @File    : msf加密shellcode2.py
+# @File    : CSbase64加密+字符替换 shellcode2.py
 # @Project : pythonBasics
-# -*- coding: utf-8 -*-
-# @Time    : 17 2月 2025 8:06 上午
-# @Author  : codervibe
-# @File    : msf加密shellcode2.py
-# @Project : pythonBasics
+
 import base64
 
 from Crypto.Cipher import AES
@@ -21,7 +17,7 @@ shellcode_bytes = bytes.fromhex(shellcode)
 shellcode_base64 = base64.b64encode(shellcode_bytes)
 
 shellcode_replace_base64 = shellcode_base64.replace(b'+', b'-').replace(b'/', b'_').replace(b'=', b'*/')
-print(f"shellcode_replace_base64:\n{shellcode_replace_base64}")
+print(f"shellcode_replace_base64:\n{shellcode_replace_base64}\n{shellcode_replace_base64.decode('utf-8')}\n{type(shellcode_replace_base64)}")
 
 # 解开 base64 + replace
 shellcode_R_replace_base64 = shellcode_replace_base64.replace(b'-', b'+').replace(b'_', b'/').replace(b'*/', b'=')
