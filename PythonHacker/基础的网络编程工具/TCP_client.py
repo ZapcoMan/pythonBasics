@@ -7,7 +7,7 @@ import socket
 
 # 定义目标主机和目标端口
 target_host = '127.0.0.1'
-target_port = 9999
+target_port = 19999
 
 # 创建一个TCP套接字对象
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
