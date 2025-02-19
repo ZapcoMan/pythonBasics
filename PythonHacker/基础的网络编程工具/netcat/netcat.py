@@ -11,7 +11,18 @@ import sys
 import textwrap
 import threading
 
+class NetCat:
+    def __init__(self, args, buffer=None):
+        self.args = args
+        self.buffer = buffer
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
+    def run(self):
+        if self.args.listen:
+            self.listen()
+        else:
+            self.send()
 
 def execute(cmd):
     cmd = cmd.strip()
