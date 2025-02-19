@@ -11,7 +11,7 @@ def handle_client(client_socket):
     处理客户端连接
 
     参数:
-    client_socket: 客户端套接字
+    socket: 客户端套接字
 
     返回值:
     无
@@ -68,7 +68,9 @@ def start_server(host, port):
     while True:
         # 接受客户端连接
         client_socket, addr = server.accept()
+        # 打印连接信息
         print(f"Accepted connection from {addr}")
+
         # 处理客户端连接
         handle_client(client_socket)
 
