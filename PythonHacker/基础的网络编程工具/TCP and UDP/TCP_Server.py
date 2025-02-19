@@ -10,12 +10,13 @@ import threading
 IP = '0.0.0.0'
 PORT = 9998
 
+
 def handle_client(client_socket):
     """
     处理客户端请求的函数。
 
     参数:
-    - client_socket: 客户端套接字对象，用于接收和发送数据。
+    - socket: 客户端套接字对象，用于接收和发送数据。
 
     返回值:
     无
@@ -26,6 +27,7 @@ def handle_client(client_socket):
         print(f"[*] Received: {request.decode('utf-8')}")
         # 向客户端发送ACK确认消息
         sock.send(b"ACK!")
+
 
 if __name__ == '__main__':
     # 创建TCP服务器套接字
@@ -42,4 +44,3 @@ if __name__ == '__main__':
         # 创建一个新的线程来处理客户端请求
         client_handle = threading.Thread(target=handle_client, args=(client,))
         client_handle.start()
-
