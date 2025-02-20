@@ -11,21 +11,39 @@ import sys
 import textwrap
 import threading
 
-
 class NetCat:
+    """
+    NetCat类用于实现网络连接相关的功能。
+    """
     def __init__(self, args, buffer=None):
+        """
+        初始化NetCat类。
+
+        参数:
+        - args: 命令行参数。
+        - buffer: 缓存数据。
+        """
         self.args = args
         self.buffer = buffer
+        # 创建一个TCP套接字
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # 设置套接字选项，以便地址可以重用
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def run(self):
+        """
+        根据命令行参数决定是监听还是发送数据。
+        """
         if self.args.listen:
             self.listen()
         else:
             self.send()
 
     def send(self):
+        """
+        发送数据到目标主机和端口。
+        如果有缓存数据，则先发送缓存数据。
+        """
         self.socket.connect((self.args.target, self.args.port))
         if self.buffer:
             self.socket.send(self.buffer)
@@ -50,10 +68,19 @@ class NetCat:
             sys.exit()
 
     def handle(self, client_socket):
+        """
+        处理客户端请求。
+
+        参数:
+        - client_socket: 客户端套接字。
+        """
+        # 根据不同的命令执行不同的操作
         if self.args.execute:
+            # 如果有命令要执行，则执行命令并将输出发送回客户端
             output = execute(self.args.execute)
             client_socket.send(output.encode())
         elif self.args.upload:
+            # 如果有文件要上传，则接收文件数据并保存到指定路径
             file_buffer = b''
             while True:
                 data = client_socket.recv(4096)
@@ -67,6 +94,7 @@ class NetCat:
             client_socket.send(message.encode())
 
         elif self.args.command:
+            # 如果是命令行模式，则循环接收命令并执行，将结果发送回客户端
             cmd_buffer = b''
             while True:
                 try:
@@ -78,11 +106,14 @@ class NetCat:
                         client_socket.send(response.encode())
                     cmd_buffer = b''
                 except Exception as e:
+                    # 异常处理，打印错误信息并关闭套接字
                     print(f'Server killed {e}')
                     self.socket.close()
                     sys.exit()
-
     def listen(self):
+        """
+        监听指定端口并接受连接。
+        """
         self.socket.bind((self.args.target, self.args.port))
         self.socket.listen(5)
         while True:
@@ -94,6 +125,15 @@ class NetCat:
 
 
 def execute(cmd):
+    """
+    执行命令并返回输出结果。
+
+    参数:
+    - cmd: 要执行的命令。
+
+    返回:
+    - output: 命令执行的输出结果。
+    """
     cmd = cmd.strip()
     if not cmd:
         return
