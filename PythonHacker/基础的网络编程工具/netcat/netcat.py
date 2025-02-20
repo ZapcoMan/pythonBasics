@@ -40,8 +40,8 @@ class NetCat:
                     if recv_len < 4096:
                         break
                 if response:
-                    print(response, end='')
-                    buffer = input('>')
+                    print(response)
+                    buffer = input('> ')
                     buffer += '\n'
                     self.socket.send(buffer.encode())
         except KeyboardInterrupt:
@@ -75,7 +75,7 @@ class NetCat:
                         cmd_buffer += client_socket.recv(64)
                     response = execute(cmd_buffer.decode())
                     if response:
-                        client_socket.send(response)
+                        client_socket.send(response.encode())
                     cmd_buffer = b''
                 except Exception as e:
                     print(f'Server killed {e}')
