@@ -10,6 +10,10 @@ import subprocess
 import sys
 import textwrap
 import threading
+import logging
+
+# 设置日志配置
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class NetCat:
     """
@@ -44,10 +48,10 @@ class NetCat:
         发送数据到目标主机和端口。
         如果有缓存数据，则先发送缓存数据。
         """
-        self.socket.connect((self.args.target, self.args.port))
-        if self.buffer:
-            self.socket.send(self.buffer)
         try:
+            self.socket.connect((self.args.target, self.args.port))
+            if self.buffer:
+                self.socket.send(self.buffer)
             while True:
                 recv_len = 1
                 response = ''
@@ -63,9 +67,11 @@ class NetCat:
                     buffer += '\n'
                     self.socket.send(buffer.encode())
         except KeyboardInterrupt:
-            print('User terminated.')
+            logging.info('User terminated.')
+        except Exception as e:
+            logging.error(f'Error during send: {e}')
+        finally:
             self.socket.close()
-            sys.exit()
 
     def handle(self, client_socket):
         """
@@ -74,54 +80,63 @@ class NetCat:
         参数:
         - client_socket: 客户端套接字。
         """
-        # 根据不同的命令执行不同的操作
-        if self.args.execute:
-            # 如果有命令要执行，则执行命令并将输出发送回客户端
-            output = execute(self.args.execute)
-            client_socket.send(output.encode())
-        elif self.args.upload:
-            # 如果有文件要上传，则接收文件数据并保存到指定路径
-            file_buffer = b''
-            while True:
-                data = client_socket.recv(4096)
-                if data:
-                    file_buffer += data
-                else:
-                    break
-            with open(self.args.upload, 'wb') as f:
-                f.write(file_buffer)
-            message = f'Saved file {self.args.upload}'
-            client_socket.send(message.encode())
+        try:
+            if self.args.execute:
+                # 如果有命令要执行，则执行命令并将输出发送回客户端
+                output = execute(self.args.execute)
+                client_socket.send(output.encode())
+            elif self.args.upload:
+                # 如果有文件要上传，则接收文件数据并保存到指定路径
+                file_buffer = b''
+                while True:
+                    data = client_socket.recv(4096)
+                    if data:
+                        file_buffer += data
+                    else:
+                        break
+                with open(self.args.upload, 'wb') as f:
+                    f.write(file_buffer)
+                message = f'Saved file {self.args.upload}'
+                client_socket.send(message.encode())
 
-        elif self.args.command:
-            # 如果是命令行模式，则循环接收命令并执行，将结果发送回客户端
-            cmd_buffer = b''
-            while True:
-                try:
+            elif self.args.command:
+                # 如果是命令行模式，则循环接收命令并执行，将结果发送回客户端
+                cmd_buffer = b''
+                while True:
                     client_socket.send(b'BHP: #> ')
-                    while '\n' not in cmd_buffer.decode():
-                        cmd_buffer += client_socket.recv(64)
+                    while b'\n' not in cmd_buffer:
+                        data = client_socket.recv(64)
+                        if not data:
+                            break
+                        cmd_buffer += data
+                    if not cmd_buffer:
+                        break
                     response = execute(cmd_buffer.decode())
                     if response:
                         client_socket.send(response.encode())
                     cmd_buffer = b''
-                except Exception as e:
-                    # 异常处理，打印错误信息并关闭套接字
-                    print(f'Server killed {e}')
-                    self.socket.close()
-                    sys.exit()
+        except Exception as e:
+            logging.error(f'Error handling client: {e}')
+        finally:
+            client_socket.close()
+
     def listen(self):
         """
         监听指定端口并接受连接。
         """
-        self.socket.bind((self.args.target, self.args.port))
-        self.socket.listen(5)
-        while True:
-            client_socket, _ = self.socket.accept()
-            client_thread = threading.Thread(
-                target=self.handle, args=(client_socket,)
-            )
-            client_thread.start()
+        try:
+            self.socket.bind((self.args.target, self.args.port))
+            self.socket.listen(5)
+            while True:
+                client_socket, _ = self.socket.accept()
+                client_thread = threading.Thread(
+                    target=self.handle, args=(client_socket,)
+                )
+                client_thread.start()
+        except Exception as e:
+            logging.error(f'Error listening: {e}')
+        finally:
+            self.socket.close()
 
 
 def execute(cmd):
@@ -137,8 +152,15 @@ def execute(cmd):
     cmd = cmd.strip()
     if not cmd:
         return
-    output = subprocess.check_output(shlex.split(cmd), stderr=subprocess.STDOUT)
-    return output.decode()
+    try:
+        output = subprocess.check_output(shlex.split(cmd), stderr=subprocess.STDOUT)
+        return output.decode()
+    except subprocess.CalledProcessError as e:
+        logging.error(f'Command failed: {e}')
+        return f'Command failed: {e.output.decode()}'
+    except Exception as e:
+        logging.error(f'Error executing command: {e}')
+        return f'Error executing command: {e}'
 
 
 if __name__ == '__main__':
