@@ -1,0 +1,7 @@
+admin
+vip
+test
+phpadmin
+xss
+uploads
+upload
