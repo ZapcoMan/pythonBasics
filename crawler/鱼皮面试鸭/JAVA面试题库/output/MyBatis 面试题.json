@@ -1,0 +1,604 @@
+{
+    "code": 0,
+    "data": {
+        "records": [
+            {
+                "id": "1802597639336042498",
+                "questionNum": "1153",
+                "title": "说说 MyBatis 的缓存机制？ ",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 10536,
+                "thumbNum": 0,
+                "favourNum": 189,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-19 13:37:12",
+                "needVip": 0,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-17 15:02:22",
+                "updateTime": "2025-06-25 23:12:27",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "fuq3xl",
+                "fileId": "1397757900240801036",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1803351153858568193",
+                "questionNum": "1231",
+                "title": "能详细说说 MyBatis 的执行流程吗？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 7983,
+                "thumbNum": 0,
+                "favourNum": 129,
+                "reviewStatus": 1,
+                "priority": -1,
+                "needVip": 1,
+                "userId": "1772087337535152129",
+                "createTime": "2024-06-19 16:56:34",
+                "updateTime": "2025-06-25 22:45:14",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "j3u3f0",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1801451484724142081",
+                "questionNum": "1082",
+                "title": "MyBatis 与 Hibernate 有哪些不同？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 5408,
+                "thumbNum": 0,
+                "favourNum": 41,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 15:06:11",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-14 11:07:57",
+                "updateTime": "2025-06-25 21:51:39",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "z4gr9n",
+                "fileId": "1397757900241181859",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1801499613443989505",
+                "questionNum": "1084",
+                "title": "MyBatis 中 #{} 和 ${} 的区别是什么？",
+                "difficulty": 1,
+                "contentType": 0,
+                "viewNum": 8243,
+                "thumbNum": 0,
+                "favourNum": 171,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 15:51:17",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-14 14:19:12",
+                "updateTime": "2025-06-25 23:31:31",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "xw6lzr",
+                "fileId": "1397757900239576892",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1801871567963365377",
+                "questionNum": "1128",
+                "title": "MyBatis 写个 Xml 映射文件，再写个 DAO 接口就能执行，这个原理是什么？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 5098,
+                "thumbNum": 0,
+                "favourNum": 55,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 15:51:17",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-15 14:57:13",
+                "updateTime": "2025-06-25 22:58:17",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "a967l2",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1802527090962407426",
+                "questionNum": "1143",
+                "title": "MyBatis 动态 sql 有什么用？执行原理？有哪些动态 sql？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 4285,
+                "thumbNum": 0,
+                "favourNum": 53,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 20:34:27",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-17 10:22:02",
+                "updateTime": "2025-06-25 20:24:10",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "l5ll71",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1802539491426377730",
+                "questionNum": "1144",
+                "title": "Mybatis 如何实现一对一、一对多的关联查询 ？",
+                "difficulty": 1,
+                "contentType": 0,
+                "viewNum": 916,
+                "thumbNum": 0,
+                "favourNum": 10,
+                "reviewStatus": 1,
+                "reviewMessage": "题库中缺失，题解不完整，已重构题解",
+                "reviewerId": "1903103654707298305",
+                "reviewTime": "2025-04-08 18:50:40",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-17 11:11:18",
+                "updateTime": "2025-06-25 22:59:09",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "mxvi4o",
+                "hasChoiceQuestion": false
+            },
+            {
+                "id": "1802587443079487490",
+                "questionNum": "1152",
+                "title": "MyBatis 是否支持延迟加载？如果支持，它的实现原理是什么？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 3382,
+                "thumbNum": 0,
+                "favourNum": 48,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-19 10:48:20",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-17 14:21:51",
+                "updateTime": "2025-06-25 14:18:00",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "zfon15",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1802630007719534594",
+                "questionNum": "1157",
+                "title": "使用 MyBatis 的 mapper 接口调用时有哪些要求？",
+                "difficulty": 1,
+                "contentType": 0,
+                "viewNum": 722,
+                "thumbNum": 0,
+                "favourNum": 8,
+                "reviewStatus": 1,
+                "reviewMessage": "题库里没有，但题解写的太干巴，重构了一下题解",
+                "reviewerId": "1903103654707298305",
+                "reviewTime": "2025-04-09 15:49:50",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-17 17:10:59",
+                "updateTime": "2025-06-25 22:36:36",
+                "tagList": [
+                    "Mybatis",
+                    "后端"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "t0xyg2",
+                "hasChoiceQuestion": false
+            },
+            {
+                "id": "1802872613967831042",
+                "questionNum": "1189",
+                "title": "简述 MyBatis 的插件运行原理，以及如何编写一个插件？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 4995,
+                "thumbNum": 0,
+                "favourNum": 120,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 20:35:08",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-18 09:15:01",
+                "updateTime": "2025-06-25 23:43:08",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "xjsf0t",
+                "fileId": "1397757900612168733",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1802959311695323137",
+                "questionNum": "1196",
+                "title": "JDBC 编程有哪些不足之处，MyBatis 是如何解决的？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 3402,
+                "thumbNum": 0,
+                "favourNum": 46,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-19 13:56:08",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-18 14:59:31",
+                "updateTime": "2025-06-25 21:32:46",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "k3zdap",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1802978222432133121",
+                "questionNum": "1199",
+                "title": "Mybatis 都有哪些 Executor 执行器？它们之间的区别是什么？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 593,
+                "thumbNum": 0,
+                "favourNum": 4,
+                "reviewStatus": 1,
+                "reviewMessage": "题库中没有，题解写的比较简洁，给他补充了一些内容",
+                "reviewerId": "1903103654707298305",
+                "reviewTime": "2025-04-09 16:32:34",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-18 16:14:40",
+                "updateTime": "2025-06-25 20:28:56",
+                "tagList": [
+                    "Mybatis",
+                    "后端"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "ql80lh",
+                "hasChoiceQuestion": false
+            },
+            {
+                "id": "1803321567800188930",
+                "questionNum": "1225",
+                "title": "MyBatis 如何实现数据库类型和 Java 类型的转换的？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 3070,
+                "thumbNum": 0,
+                "favourNum": 40,
+                "reviewStatus": 1,
+                "needVip": 1,
+                "userId": "1772087337535152129",
+                "createTime": "2024-06-19 14:59:00",
+                "updateTime": "2025-06-25 20:32:34",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "vqy8ff",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1803353282371379202",
+                "questionNum": "1232",
+                "title": "MyBatis 自带的连接池有了解过吗？",
+                "difficulty": 1,
+                "contentType": 0,
+                "viewNum": 3625,
+                "thumbNum": 0,
+                "favourNum": 41,
+                "reviewStatus": 1,
+                "needVip": 1,
+                "userId": "1772087337535152129",
+                "createTime": "2024-06-19 17:05:01",
+                "updateTime": "2025-06-25 20:37:14",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "ryollo",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1772519661640982530",
+                "questionNum": "82",
+                "title": "什么是 MyBatis-Plus？它有什么作用？它和 MyBatis 有哪些区别？\n",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 6106,
+                "thumbNum": 0,
+                "favourNum": 89,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-03-27 15:54:38",
+                "needVip": 1,
+                "userId": "1772087337535152129",
+                "createTime": "2024-03-26 15:03:13",
+                "updateTime": "2025-06-25 22:42:24",
+                "tagList": [
+                    "后端",
+                    "Mybatis-plus",
+                    "编程导航"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "pbc762",
+                "fileId": "1397757900669744685",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1801432411697127425",
+                "questionNum": "1078",
+                "title": "MyBatis 的优点？",
+                "difficulty": 1,
+                "contentType": 0,
+                "viewNum": 4035,
+                "thumbNum": 0,
+                "favourNum": 46,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 15:06:11",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-14 09:52:10",
+                "updateTime": "2025-06-25 20:49:21",
+                "tagList": [
+                    "MyBatis",
+                    "后端"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "91qqxt",
+                "hasChoiceQuestion": true
+            },
+            {
+                "id": "1801436313830105090",
+                "questionNum": "1079",
+                "title": "MyBatis 的缺点？",
+                "difficulty": 3,
+                "contentType": 0,
+                "viewNum": 3492,
+                "thumbNum": 0,
+                "favourNum": 34,
+                "reviewStatus": 1,
+                "reviewerId": "1772087337535152129",
+                "reviewTime": "2024-06-18 15:06:11",
+                "needVip": 1,
+                "userId": "1783393747989405698",
+                "createTime": "2024-06-14 10:07:40",
+                "updateTime": "2025-06-25 20:49:35",
+                "tagList": [
+                    "后端",
+                    "MyBatis"
+                ],
+                "hasVipAuth": false,
+                "hasBestAnswer": false,
+                "hasAnswer": false,
+                "isNew": false,
+                "shareCode": "uscnjb",
+                "hasChoiceQuestion": true
+            }
+        ],
+        "total": "17",
+        "size": "20",
+        "current": "1",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "2",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "3",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "4",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "5",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "6",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "7",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "8",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "9",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}
+{
+    "code": 0,
+    "data": {
+        "records": [],
+        "total": "17",
+        "size": "20",
+        "current": "10",
+        "orders": [],
+        "optimizeCountSql": true,
+        "searchCount": true,
+        "pages": "1"
+    },
+    "message": "ok"
+}

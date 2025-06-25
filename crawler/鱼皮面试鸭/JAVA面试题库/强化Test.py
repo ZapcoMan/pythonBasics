@@ -9,6 +9,7 @@ txt_output_dir = "强化txt"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(txt_output_dir, exist_ok=True)  # 新增 txt 输出目录
 
+
 def fetch_and_save_questions(question_bank_id, title):
     """
     根据 question_bank_id 获取面试题数据并保存到本地 JSON 文件中，
@@ -79,6 +80,12 @@ def fetch_and_save_questions(question_bank_id, title):
                     print(f"已将第 {current} 页的标题写入文件：{txt_filename}")
                 else:
                     print(f"第 {current} 页无有效标题可写入。")
+
+                # 如果 records 为空，并且不是第一页，则说明数据请求完毕，跳出循环
+                if current > 1 and not records:
+                    print(f"第 {current} 页 records 为空，判断数据已请求完毕，切换到下一个题库 ID...")
+                    break
+
             else:
                 print(f"获取第 {current} 页数据失败，状态码：{response.status_code}")
         except requests.exceptions.RequestException as e:
