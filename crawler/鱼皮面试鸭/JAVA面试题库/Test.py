@@ -46,9 +46,20 @@ except requests.exceptions.JSONDecodeError:
     print("响应内容不是有效的 JSON 格式")
     response_json = {}
 
-# 将 JSON 数据写入文件
+# 将原始 JSON 数据写入文件
 output_file = "response_output.json"
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump(response_json, f, ensure_ascii=False, indent=4)
 
 print(f"JSON 数据已写入文件: {output_file}")
+
+# 提取 data 中的 records 列表，并获取每个元素的 id 和 title
+records = response_json.get("data", {}).get("records", [])
+extracted_data = [{"id": record.get("id"), "title": record.get("title")} for record in records]
+
+# 将提取的数据写入新的 JSON 文件
+extracted_file = "extracted_records.json"
+with open(extracted_file, "w", encoding="utf-8") as f:
+    json.dump(extracted_data, f, ensure_ascii=False, indent=4)
+
+print(f"已提取 records 中的 id 和 title，并保存到文件: {extracted_file}")
