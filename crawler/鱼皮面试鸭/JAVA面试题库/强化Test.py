@@ -4,14 +4,16 @@ import time
 import os
 
 # 创建输出目录（如不存在）
-output_dir = "output"
+output_dir = "强化output"
+txt_output_dir = "强化txt"
 os.makedirs(output_dir, exist_ok=True)
+os.makedirs(txt_output_dir, exist_ok=True)  # 新增 txt 输出目录
 
 def fetch_and_save_questions(question_bank_id, title):
     """
     根据 question_bank_id 获取面试题数据并保存到本地 JSON 文件中，
     文件名为 title.json 的格式，并统一存放在 output 目录下。
-    同时提取 data.records 中的 title 并写入对应的 .txt 文件中。
+    同时提取 data.records 中的 title 并写入对应的 .txt 文件中，存放在 txt_output_dir。
 
     :param question_bank_id: 题库ID（字符串）
     :param title: 对应标题，用于命名输出文件
@@ -56,7 +58,7 @@ def fetch_and_save_questions(question_bank_id, title):
             if response.status_code == 200:
                 data = response.json()
                 filename = os.path.join(output_dir, f"{title}.json")  # JSON 文件路径
-                txt_filename = os.path.join(output_dir, f"{title}.txt")  # TXT 文件路径
+                txt_filename = os.path.join(txt_output_dir, f"{title}.txt")  # TXT 文件路径
 
                 # 将原始响应数据写入 JSON 文件
                 with open(filename, 'a', encoding='utf-8') as f:

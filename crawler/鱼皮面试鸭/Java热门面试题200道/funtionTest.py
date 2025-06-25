@@ -1,13 +1,15 @@
 import requests
 import json
 
-def fetch_and_save_questions(question_bank_ids, url="https://api.mianshiya.com/api/question_bank/list_question"):
-    """
-    根据 question_bank_ids 获取面试题数据并保存到本地 JSON 文件中
 
-    :param question_bank_ids: 题库ID列表
-    :param url: 请求地址（默认值为指定的API URL）
+def fetch_and_save_questions(question_bank_id):
     """
+    根据 question_bank_id 获取面试题数据并保存到本地 JSON 文件中
+
+    :param question_bank_id: 题库ID，可以是字符串（单个ID）或列表（多个ID）
+    """
+    url = "https://api.mianshiya.com/api/question_bank/list_question"
+
     payload = {
         "current": 1,
         "pageSize": 20,
@@ -38,6 +40,12 @@ def fetch_and_save_questions(question_bank_ids, url="https://api.mianshiya.com/a
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
     }
 
+    # 如果是字符串，转成列表处理
+    if isinstance(question_bank_id, str):
+        question_bank_ids = [question_bank_id]
+    else:
+        question_bank_ids = question_bank_id
+
     for question_bank_id in question_bank_ids:
         payload["questionBankId"] = question_bank_id
         for current in range(1, 11):
@@ -56,15 +64,7 @@ def fetch_and_save_questions(question_bank_ids, url="https://api.mianshiya.com/a
             else:
                 print(f"获取第 {current} 页数据失败，状态码：{response.status_code}")
 
+
 # 示例调用
 if __name__ == "__main__":
-    question_bank_ids = [
-        "1860871861809897474",
-        "1787463103423897602",
-        "1789249312885223425",
-        "1791375592078610434",
-        "1791003439968264194",
-        "1788408712975282177",
-        "1789931432793948162", "1801424748099739650",
-    ]
-    fetch_and_save_questions(question_bank_ids)
+    fetch_and_save_questions("1860871861809897474")
