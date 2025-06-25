@@ -1,0 +1,13 @@
+什么是 Netty，它在网络编程中解决了什么问题？
+说说你知道的几种 I/O 模型
+说一下 Netty 的应用场景？
+介绍一下 Reactor 线程模型？
+简单说说 Netty 的零拷贝机制？
+简单说说 Netty 的线程模型，并且其是如何完成工作的？
+为什么不选择使用原生的 NIO 而选择使用 Netty 呢？
+Netty 性能为什么这么高？
+说一下 TCP 半包和粘包问题？
+Netty 是如何解决粘包和拆包问题的？
+Netty 采用了哪些设计模式？
+Netty 如何解决 JDK NIO 中的空轮询 Bug？
+在 Netty 中，什么是 Channel ？ 什么是 ChannelHandlerContext？

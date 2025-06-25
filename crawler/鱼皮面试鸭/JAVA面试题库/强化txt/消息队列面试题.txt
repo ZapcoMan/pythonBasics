@@ -1,0 +1,11 @@
+说一下 AMQP 协议？
+说一下 RabbitMQ 的事务机制？
+RabbitMQ 中主要有哪几个角色或者说概念？
+RabbitMQ 的 routing key 和 binding key 的最大长度是多少字节？
+说说 RabbitMQ 的工作模式？
+说说 RabbitMQ 的集群模式？
+为什么 RocketMQ 不使用 Zookeeper 作为注册中心呢？而选择自己实现 NameServer？
+说一下 Kafka 为什么性能高？
+RabbitMQ 怎么实现延迟队列？
+RocketMQ 的延迟消息是怎么实现的？
+RocketMQ 的开发参考了 Kafka，那两者在架构和功能上有什么区别？

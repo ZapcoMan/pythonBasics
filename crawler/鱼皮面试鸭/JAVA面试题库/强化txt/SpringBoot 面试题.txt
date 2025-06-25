@@ -1,0 +1,6 @@
+说说你对 Spring Boot 事件机制的了解？
+在 Spring Boot 中如何实现多数据源配置？
+Spring Boot 中如何实现异步处理？
+如何在 SpringBoot 启动时执行特定代码？有哪些方式？
+SpringBoot（Spring）中为什么不推荐使用 @Autowired ？
+@Async 什么时候会失效？
