@@ -5,10 +5,9 @@ import os
 
 # 创建输出目录（如不存在）
 output_dir = "强化output"
-# txt_output_dir = "强化txt"
+txt_output_dir = "强化txt"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(txt_output_dir, exist_ok=True)  # 新增 txt 输出目录
-
 
 def fetch_and_save_questions(question_bank_id, title):
     """
@@ -38,7 +37,7 @@ def fetch_and_save_questions(question_bank_id, title):
         'accept-language': 'zh-CN,zh;q=0.9',
         'content-length': '79',
         'content-type': 'application/json',
-        'cookie': 'SESSION=NGMzMzFkYTAtOWUxMC00MGZjLTljNDItZDM4ZTAxZDA1ZGQ2; Hm_lvt_8abb85f1b5cfd5f406cdcc6454141898=1750865759; HMACCOUNT=0F4187ED15E1DA2A; Hm_lvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865759; Hm_lpvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865831; Hm_lpvt_8abb85f1b5cfd5f406cdcc6454141898=1750865831',
+        'cookie': 'SESSION=NGMzMzFkYTAtOWUxMC00MGZjLTljNDItZDM4ZTAxZDA5ZGQ6; Hm_lvt_8abb85f1b5cfd5f406cdcc6454141898=1750865759; HMACCOUNT=0F4187ED15E1DA2A; Hm_lvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865759; Hm_lpvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865831; Hm_lpvt_8abb85f1b5cfd5f406cdcc6454141898=1750865831',
         'origin': 'https://www.mianshiya.com',
         'priority': 'u=1, i',
         'referer': 'https://www.mianshiya.com/',
@@ -116,7 +115,7 @@ headers = {
     "accept-language": "zh-CN,zh;q=0.9",
     "content-length": "95",
     "content-type": "application/json",
-    "cookie": "SESSION=NGMzMzFkYTAtOWUxMC00MGZjLTljNDItZDM4ZTAxZDA1ZGQ2; Hm_lvt_8abb85f1b5cfd5f406cdcc6454141898=1750865759; HMACCOUNT=0F4187ED15E1DA2A; Hm_lvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865759; Hm_lpvt_c7cedf2eca8990b32ef9f1a0412e7102=1750870875; Hm_lpvt_8abb85f1b5cfd5f406cdcc6454141898=1750870875",
+    "cookie": "SESSION=NGMzMzFkYTAtOWUxMC00MGZjLTljNDItZDM4ZTAxZDA5ZGQ6; Hm_lvt_8abb85f1b5cfd5f406cdcc6454141898=1750865759; HMACCOUNT=0F4187ED15E1DA2A; Hm_lvt_c7cedf2eca8990b32ef9f1a0412e7102=1750865759; Hm_lpvt_c7cedf2eca8990b32ef9f1a0412e7102=1750870875; Hm_lpvt_8abb85f1b5cfd5f406cdcc6454141898=1750870875",
     "origin": "https://www.mianshiya.com",
     "priority": "u=1, i",
     "referer": "https://www.mianshiya.com/",
