@@ -1,0 +1,14 @@
+什么是服务限流？
+Sentinel 是怎么实现限流的？
+Sentinel 与 Hystrix 的区别是什么？
+Sentinel 是怎么实现集群限流的？
+什么是服务网格？
+什么是灰度发布、金丝雀部署以及蓝绿部署？
+什么是微服务网关？为什么需要服务网关？
+Spring Cloud  可以选择哪些 API 网关？
+什么是 Spring Cloud Zuul？
+什么是 Spring Cloud Gateway？
+你项目里为什么选择 Gateway 作为网关？
+说说什么是 API 网关？它有什么作用？
+Dubbo 和 Spring Cloud Gateway 有什么区别？
+什么是令牌桶算法？工作原理是什么？使用它有哪些优点和注意事项？
