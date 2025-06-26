@@ -97,7 +97,7 @@ def fetch_and_save_questions(session, question_bank_id, title):
             print(f"请求第 {current} 页时发生异常：{e}")
             continue
 
-        time.sleep(random.uniform(4, 15))  # 随机延时 1~3 秒
+        time.sleep(random.uniform(4, 15))  # 随机延时 4~15 秒
 
     # 所有数据收集完成后统一写入 JSON 文件
     if all_data:
@@ -132,12 +132,6 @@ def main():
             print("响应内容不是有效的 JSON 格式")
             return
 
-        # 写入原始响应
-        output_file = os.path.join(output_dir, "response_output.json")
-        with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(response_json, f, ensure_ascii=False, indent=4)
-        print(f"JSON 数据已写入文件: {output_file}")
-
         # 提取 records
         records = response_json.get("data", {}).get("records", [])
         if not records:
@@ -145,12 +139,6 @@ def main():
             return
 
         extracted_data = [{"id": record.get("id"), "title": record.get("title")} for record in records]
-
-        # 写入提取数据
-        extracted_file = os.path.join(output_dir, "extracted_records.json")
-        with open(extracted_file, "w", encoding="utf-8") as f:
-            json.dump(extracted_data, f, ensure_ascii=False, indent=4)
-        print(f"已提取 records 中的 id 和 title，并保存到文件: {extracted_file}")
 
         # 使用线程池并发执行
         with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
