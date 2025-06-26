@@ -1,7 +1,0 @@
-Kubernetes 中的 DaemonSet 有什么作用？
-Kubernetes 中的 ReplicaSet 和 ReplicationController 有什么区别？
-Kubernetes 中的 Service 有哪几种类型？请分别简述。
-Kubernetes 的 Helm Charts 如何实现应用的版本控制？
-Kubernetes 中的 Job 和 CronJob 有什么区别？
-Kubernetes 中的 Persistent Volume 和 Persistent Volume Claim 有什么区别？
-Kubernetes 中的网络策略（Network Policy）如何实现？

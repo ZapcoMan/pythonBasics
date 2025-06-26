@@ -100,7 +100,7 @@ url = "https://api.mianshiya.com/api/questionBankCategory/list_questionBank"
 # 请求载荷
 data = {
     "current": 1,
-    "pageSize": 200,
+    "pageSize": 20,
     "isHasChoice": False,
     "questionBankCategoryId": "1821883312558432257"
 }
