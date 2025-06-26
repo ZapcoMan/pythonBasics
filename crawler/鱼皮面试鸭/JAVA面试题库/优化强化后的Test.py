@@ -97,7 +97,7 @@ def fetch_and_save_questions(session, question_bank_id, title):
             print(f"请求第 {current} 页时发生异常：{e}")
             continue
 
-        time.sleep(random.uniform(1, 3))  # 随机延时 1~3 秒
+        time.sleep(random.uniform(4, 15))  # 随机延时 1~3 秒
 
     # 所有数据收集完成后统一写入 JSON 文件
     if all_data:
@@ -107,7 +107,7 @@ def fetch_and_save_questions(session, question_bank_id, title):
 
 
 def main():
-    MAX_THREADS = 5  # 可根据网络状况调整线程数
+    MAX_THREADS = 10  # 可根据网络状况调整线程数
 
     with get_session_with_headers() as session:
         # 请求地址
