@@ -2,6 +2,8 @@ import requests
 import json
 import time
 import os
+import random
+from concurrent.futures import ThreadPoolExecutor
 
 # 创建输出目录（如不存在）
 output_dir = "优化强化output"
@@ -9,8 +11,17 @@ txt_output_dir = "优化强化txt"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(txt_output_dir, exist_ok=True)
 
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+]
+
+
 def get_session_with_headers():
-    """创建带默认 headers 的 session"""
+    """创建带默认 headers 的 session，并随机设置 User-Agent"""
     session = requests.Session()
     session.headers.update({
         'authority': 'api.mianshiya.com',
@@ -28,9 +39,10 @@ def get_session_with_headers():
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
         'sec-fetch-site': 'same-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
+        'user-agent': random.choice(USER_AGENTS)  # 随机 User-Agent
     })
     return session
+
 
 def fetch_and_save_questions(session, question_bank_id, title):
     """
@@ -85,7 +97,7 @@ def fetch_and_save_questions(session, question_bank_id, title):
             print(f"请求第 {current} 页时发生异常：{e}")
             continue
 
-        time.sleep(2)
+        time.sleep(random.uniform(1, 3))  # 随机延时 1~3 秒
 
     # 所有数据收集完成后统一写入 JSON 文件
     if all_data:
@@ -93,7 +105,10 @@ def fetch_and_save_questions(session, question_bank_id, title):
             json.dump(all_data, f, ensure_ascii=False, indent=4)
         print(f"已将全部数据写入文件：{filename}")
 
+
 def main():
+    MAX_THREADS = 5  # 可根据网络状况调整线程数
+
     with get_session_with_headers() as session:
         # 请求地址
         url = "https://api.mianshiya.com/api/questionBankCategory/list_questionBank"
@@ -137,12 +152,21 @@ def main():
             json.dump(extracted_data, f, ensure_ascii=False, indent=4)
         print(f"已提取 records 中的 id 和 title，并保存到文件: {extracted_file}")
 
-        # 调用抓取函数
-        for item in extracted_data:
-            question_bank_id = item.get("id")
-            title = item.get("title")
-            if question_bank_id and title:
-                fetch_and_save_questions(session, question_bank_id, title)
+        # 使用线程池并发执行
+        with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+            futures = []
+            for item in extracted_data:
+                question_bank_id = item.get("id")
+                title = item.get("title")
+                if question_bank_id and title:
+                    futures.append(executor.submit(fetch_and_save_questions, session, question_bank_id, title))
+
+            for future in futures:
+                try:
+                    future.result()
+                except Exception as e:
+                    print(f"线程任务出错: {e}")
+
 
 if __name__ == "__main__":
     main()
