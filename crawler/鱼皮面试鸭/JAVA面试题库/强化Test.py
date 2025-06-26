@@ -5,7 +5,7 @@ import os
 
 # 创建输出目录（如不存在）
 output_dir = "强化output"
-txt_output_dir = "强化txt"
+# txt_output_dir = "强化txt"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(txt_output_dir, exist_ok=True)  # 新增 txt 输出目录
 
@@ -72,14 +72,14 @@ def fetch_and_save_questions(question_bank_id, title):
                 records = data.get("data", {}).get("records", [])
                 titles = [record.get("title") for record in records if record.get("title")]
 
-                if titles:
-                    with open(txt_filename, 'w', encoding='utf-8') as f:
-                        for t in titles:
-                            f.write(f"{t}\n")
-
-                    print(f"已将第 {current} 页的标题写入文件：{txt_filename}")
-                else:
-                    print(f"第 {current} 页无有效标题可写入。")
+                # if titles:
+                #     with open(txt_filename, 'w', encoding='utf-8') as f:
+                #         for t in titles:
+                #             f.write(f"{t}\n")
+                #
+                #     print(f"已将第 {current} 页的标题写入文件：{txt_filename}")
+                # else:
+                #     print(f"第 {current} 页无有效标题可写入。")
 
                 # 如果 records 为空，并且不是第一页，则说明数据请求完毕，跳出循环
                 if current > 1 and not records:
