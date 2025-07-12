@@ -6,7 +6,17 @@ import json
 def get_ip_geolocation(ip_address: str, api_key: str) -> dict:
     """
     获取指定 IP 的地理位置信息。
+
+    通过调用 IP Geolocation API，可以获取到与 IP 地址相关的地理位置信息，如国家、城市、经纬度等。
+
+    参数:
+    ip_address (str): 需要查询地理位置信息的 IP 地址。
+    api_key (str): 使用 API 服务所需的密钥，用于验证用户身份。
+
+    返回:
+    dict: 包含 IP 地址地理位置信息的字典。如果请求失败或发生错误，返回一个空字典。
     """
+    # 定义 API 请求的 URL 和参数
     url = "https://api.ipgeolocation.io/v2/ipgeo"
     params = {
         "apiKey": api_key,
@@ -14,10 +24,13 @@ def get_ip_geolocation(ip_address: str, api_key: str) -> dict:
     }
 
     try:
+        # 发起 HTTP GET 请求获取地理位置信息
         response = requests.get(url, params=params, timeout=10)
+        # 检查响应状态码，如果状态码表明请求成功，则返回响应的 JSON 数据
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
+        # 如果发生网络请求错误，则打印错误信息并返回一个空字典
         print(f"请求过程中发生错误：{e}")
         return {}
 
@@ -25,22 +38,35 @@ def get_ip_geolocation(ip_address: str, api_key: str) -> dict:
 def bulk_query_ips(api_key: str, ips: list):
     """
     批量查询多个 IP 的地理信息。
+
+    参数:
+    api_key (str): IP 地理信息查询的 API 密钥。
+    ips (list): 需要查询的 IP 地址列表。
+
+    返回:
+    list: 查询到的 IP 地理信息列表。
     """
+    # 打印 API 密钥以便调试
     print(f"api_key:{api_key}")
+    # 构造请求 URL
     url = f"https://api.ipgeolocation.io/v2/ipgeo-bulk?apiKey={api_key}"
+    # 将 IP 列表转换为 JSON 格式，准备作为请求负载
     payload = json.dumps({
         "ips": ips
     })
-    print(f"正在向 {url} 发送 POST 请求... {payload}")
+    # 发送 POST 请求以查询 IP 地理信息
     try:
         headers = {
             'Content-Type': 'application/json'
         }
         response = requests.post(url, data=payload, headers=headers, timeout=(10, 30))
+        # 如果响应状态码是 200，表示请求成功
         response.raise_for_status()
+        # 返回查询结果的 JSON 数据
         return response.json()
 
     except requests.exceptions.HTTPError as e:
+        # 处理 HTTP 错误响应
         if response.status_code == 401:
             print("❌ HTTP 401 错误：API 密钥无效，请检查 apiKey 是否正确。")
         elif response.status_code == 403:
@@ -52,23 +78,39 @@ def bulk_query_ips(api_key: str, ips: list):
         return []
 
     except requests.exceptions.RequestException as e:
+        # 处理网络请求过程中的其他错误
         print(f"网络请求过程中发生错误：{e}")
         return []
+
 
 
 def get_local_country(api_key: str):
     """
     获取调用者所在 IP 的国家名称（无需传入 IP）。
+
+    参数:
+    api_key (str): API 的密钥，用于认证用户。
+
+    返回:
+    dict: 包含国家名称的字典，如果请求失败或解析错误，则返回空字典。
     """
+    # 构建API请求URL，将api_key嵌入到URL中
     url = f"https://api.ipgeolocation.io/v2/ipgeo?apiKey={api_key}"
+    # 指定只获取国家名称字段，以减少不必要的数据传输
     params = {"fields": "location.country_name"}
     try:
+        # 发起HTTP GET请求，包含超时设置以防止长时间等待
         response = requests.get(url, params=params, timeout=10)
+        # 确保请求成功，否则抛出HTTPError异常
         response.raise_for_status()
+        # 解析响应的JSON数据并返回
         return response.json()
     except requests.exceptions.RequestException as e:
+        # 请求失败时，输出错误信息
         print(f"获取本地国家失败：{e}")
+        # 在错误情况下返回空字典
         return {}
+
 
 
 def get_specific_fields(api_key: str, ip: str, fields: list):
