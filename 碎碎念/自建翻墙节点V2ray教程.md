@@ -25,3 +25,4 @@ sudo ufw status
 ~~~
 6. 但是这里有个问题 我使用的是clash / clash verge 但是这里的面板 分享出来的地址却是 V2ary 的 所以需要转换一下 [转换地址：https://acl4ssr-sub.github.io/](https://acl4ssr-sub.github.io/)
 7. 搭建节点可以选择 使用域名搭建 也可以直接用IP地址 [域名注册和解析教程：https://youtu.be/dkc1I4WXHOA](https://youtu.be/dkc1I4WXHOA)
+* 思考： 这东西在城外 可以作为梯子 那么如果在城内 算是什么呢？
