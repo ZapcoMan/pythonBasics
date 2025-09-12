@@ -265,4 +265,4 @@ def bomb_register_threaded(count=10, delay=1, max_threads=10):
 
 if __name__ == "__main__":
     # 当count=True时持续发送请求，每次间隔5秒，最多使用15个线程
-    bomb_register_threaded(count=999, delay=0, max_threads=15)
+    bomb_register_threaded(count=15, delay=0, max_threads=15)
