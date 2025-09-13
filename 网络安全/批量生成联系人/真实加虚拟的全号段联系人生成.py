@@ -402,7 +402,7 @@ def generate_service_contacts(count):
 
 # 生成 vCard
 vcf_entries = []
-total_contacts = 1540
+total_contacts = 2540
 family_count = 300   # 家庭联系人数量
 leader_count = 150   # 领导数量
 colleague_count = 250 # 同事数量
