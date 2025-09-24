@@ -14,8 +14,9 @@
 - 探索 Python 与 C 的交互
 - 构建 GUI 应用程序
 - 实践多线程、异步请求等高级技巧
+- 数据处理和清洗
 
-> ⚠️ **说明**：本项目为“想法先行”的实验性项目，部分功能在完善后可抽离为独立项目进行维护更新。
+> ⚠️ **说明**：本项目为"想法先行"的实验性项目，部分功能在完善后可抽离为独立项目进行维护更新。
 
 ---
 
@@ -52,28 +53,34 @@
 ### 7. **数据库连接**
 - MySQL 数据库连接示例
 
+### 8. **数据处理**
+- CSV 数据清洗和处理
+- 包含鳄鱼观测数据和加密货币市场数据的清洗脚本
+
 ---
 
 ## 🛠️ 技术栈
 
 - Python 3.x
-- 第三方库：`requests`, `beautifulsoup4`, `selenium`, `tkinter`, `pymysql`, `concurrent.futures`, [json](file://E:\python\Python_project\pythonBasics\crawler\七猫免费小说热榜%20女频.json), `os`, [time](file://E:\python\Python_project\pythonBasics\基础\20240724_创建一个python代码的类Test.py#L0-L0)
-- 可选：`PyQt5`, `matplotlib`, `pandas`
+- 第三方库：`requests`, `beautifulsoup4`, `selenium`, `tkinter`, `pymysql`, `concurrent.futures`, [json](file://E:\python\Python_project\pythonBasics\crawler\七猫免费小说热榜%20女频.json), [time](file://E:\python\Python_project\pythonBasics\基础\20240724_创建一个python代码的类Test.py#L14-L14), `pandas`, `numpy`
+- 可选：`PyQt5`, `matplotlib`
 
 ---
 
 ## 📦 项目结构概览
 ~~~
 . 
-├── PythonHacker # 网络编程相关工具 
-├── crawler # 各类网站爬虫脚本 
-├── 基础 # 常用基础练习与算法 
-├── mysqlConnection # 数据库连接示例 
-├── pythongraphical # GUI 程序 
+├── PythonHacker           # 网络编程相关工具 
+├── crawler                # 各类网站爬虫脚本 
+├── 基础                   # 常用基础练习与算法 
+├── mysqlConnection        # 数据库连接示例 
+├── pythongraphical        # GUI 程序 
 ├── 用于测试一个内测的代理地址软件 
-├── 网络安全 # 安全测试、社工、免杀等 
-├── 基础 # Python 基础学习脚本 
-└── README.md # 当前文档
+├── 网络安全               # 安全测试、社工、免杀等 
+├── 数据处理               # 数据清洗和处理脚本
+├── 碎碎念                 # 日常练习和想法记录
+├── 运维                   # 运维相关脚本
+└── README.md              # 当前文档
 ~~~
 ---
 
