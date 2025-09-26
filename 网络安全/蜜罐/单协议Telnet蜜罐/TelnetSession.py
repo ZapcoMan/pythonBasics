@@ -106,11 +106,12 @@ class TelnetSession:
         将会话数据持久化到日志文件中
         """
         # 打包会话详情
+        end_time = datetime.now(timezone.utc)
         entry = {
             "session_id": self.id,
             "start_time": self.start_time.isoformat(),
-            "end_time": datetime.now(timezone.utc).isoformat(),
-            "duration_seconds": (datetime.now(timezone.utc) - self.start_time).total_seconds(),
+            "end_time": end_time.isoformat(),
+            "duration_seconds": (end_time - self.start_time).total_seconds(),
             "remote_ip": self.remote[0],
             "remote_port": self.remote[1],
             "login": self.login,
