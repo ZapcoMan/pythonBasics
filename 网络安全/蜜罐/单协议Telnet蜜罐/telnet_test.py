@@ -2,6 +2,11 @@ import socket
 import time
 
 def test_telnet_honeypot():
+    """
+    测试Telnet蜜罐连接功能
+    该函数模拟一个Telnet客户端，连接到本地运行的Telnet蜜罐，
+    执行登录流程并发送一些基本命令来测试蜜罐是否正常工作
+    """
     try:
         # 创建socket连接
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,4 +59,7 @@ def test_telnet_honeypot():
         print(f"Error during test: {e}")
 
 if __name__ == "__main__":
+    """
+    程序主入口，执行Telnet蜜罐测试
+    """
     test_telnet_honeypot()
