@@ -172,8 +172,12 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
     """
     peer = writer.get_extra_info("peername") or ("unknown", 0)
+    # 获取连接的精确时间（包含毫秒）
+    connection_time = datetime.datetime.now()
+    connection_time_iso = connection_time.isoformat()
+
     session = TelnetSession(reader, writer, peer)
-    logger.info("新连接 %s 会话=%s", peer, session.id)
+    logger.info("新连接 %s 会话=%s 连接时间=%s", peer, session.id, connection_time_iso)
 
     try:
         # 发送系统Banner
@@ -622,6 +626,8 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         logger.exception("会话 %s 异常: %s", session.id, exc)
     finally:
         try:
+            # 在会话持久化之前添加连接时间信息
+            # 注意：这需要修改TelnetSession类以支持额外的连接时间字段
             await session.persist()
         except Exception as e:
             logger.exception("持久化错误: %s", e)
