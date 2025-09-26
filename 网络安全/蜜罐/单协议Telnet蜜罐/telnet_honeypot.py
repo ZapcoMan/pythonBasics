@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # telnet_honeypot_standalone.py
-# 独立的Telnet蜜罐实现，包含所有功能于单个文件中
+# 简单的基于asyncio的TelnetService （单协议版本）
+# 将会话元数据和所有输入记录到JSONL文件中。
 
 import argparse
 import asyncio
