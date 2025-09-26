@@ -8,12 +8,13 @@ import asyncio
 import logging
 import random
 import datetime
+import re
 
 from 网络安全.蜜罐.单协议Telnet蜜罐.TelnetSession import TelnetSession
 
 # ---------- 配置 ----------
 # 更真实的系统Banner
-BANNER = b"Debian GNU/Linux 11\r\n" + \
+BANNER = b"\r\n\r\nDebian GNU/Linux 11\r\n" + \
          b"server01 login: "
 
 # 更真实的提示符
@@ -35,7 +36,55 @@ SYSTEM_INFO = {
         ("/dev/sda1", "ext4", "20G", "8.2G", "11G", "43%", "/"),
         ("/dev/sda2", "ext4", "50G", "15G", "33G", "32%", "/home"),
         ("tmpfs", "tmpfs", "2.0G", "0", "2.0G", "0%", "/run")
-    ]
+    ],
+    "network": [
+        ("lo", "127.0.0.1", "255.0.0.0"),
+        ("eth0", "192.168.1.101", "255.255.255.0")
+    ],
+    "memory": {
+        "total": "2048000",  # KB
+        "free": "819000",
+        "buffers": "123000",
+        "cached": "456000"
+    }
+}
+
+# 模拟文件系统内容
+FILESYSTEM = {
+    "/": ["bin", "boot", "dev", "etc", "home", "lib", "lib64", "media", "mnt", "opt", "proc", "root", "run", "sbin", "srv", "sys", "tmp", "usr", "var"],
+    "/etc": ["passwd", "group", "hosts", "hostname", "resolv.conf", "motd", "issue", "network", "apache2", "mysql"],
+    "/var/log": ["syslog", "auth.log", "kern.log", "mail.log", "daemon.log"],
+    "/home": ["admin", "user"],
+    "/home/admin": [".bashrc", ".profile", "readme.txt"],
+    "/home/user": [".bashrc", ".profile"],
+    "/tmp": ["test.tmp", "tempfile.log"]
+}
+
+# 模拟文件内容
+FILE_CONTENTS = {
+    "/etc/hosts": "127.0.0.1\tlocalhost\n192.168.1.101\tserver01\n::1\tlocalhost ip6-localhost ip6-loopback\n",
+    "/etc/hostname": "server01\n",
+    "/etc/resolv.conf": "nameserver 8.8.8.8\nnameserver 8.8.4.4\n",
+    "/proc/meminfo": "\n".join([
+        "MemTotal:        2048000 kB",
+        "MemFree:          819000 kB",
+        "MemAvailable:    1200000 kB",
+        "Buffers:          123000 kB",
+        "Cached:           456000 kB",
+        "SwapTotal:       1024000 kB",
+        "SwapFree:        1024000 kB"
+    ]) + "\n",
+    "/proc/cpuinfo": "\n".join([
+        "processor\t: 0",
+        "vendor_id\t: GenuineIntel",
+        "cpu family\t: 6",
+        "model\t\t: 142",
+        "model name\t: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "stepping\t: 10",
+        "cpu MHz\t\t: 1992.000",
+        "cache size\t: 8192 KB"
+    ]) + "\n",
+    "/home/admin/readme.txt": "This is a readme file for admin user.\nContains some basic information.\n"
 }
 
 DEFAULT_HOST = "0.0.0.0"
@@ -48,6 +97,32 @@ LOG_FILE = "honeypot_sessions.jsonl"
 # 设置Python日志记录用于操作员日志（不是会话日志）
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("honeypot")
+
+
+# 辅助函数：生成随机MAC地址
+def generate_mac():
+    return ":".join(["%02x" % random.randint(0, 255) for _ in range(6)])
+
+
+# 辅助函数：获取目录内容
+def get_directory_contents(path):
+    if path in FILESYSTEM:
+        return FILESYSTEM[path]
+    # 处理子目录情况
+    for key in FILESYSTEM:
+        if path.startswith(key) and len(path) > len(key) and path[len(key)] == '/':
+            return FILESYSTEM.get(key, [])
+    return []
+
+
+# 辅助函数：获取文件内容
+def get_file_content(filepath):
+    if filepath in FILE_CONTENTS:
+        return FILE_CONTENTS[filepath]
+    for key in FILE_CONTENTS:
+        if filepath.startswith(key):
+            return FILE_CONTENTS[key]
+    return None
 
 
 async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -89,6 +164,37 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         # 模拟登录延迟和验证
         await asyncio.sleep(random.uniform(0.5, 2.0))
 
+        # 模拟登录失败重试机制
+        login_attempts = 1
+        while login_attempts < 3 and (not login or not session.password):
+            if login_attempts > 1:
+                await session.send(b"\r\nLogin incorrect\r\n")
+                await session.send(LOGIN_PROMPT)
+                login_bytes = await reader.readline()
+                if not login_bytes:
+                    await session.close()
+                    return
+                session.record_raw(login_bytes)
+                login = login_bytes.decode(errors="ignore").strip()
+                session.login = login
+
+                await session.send(PASS_PROMPT)
+                password_bytes = await reader.readline()
+                if not password_bytes:
+                    await session.close()
+                    return
+                session.record_raw(password_bytes)
+                session.password = password_bytes.decode(errors="ignore").strip()
+
+            login_attempts += 1
+
+        # 三次登录失败后断开连接
+        if login_attempts >= 3 and (not login or not session.password):
+            await session.send(b"\r\nLogin incorrect\r\n")
+            await session.send(b"Login timed out after 3 minutes\r\n")
+            await session.close()
+            return
+
         # 接受任何凭据（模拟弱密码策略）
         await session.send(b"\r\nLinux server01 5.10.0-11-amd64 #1 SMP Debian 5.10.92-1 (2022-01-18) x86_64\r\n")
         await session.send(b"\r\nThe programs included with the Debian GNU/Linux system are free software;\r\n")
@@ -102,6 +208,10 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
             minutes=random.randint(10, 1000))
         await session.send(f"\r\nLast login: {last_login_time.strftime('%a %b %d %H:%M')} from 192.168.1.105\r\n".encode())
 
+        # 显示系统消息
+        await session.send(b"No mail.\r\n")
+
+        current_path = "/root"
         await session.send(PROMPT)
 
         # 交互循环：读取行，回显预设响应但记录所有内容
@@ -117,6 +227,27 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
             # 简单命令处理（非详尽）
             lowered = text.strip().lower()
+            original_text = text.strip()
+
+            # 处理cd命令和路径
+            if lowered.startswith("cd "):
+                new_path = lowered[3:].strip()
+                if new_path == "" or new_path == "~":
+                    current_path = "/root"
+                elif new_path == "..":
+                    if current_path != "/":
+                        parts = current_path.split("/")
+                        current_path = "/".join(parts[:-1]) if len(parts) > 2 else "/"
+                elif new_path.startswith("/"):
+                    current_path = new_path
+                else:
+                    current_path = current_path.rstrip("/") + "/" + new_path
+                await session.send(PROMPT)
+                continue
+
+            # 根据当前路径更新提示符
+            prompt = f"{session.login}@{SYSTEM_INFO['hostname']}:{current_path}# ".encode() if current_path != "/root" else PROMPT
+
             if lowered in ("exit", "quit", "logout"):
                 await session.send(b"logout\r\n")
                 break
@@ -130,24 +261,29 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
             elif lowered == "uname -a":
                 await session.send(f"Linux {SYSTEM_INFO['hostname']} {SYSTEM_INFO['kernel']} #1 SMP Debian 5.10.92-1 (2022-01-18) x86_64 GNU/Linux\r\n".encode())
             elif lowered == "ls":
-                await session.send(b"Desktop  Documents  Downloads  Pictures  Public  Templates  Videos\r\n")
-            elif lowered == "ls -la":
-                await session.send(b"total 48\r\n"
-                                   b"drwx------ 10 root root 4096 Feb 15 10:22 .\r\n"
-                                   b"drwxr-xr-x 19 root root 4096 Feb 10 09:15 ..\r\n"
-                                   b"-rw-------  1 root root  234 Feb 15 10:22 .bash_history\r\n"
-                                   b"-rw-r--r--  1 root root  220 Feb 10 09:15 .bash_logout\r\n"
-                                   b"-rw-r--r--  1 root root 3771 Feb 10 09:15 .bashrc\r\n"
-                                   b"drwx------  3 root root 4096 Feb 10 09:18 .cache\r\n"
-                                   b"drwxr-xr-x  3 root root 4096 Feb 10 09:18 .local\r\n"
-                                   b"-rw-r--r--  1 root root  807 Feb 10 09:15 .profile\r\n"
-                                   b"drwx------  2 root root 4096 Feb 15 10:22 .ssh\r\n"
-                                   b"drwxr-xr-x  2 root root 4096 Feb 10 09:20 Desktop\r\n"
-                                   b"drwxr-xr-x  2 root root 4096 Feb 10 09:20 Documents\r\n"
-                                   b"drwxr-xr-x  2 root root 4096 Feb 10 09:20 Downloads\r\n"
-                                   b"drwxr-xr-x  2 root root 4096 Feb 10 09:20 Pictures\r\n")
+                contents = get_directory_contents(current_path)
+                if contents:
+                    await session.send("  ".join(contents).encode() + b"\r\n")
+                else:
+                    await session.send(b"\r\n")
+            elif lowered == "ls -l" or lowered == "ls -la":
+                contents = get_directory_contents(current_path)
+                if contents:
+                    # 生成类似 ls -l 的输出
+                    output_lines = [f"total {len(contents)}"]
+                    dir_count = 0
+                    for item in contents:
+                        is_dir = item in [d.lstrip("/") for d in FILESYSTEM.keys() if d.startswith(current_path)]
+                        perms = "drwxr-xr-x" if is_dir else "-rw-r--r--"
+                        size = random.randint(1000, 10000) if not is_dir else 4096
+                        date = "Feb 10 09:15" if not is_dir else "Feb 10 09:15"
+                        output_lines.append(f"{perms} 1 root root {size:6} {date} {item}")
+                        dir_count += 1
+                    await session.send("\r\n".join(output_lines).encode() + b"\r\n")
+                else:
+                    await session.send(b"\r\n")
             elif lowered == "pwd":
-                await session.send(b"/root\r\n")
+                await session.send(f"{current_path}\r\n".encode())
             elif lowered == "cat /etc/passwd":
                 passwd_content = "\r\n".join([
                     "root:x:0:0:root:/root:/bin/bash",
@@ -173,23 +309,99 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 for fs in SYSTEM_INFO["filesystems"]:
                     df_lines.append(f"{fs[0]:15} {fs[2]:>4} {fs[3]:>4} {fs[4]:>4} {fs[5]:>3} {fs[6]}".encode())
                 await session.send(df_header + b"\r\n".join(df_lines) + b"\r\n")
+            elif lowered == "free -h":
+                mem_info = SYSTEM_INFO["memory"]
+                await session.send(b"               total        used        free      shared  buff/cache   available\r\n")
+                await session.send(f"Mem:           2.0G        1.2G        800M         50M        579M        1.1G\r\n".encode())
+                await session.send(f"Swap:          1.0G          0B        1.0G\r\n".encode())
+            elif lowered == "ifconfig" or lowered == "ip addr":
+                ifconfig_lines = []
+                for i, (iface, ip, mask) in enumerate(SYSTEM_INFO["network"]):
+                    ifconfig_lines.append(f"{iface}: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500")
+                    ifconfig_lines.append(f"        inet {ip}  netmask {mask}  broadcast {ip.split('.')[0]}.{ip.split('.')[1]}.{ip.split('.')[2]}.255")
+                    ifconfig_lines.append(f"        inet6 ::1  prefixlen 128  scopeid 0x10<host>")
+                    ifconfig_lines.append(f"        ether {generate_mac()}  txqueuelen 1000  (Ethernet)")
+                    ifconfig_lines.append(f"        RX packets 123456  bytes 789012345 (752.1 MiB)")
+                    ifconfig_lines.append(f"        TX packets 98765  bytes 456789012 (435.2 MiB)")
+                    ifconfig_lines.append("")
+                await session.send("\r\n".join(ifconfig_lines).encode())
             elif lowered == "help":
-                await session.send(b"Supported commands: ls, ls -la, cat, ps aux, df -h, whoami, id, uname -a, pwd, help, exit, quit, logout\r\n")
+                await session.send(b"Supported commands: ls, ls -l, ls -la, cd, cat, ps aux, df -h, free -h, ifconfig, ip addr, whoami, id, uname -a, pwd, help, exit, quit, logout\r\n")
             elif lowered.startswith("cat "):
-                filename = lowered[4:].strip()
-                if filename in ["/etc/issue", "/etc/motd"]:
+                filename = original_text[4:].strip()  # 保留原始大小写
+                # 处理相对路径和绝对路径
+                if filename.startswith("/"):
+                    filepath = filename
+                else:
+                    filepath = current_path.rstrip("/") + "/" + filename
+
+                content = get_file_content(filepath)
+                if content is not None:
+                    await session.send(content.encode())
+                elif filepath in ["/etc/issue", "/etc/motd"]:
                     await session.send(b"Debian GNU/Linux 11 \\n \\l\r\n")
-                elif filename == "/proc/version":
+                elif filepath == "/proc/version":
                     await session.send(f"Linux version {SYSTEM_INFO['kernel']} (debian-kernel@lists.debian.org) (gcc-10 (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP Debian 5.10.92-1 (2022-01-18)\r\n".encode())
+                elif filepath == "/proc/meminfo":
+                    await session.send(FILE_CONTENTS["/proc/meminfo"].encode())
+                elif filepath == "/proc/cpuinfo":
+                    await session.send(FILE_CONTENTS["/proc/cpuinfo"].encode())
                 else:
                     await session.send(f"cat: {filename}: No such file or directory\r\n".encode())
             elif lowered.startswith("echo "):
-                message = text[5:]  # Skip "echo "
+                message = original_text[5:]  # Skip "echo "，保留原始大小写
                 await session.send(f"{message}\r\n".encode())
+            elif lowered == "date":
+                await session.send(f"{datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Z %Y')}\r\n".encode())
+            elif lowered == "uptime":
+                uptime_minutes = random.randint(60, 10000)
+                days = uptime_minutes // (60 * 24)
+                hours = (uptime_minutes % (60 * 24)) // 60
+                mins = uptime_minutes % 60
+                await session.send(f" {datetime.datetime.now().strftime('%H:%M:%S')} up {days} days, {hours}:{mins:02d},  1 user,  load average: 0.00, 0.01, 0.05\r\n".encode())
+            elif lowered == "w" or lowered == "who":
+                await session.send(b"USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT\r\n")
+                await session.send(f"{session.login:<8} pts/0    192.168.1.105    {datetime.datetime.now().strftime('%H:%M')}   0.00s  0.04s  0.01s w\r\n".encode())
+            elif lowered == "history":
+                await session.send(b"    1  ls -la\r\n")
+                await session.send(b"    2  cat /etc/passwd\r\n")
+                await session.send(b"    3  ps aux\r\n")
+                await session.send(b"    4  df -h\r\n")
+                await session.send(b"    5  free -h\r\n")
+            elif lowered.startswith("grep "):
+                # 简单的grep模拟
+                parts = original_text.split()
+                if len(parts) >= 3:
+                    pattern = parts[1]
+                    filename = parts[2]
+                    if filename.startswith("/"):
+                        filepath = filename
+                    else:
+                        filepath = current_path.rstrip("/") + "/" + filename
+
+                    content = get_file_content(filepath)
+                    if content is not None:
+                        lines = content.split('\n')
+                        for line in lines:
+                            if pattern in line:
+                                await session.send(f"{line}\r\n".encode())
+                    else:
+                        await session.send(f"grep: {filename}: No such file or directory\r\n".encode())
+                else:
+                    await session.send(b"Usage: grep pattern file\r\n")
+            elif lowered.startswith("mkdir "):
+                await session.send(PROMPT)
+                continue
+            elif lowered.startswith("rm "):
+                await session.send(PROMPT)
+                continue
+            elif lowered.startswith("touch "):
+                await session.send(PROMPT)
+                continue
             else:
                 # 通用回显
-                await session.send(b"bash: " + text.encode() + b": command not found\r\n")
-            await session.send(PROMPT)
+                await session.send(b"bash: " + original_text.encode() + b": command not found\r\n")
+            await session.send(prompt)
 
     except Exception as exc:
         logger.exception("会话 %s 异常: %s", session.id, exc)
