@@ -24,7 +24,10 @@ PORTS = {
 LOG_FILE = "honeypot_sessions.jsonl"
 
 def test_tcp():
-    """测试TCP回显服务"""
+    """
+    测试TCP回显服务
+    通过多次连接TCP服务并发送数据，验证蜜罐的TCP回显功能是否正常工作
+    """
     print("测试TCP回显服务...")
     try:
         # 进行多次TCP连接测试
@@ -41,7 +44,10 @@ def test_tcp():
         print(f"TCP测试失败: {e}\n")
 
 def test_http():
-    """测试HTTP服务"""
+    """
+    测试HTTP服务
+    通过发送多种HTTP请求（不同路径和方法），验证蜜罐的HTTP服务是否正常工作
+    """
     print("测试HTTP服务...")
     try:
         # 进行多次HTTP请求测试
@@ -70,7 +76,11 @@ def test_http():
         print(f"HTTP测试失败: {e}\n")
 
 def test_https():
-    """测试HTTPS服务"""
+    """
+    测试HTTPS服务
+    通过发送多种HTTPS请求（不同路径和方法），验证蜜罐的HTTPS服务是否正常工作
+    注意：由于使用自签名证书，已禁用SSL验证
+    """
     print("测试HTTPS服务...")
     try:
         # 禁用SSL验证，因为使用的是自签名证书
@@ -104,7 +114,10 @@ def test_https():
         print(f"HTTPS测试失败: {e}\n")
 
 def test_ssh():
-    """测试SSH服务（仅测试连接和横幅获取）"""
+    """
+    测试SSH服务（仅测试连接和横幅获取）
+    通过多次连接SSH服务并获取服务器横幅，验证蜜罐的SSH服务是否正常工作
+    """
     print("测试SSH服务...")
     try:
         # 进行多次SSH连接测试
@@ -120,7 +133,10 @@ def test_ssh():
         print(f"SSH测试失败: {e}\n")
 
 def test_telnet():
-    """测试Telnet服务"""
+    """
+    测试Telnet服务
+    通过建立多个Telnet会话并执行多个命令，全面测试蜜罐的Telnet服务功能
+    """
     print("测试Telnet服务...")
     try:
         # 进行多次Telnet会话测试
@@ -172,7 +188,10 @@ def test_telnet():
         print(f"Telnet测试失败: {e}\n")
 
 def test_ftp():
-    """测试FTP服务"""
+    """
+    测试FTP服务
+    通过建立多个FTP会话并执行多个FTP命令，全面测试蜜罐的FTP服务功能
+    """
     print("测试FTP服务...")
     try:
         # 进行多次FTP会话测试
@@ -216,7 +235,10 @@ def test_ftp():
         print(f"FTP测试失败: {e}\n")
 
 def check_logs():
-    """检查日志文件是否记录了测试操作"""
+    """
+    检查日志文件是否记录了测试操作
+    读取并分析蜜罐生成的日志文件，验证各种协议的操作是否被正确记录
+    """
     print("检查日志记录...")
     try:
         log_path = Path(LOG_FILE)
@@ -261,7 +283,10 @@ def check_logs():
     print("日志检查完成\n")
 
 def run_all_tests():
-    """运行所有测试"""
+    """
+    运行所有测试
+    按顺序启动所有协议的测试线程，并在测试完成后检查日志记录
+    """
     print("开始测试多协议蜜罐...\n")
 
     # 创建线程分别运行各协议测试，避免阻塞
