@@ -35,16 +35,195 @@
   "inputs": [],
   "raw_base64": "cm9vdA0KMTIzMTINCg=="
 }
-{"session_id": "a65e92c9-c70a-4afa-a1a6-6933cda280ef", "start_time": "2025-09-26T23:08:18.113498+00:00", "end_time": "2025-09-26T23:08:29.126802+00:00", "duration_seconds": 11.013304, "remote_ip": "192.168.1.4", "remote_port": 46240, "login": "\u0018\u0018\u0000IBM-3279-4-E\u0019\u0019\u0000\u0000", "password": null, "inputs": [], "raw_base64": "//sY//oYAElCTS0zMjc5LTQtRf/w//sZ//0Z//sA//0A"}
-{"session_id": "d01ff413-a5f5-4a8a-88f8-7fdadd29bf8e", "start_time": "2025-09-26T23:08:29.156653+00:00", "end_time": "2025-09-26T23:08:34.167241+00:00", "duration_seconds": 5.010588, "remote_ip": "192.168.1.4", "remote_port": 46271, "login": "", "password": null, "inputs": [], "raw_base64": "DQoNCg=="}
-{"session_id": "0eb644f7-bfac-4e25-969a-404eae4e9e0e", "start_time": "2025-09-26T23:08:34.190428+00:00", "end_time": "2025-09-26T23:08:34.445209+00:00", "duration_seconds": 0.254781, "remote_ip": "192.168.1.4", "remote_port": 46272, "login": null, "password": null, "inputs": [], "raw_base64": "R0VUIC8gSFRUUC8xLjANCg=="}
-{"session_id": "2bf014cc-2467-4068-927a-1e7534724c7d", "start_time": "2025-09-26T23:08:34.494648+00:00", "end_time": "2025-09-26T23:08:39.501223+00:00", "duration_seconds": 5.006575, "remote_ip": "192.168.1.4", "remote_port": 46273, "login": "", "password": null, "inputs": [], "raw_base64": "T1BUSU9OUyAvIEhUVFAvMS4wDQoNCg=="}
-{"session_id": "c178f44a-a473-4769-9c3f-6c30894b4ab1", "start_time": "2025-09-26T23:08:39.522092+00:00", "end_time": "2025-09-26T23:08:44.567748+00:00", "duration_seconds": 5.045656, "remote_ip": "192.168.1.4", "remote_port": 46276, "login": "", "password": null, "inputs": [], "raw_base64": "T1BUSU9OUyAvIFJUU1AvMS4wDQoNCg=="}
-{"session_id": "d2f4e1bf-2c88-4518-8070-934c8a750697", "start_time": "2025-09-26T23:08:44.596932+00:00", "end_time": "2025-09-26T23:08:49.588262+00:00", "duration_seconds": 4.99133, "remote_ip": "192.168.1.4", "remote_port": 46277, "login": "\u0000\u0000(r\u001d\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0002\u0000\u0001\u0000\u0001|\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000", "password": null, "inputs": [], "raw_base64": "gAAAKHL+HRMAAAAAAAAAAgABhqAAAZd8AAAAAAAAAAAAAAAAAAAAAAAAAAA="}
-{"session_id": "def8f62f-a2c1-4f35-9fd0-12f3522d3e56", "start_time": "2025-09-26T23:08:49.606970+00:00", "end_time": "2025-09-26T23:08:54.613287+00:00", "duration_seconds": 5.006317, "remote_ip": "192.168.1.4", "remote_port": 46278, "login": "\u0000\u001e\u0000\u0006\u0001\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0007version\u0004bind\u0000\u0000\u0010\u0000\u0003", "password": null, "inputs": [], "raw_base64": "AB4ABgEAAAEAAAAAAAAHdmVyc2lvbgRiaW5kAAAQAAM="}
-{"session_id": "2b529273-78f5-467f-877f-3b5a2da06943", "start_time": "2025-09-26T23:08:54.644943+00:00", "end_time": "2025-09-26T23:08:59.655645+00:00", "duration_seconds": 5.010702, "remote_ip": "192.168.1.4", "remote_port": 46279, "login": "\u0000\f\u0000\u0000\u0010\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000", "password": null, "inputs": [], "raw_base64": "AAwAABAAAAAAAAAAAAA="}
-{"session_id": "b808950f-09b2-4015-84fc-c05dc1854f13", "start_time": "2025-09-26T23:08:59.684887+00:00", "end_time": "2025-09-26T23:09:07.194935+00:00", "duration_seconds": 7.510048, "remote_ip": "192.168.1.4", "remote_port": 46280, "login": null, "password": null, "inputs": [], "raw_base64": "SEVMUA0K"}
-{"session_id": "5b071eba-77d8-46da-bcc3-8ac78f16baad", "start_time": "2025-09-26T23:09:07.212910+00:00", "end_time": "2025-09-26T23:09:12.217953+00:00", "duration_seconds": 5.005043, "remote_ip": "192.168.1.4", "remote_port": 46281, "login": "\u0000f\u0000\u0005\u0000\u0004\u0000e\u0000d\u0000c\u0000b\u0000a\u0000`\u0000\u0015\u0000\u0012\u0000\t\u0000\u0014\u0000\u0011\u0000\b\u0000\u0006\u0000\u0003\u0001\u0000", "password": null, "inputs": [], "raw_base64": "FgMAAFMBAABPAwA/R9f3uizu6rJgfvMA/YJ7udWWyHeb5sTbPD3bb+8QbgAAKAAWABMACgBmAAUABABlAGQAYwBiAGEAYAAVABIACQAUABEACAAGAAMBAA=="}
-{"session_id": "0117ab6b-4e02-4b36-aafa-55e205c92d5c", "start_time": "2025-09-26T23:09:12.252626+00:00", "end_time": "2025-09-26T23:09:17.267995+00:00", "duration_seconds": 5.015369, "remote_ip": "192.168.1.4", "remote_port": 46283, "login": "\u0001\u0000\b\u0000\u0003\u0000\u0000\u0000", "password": null, "inputs": [], "raw_base64": "AwAAKiXgAAAAAABDb29raWU6IG1zdHNoYXNoPW5tYXANCgEACAADAAAA"}
-{"session_id": "c8648a66-b9a6-47bd-8c12-cfc18c82e0f3", "start_time": "2025-09-26T23:09:30.226791+00:00", "end_time": "2025-09-26T23:09:30.577699+00:00", "duration_seconds": 0.350908, "remote_ip": "192.168.1.4", "remote_port": 46300, "login": null, "password": null, "inputs": [], "raw_base64": "FgMAAGkBAABlAwNVHKfkcmFuZG9tMXJhbmRvbTJyYW5kb20zcmFuZG9tNAAADAAvAAo="}
-{"session_id": "7f970a4f-3d64-4734-9b05-5435a6652ef4", "start_time": "2025-09-26T23:09:36.053257+00:00", "end_time": "2025-09-26T23:09:37.459863+00:00", "duration_seconds": 1.406606, "remote_ip": "192.168.1.4", "remote_port": 876, "login": null, "password": null, "inputs": [], "raw_base64": ""}
+{
+  "session_id": "a65e92c9-c70a-4afa-a1a6-6933cda280ef",
+  "start_time": "2025-09-26T23:08:18.113498+00:00",
+  "end_time": "2025-09-26T23:08:29.126802+00:00",
+  "duration_seconds": 11.013304,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46240,
+  "login": "\u0018\u0018\u0000IBM-3279-4-E\u0019\u0019\u0000\u0000",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "//sY//oYAElCTS0zMjc5LTQtRf/w//sZ//0Z//sA//0A"
+}
+{
+  "session_id": "d01ff413-a5f5-4a8a-88f8-7fdadd29bf8e",
+  "start_time": "2025-09-26T23:08:29.156653+00:00",
+  "end_time": "2025-09-26T23:08:34.167241+00:00",
+  "duration_seconds": 5.010588,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46271,
+  "login": "",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "DQoNCg=="
+}
+{
+  "session_id": "0eb644f7-bfac-4e25-969a-404eae4e9e0e",
+  "start_time": "2025-09-26T23:08:34.190428+00:00",
+  "end_time": "2025-09-26T23:08:34.445209+00:00",
+  "duration_seconds": 0.254781,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46272,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": "R0VUIC8gSFRUUC8xLjANCg=="
+}
+{
+  "session_id": "2bf014cc-2467-4068-927a-1e7534724c7d",
+  "start_time": "2025-09-26T23:08:34.494648+00:00",
+  "end_time": "2025-09-26T23:08:39.501223+00:00",
+  "duration_seconds": 5.006575,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46273,
+  "login": "",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "T1BUSU9OUyAvIEhUVFAvMS4wDQoNCg=="
+}
+{
+  "session_id": "c178f44a-a473-4769-9c3f-6c30894b4ab1",
+  "start_time": "2025-09-26T23:08:39.522092+00:00",
+  "end_time": "2025-09-26T23:08:44.567748+00:00",
+  "duration_seconds": 5.045656,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46276,
+  "login": "",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "T1BUSU9OUyAvIFJUU1AvMS4wDQoNCg=="
+}
+{
+  "session_id": "d2f4e1bf-2c88-4518-8070-934c8a750697",
+  "start_time": "2025-09-26T23:08:44.596932+00:00",
+  "end_time": "2025-09-26T23:08:49.588262+00:00",
+  "duration_seconds": 4.99133,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46277,
+  "login": "\u0000\u0000(r\u001d\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0002\u0000\u0001\u0000\u0001|\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "gAAAKHL+HRMAAAAAAAAAAgABhqAAAZd8AAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}
+{
+  "session_id": "def8f62f-a2c1-4f35-9fd0-12f3522d3e56",
+  "start_time": "2025-09-26T23:08:49.606970+00:00",
+  "end_time": "2025-09-26T23:08:54.613287+00:00",
+  "duration_seconds": 5.006317,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46278,
+  "login": "\u0000\u001e\u0000\u0006\u0001\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0007version\u0004bind\u0000\u0000\u0010\u0000\u0003",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "AB4ABgEAAAEAAAAAAAAHdmVyc2lvbgRiaW5kAAAQAAM="
+}
+{
+  "session_id": "2b529273-78f5-467f-877f-3b5a2da06943",
+  "start_time": "2025-09-26T23:08:54.644943+00:00",
+  "end_time": "2025-09-26T23:08:59.655645+00:00",
+  "duration_seconds": 5.010702,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46279,
+  "login": "\u0000\f\u0000\u0000\u0010\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "AAwAABAAAAAAAAAAAAA="
+}
+{
+  "session_id": "b808950f-09b2-4015-84fc-c05dc1854f13",
+  "start_time": "2025-09-26T23:08:59.684887+00:00",
+  "end_time": "2025-09-26T23:09:07.194935+00:00",
+  "duration_seconds": 7.510048,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46280,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": "SEVMUA0K"
+}
+{
+  "session_id": "5b071eba-77d8-46da-bcc3-8ac78f16baad",
+  "start_time": "2025-09-26T23:09:07.212910+00:00",
+  "end_time": "2025-09-26T23:09:12.217953+00:00",
+  "duration_seconds": 5.005043,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46281,
+  "login": "\u0000f\u0000\u0005\u0000\u0004\u0000e\u0000d\u0000c\u0000b\u0000a\u0000`\u0000\u0015\u0000\u0012\u0000\t\u0000\u0014\u0000\u0011\u0000\b\u0000\u0006\u0000\u0003\u0001\u0000",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "FgMAAFMBAABPAwA/R9f3uizu6rJgfvMA/YJ7udWWyHeb5sTbPD3bb+8QbgAAKAAWABMACgBmAAUABABlAGQAYwBiAGEAYAAVABIACQAUABEACAAGAAMBAA=="
+}
+{
+  "session_id": "0117ab6b-4e02-4b36-aafa-55e205c92d5c",
+  "start_time": "2025-09-26T23:09:12.252626+00:00",
+  "end_time": "2025-09-26T23:09:17.267995+00:00",
+  "duration_seconds": 5.015369,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46283,
+  "login": "\u0001\u0000\b\u0000\u0003\u0000\u0000\u0000",
+  "password": null,
+  "inputs": [],
+  "raw_base64": "AwAAKiXgAAAAAABDb29raWU6IG1zdHNoYXNoPW5tYXANCgEACAADAAAA"
+}
+{
+  "session_id": "c8648a66-b9a6-47bd-8c12-cfc18c82e0f3",
+  "start_time": "2025-09-26T23:09:30.226791+00:00",
+  "end_time": "2025-09-26T23:09:30.577699+00:00",
+  "duration_seconds": 0.350908,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46300,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": "FgMAAGkBAABlAwNVHKfkcmFuZG9tMXJhbmRvbTJyYW5kb20zcmFuZG9tNAAADAAvAAo="
+}
+{
+  "session_id": "7f970a4f-3d64-4734-9b05-5435a6652ef4",
+  "start_time": "2025-09-26T23:09:36.053257+00:00",
+  "end_time": "2025-09-26T23:09:37.459863+00:00",
+  "duration_seconds": 1.406606,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 876,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": ""
+}
+{
+  "session_id": "fa2f16af-0a66-41d0-93fd-f8b747f2b943",
+  "start_time": "2025-09-26T23:07:45.956335+00:00",
+  "end_time": "2025-09-26T23:12:59.376775+00:00",
+  "duration_seconds": 313.42044,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46199,
+  "login": "root",
+  "password": "<captured>",
+  "inputs": [],
+  "raw_base64": "cm9vdA0KYWRtb24NCg=="
+}
+{
+  "session_id": "23e258e3-c95c-48d6-890f-366088acb051",
+  "start_time": "2025-09-26T23:07:33.373496+00:00",
+  "end_time": "2025-09-26T23:12:59.376899+00:00",
+  "duration_seconds": 326.003403,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46186,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": ""
+}
+{
+  "session_id": "fc12a802-959a-4bf9-8f0f-dbd8a8476cde",
+  "start_time": "2025-09-26T23:09:17.279448+00:00",
+  "end_time": "2025-09-26T23:12:59.377290+00:00",
+  "duration_seconds": 222.097842,
+  "remote_ip": "192.168.1.4",
+  "remote_port": 46284,
+  "login": null,
+  "password": null,
+  "inputs": [],
+  "raw_base64": "FgMAAGkBAABlAwNVHKfkcmFuZG9tMXJhbmRvbTJyYW5kb20zcmFuZG9tNAAADAAvAAo="
+}
