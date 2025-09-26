@@ -87,6 +87,27 @@ FILE_CONTENTS = {
     "/home/admin/readme.txt": "This is a readme file for admin user.\nContains some basic information.\n"
 }
 
+# 模拟环境变量
+ENV_VARS = {
+    "HOME": "/root",
+    "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "SHELL": "/bin/bash",
+    "USER": "root",
+    "LOGNAME": "root",
+    "PWD": "/root",
+    "LANG": "en_US.UTF-8"
+}
+
+# 模拟命令历史
+COMMAND_HISTORY = [
+    "ls -la",
+    "cat /etc/passwd",
+    "ps aux",
+    "df -h",
+    "free -h",
+    "uname -a"
+]
+
 DEFAULT_HOST = "0.0.0.0"
 DEFAULT_PORT = 2323  # 如果你控制基础设施，使用23；2323避免需要root权限
 
@@ -123,6 +144,12 @@ def get_file_content(filepath):
         if filepath.startswith(key):
             return FILE_CONTENTS[key]
     return None
+
+
+# 模拟命令执行时间
+async def simulate_command_execution():
+    # 模拟命令执行的延迟
+    await asyncio.sleep(random.uniform(0.1, 1.0))
 
 
 async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -212,6 +239,9 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         await session.send(b"No mail.\r\n")
 
         current_path = "/root"
+        command_history = COMMAND_HISTORY.copy()
+        env_vars = ENV_VARS.copy()
+
         await session.send(PROMPT)
 
         # 交互循环：读取行，回显预设响应但记录所有内容
@@ -242,6 +272,7 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                     current_path = new_path
                 else:
                     current_path = current_path.rstrip("/") + "/" + new_path
+                env_vars["PWD"] = current_path
                 await session.send(PROMPT)
                 continue
 
@@ -255,18 +286,23 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 # 假装显示文件列表
                 await session.send(b"dummy-file.txt\r\n")
             elif lowered == "whoami":
+                await simulate_command_execution()
                 await session.send(f"{session.login}\r\n".encode())
             elif lowered == "id":
+                await simulate_command_execution()
                 await session.send(f"uid=0({session.login}) gid=0(root) groups=0(root)\r\n".encode())
             elif lowered == "uname -a":
+                await simulate_command_execution()
                 await session.send(f"Linux {SYSTEM_INFO['hostname']} {SYSTEM_INFO['kernel']} #1 SMP Debian 5.10.92-1 (2022-01-18) x86_64 GNU/Linux\r\n".encode())
             elif lowered == "ls":
+                await simulate_command_execution()
                 contents = get_directory_contents(current_path)
                 if contents:
                     await session.send("  ".join(contents).encode() + b"\r\n")
                 else:
                     await session.send(b"\r\n")
             elif lowered == "ls -l" or lowered == "ls -la":
+                await simulate_command_execution()
                 contents = get_directory_contents(current_path)
                 if contents:
                     # 生成类似 ls -l 的输出
@@ -283,8 +319,10 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 else:
                     await session.send(b"\r\n")
             elif lowered == "pwd":
+                await simulate_command_execution()
                 await session.send(f"{current_path}\r\n".encode())
             elif lowered == "cat /etc/passwd":
+                await simulate_command_execution()
                 passwd_content = "\r\n".join([
                     "root:x:0:0:root:/root:/bin/bash",
                     "daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin",
@@ -298,23 +336,27 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 ]) + "\r\n"
                 await session.send(passwd_content.encode())
             elif lowered == "ps aux":
+                await simulate_command_execution()
                 ps_header = b"USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\r\n"
                 ps_lines = []
                 for i, proc in enumerate(SYSTEM_INFO["processes"]):
                     ps_lines.append(f"root      {1000+i:5}  0.0  0.1  {random.randint(10000, 99999):6}  {random.randint(1000, 9999):4}  ?        Ss   Feb10   0:{random.randint(10, 59):02} {proc}".encode())
                 await session.send(ps_header + b"\r\n".join(ps_lines) + b"\r\n")
             elif lowered == "df -h":
+                await simulate_command_execution()
                 df_header = b"Filesystem      Size  Used Avail Use% Mounted on\r\n"
                 df_lines = []
                 for fs in SYSTEM_INFO["filesystems"]:
                     df_lines.append(f"{fs[0]:15} {fs[2]:>4} {fs[3]:>4} {fs[4]:>4} {fs[5]:>3} {fs[6]}".encode())
                 await session.send(df_header + b"\r\n".join(df_lines) + b"\r\n")
             elif lowered == "free -h":
+                await simulate_command_execution()
                 mem_info = SYSTEM_INFO["memory"]
                 await session.send(b"               total        used        free      shared  buff/cache   available\r\n")
                 await session.send(f"Mem:           2.0G        1.2G        800M         50M        579M        1.1G\r\n".encode())
                 await session.send(f"Swap:          1.0G          0B        1.0G\r\n".encode())
             elif lowered == "ifconfig" or lowered == "ip addr":
+                await simulate_command_execution()
                 ifconfig_lines = []
                 for i, (iface, ip, mask) in enumerate(SYSTEM_INFO["network"]):
                     ifconfig_lines.append(f"{iface}: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500")
@@ -326,8 +368,9 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                     ifconfig_lines.append("")
                 await session.send("\r\n".join(ifconfig_lines).encode())
             elif lowered == "help":
-                await session.send(b"Supported commands: ls, ls -l, ls -la, cd, cat, ps aux, df -h, free -h, ifconfig, ip addr, whoami, id, uname -a, pwd, help, exit, quit, logout\r\n")
+                await session.send(b"Supported commands: ls, ls -l, ls -la, cd, cat, ps aux, df -h, free -h, ifconfig, ip addr, whoami, id, uname -a, pwd, env, export, history, help, exit, quit, logout\r\n")
             elif lowered.startswith("cat "):
+                await simulate_command_execution()
                 filename = original_text[4:].strip()  # 保留原始大小写
                 # 处理相对路径和绝对路径
                 if filename.startswith("/"):
@@ -349,26 +392,29 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 else:
                     await session.send(f"cat: {filename}: No such file or directory\r\n".encode())
             elif lowered.startswith("echo "):
+                await simulate_command_execution()
                 message = original_text[5:]  # Skip "echo "，保留原始大小写
                 await session.send(f"{message}\r\n".encode())
             elif lowered == "date":
+                await simulate_command_execution()
                 await session.send(f"{datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Z %Y')}\r\n".encode())
             elif lowered == "uptime":
+                await simulate_command_execution()
                 uptime_minutes = random.randint(60, 10000)
                 days = uptime_minutes // (60 * 24)
                 hours = (uptime_minutes % (60 * 24)) // 60
                 mins = uptime_minutes % 60
                 await session.send(f" {datetime.datetime.now().strftime('%H:%M:%S')} up {days} days, {hours}:{mins:02d},  1 user,  load average: 0.00, 0.01, 0.05\r\n".encode())
             elif lowered == "w" or lowered == "who":
+                await simulate_command_execution()
                 await session.send(b"USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT\r\n")
                 await session.send(f"{session.login:<8} pts/0    192.168.1.105    {datetime.datetime.now().strftime('%H:%M')}   0.00s  0.04s  0.01s w\r\n".encode())
             elif lowered == "history":
-                await session.send(b"    1  ls -la\r\n")
-                await session.send(b"    2  cat /etc/passwd\r\n")
-                await session.send(b"    3  ps aux\r\n")
-                await session.send(b"    4  df -h\r\n")
-                await session.send(b"    5  free -h\r\n")
+                await simulate_command_execution()
+                for i, cmd in enumerate(command_history, 1):
+                    await session.send(f"{i:5}  {cmd}\r\n".encode())
             elif lowered.startswith("grep "):
+                await simulate_command_execution()
                 # 简单的grep模拟
                 parts = original_text.split()
                 if len(parts) >= 3:
@@ -390,17 +436,123 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                 else:
                     await session.send(b"Usage: grep pattern file\r\n")
             elif lowered.startswith("mkdir "):
-                await session.send(PROMPT)
+                await simulate_command_execution()
+                await session.send(prompt)
                 continue
             elif lowered.startswith("rm "):
-                await session.send(PROMPT)
+                await simulate_command_execution()
+                await session.send(prompt)
                 continue
             elif lowered.startswith("touch "):
-                await session.send(PROMPT)
+                await simulate_command_execution()
+                await session.send(prompt)
                 continue
+            elif lowered == "env":
+                await simulate_command_execution()
+                for key, value in env_vars.items():
+                    await session.send(f"{key}={value}\r\n".encode())
+            elif lowered.startswith("export "):
+                await simulate_command_execution()
+                # 简单处理环境变量设置
+                var_def = original_text[7:].strip()  # Skip "export "
+                if "=" in var_def:
+                    key, value = var_def.split("=", 1)
+                    env_vars[key] = value
+                await session.send(prompt)
+                continue
+            elif lowered.startswith("which "):
+                await simulate_command_execution()
+                command = original_text[6:].strip()
+                if command in ["ls", "cat", "ps", "df", "free", "grep", "echo", "uname", "id", "whoami"]:
+                    await session.send(f"/usr/bin/{command}\r\n".encode())
+                else:
+                    await session.send(f"which: no {command} in ({env_vars['PATH']})\r\n".encode())
+            elif lowered == "printenv":
+                await simulate_command_execution()
+                for key, value in env_vars.items():
+                    await session.send(f"{key}={value}\r\n".encode())
+            elif lowered.startswith("tail "):
+                await simulate_command_execution()
+                parts = original_text.split()
+                if len(parts) >= 2:
+                    filename = parts[-1]
+                    if filename.startswith("/"):
+                        filepath = filename
+                    else:
+                        filepath = current_path.rstrip("/") + "/" + filename
+
+                    content = get_file_content(filepath)
+                    if content is not None:
+                        lines = content.split('\n')
+                        # 默认显示最后10行
+                        tail_lines = lines[-10:] if len(lines) > 10 else lines
+                        for line in tail_lines:
+                            await session.send(f"{line}\r\n".encode())
+                    else:
+                        await session.send(f"tail: cannot open '{filename}' for reading: No such file or directory\r\n".encode())
+                else:
+                    await session.send(b"Usage: tail [file]\r\n")
+            elif lowered.startswith("head "):
+                await simulate_command_execution()
+                parts = original_text.split()
+                if len(parts) >= 2:
+                    filename = parts[-1]
+                    if filename.startswith("/"):
+                        filepath = filename
+                    else:
+                        filepath = current_path.rstrip("/") + "/" + filename
+
+                    content = get_file_content(filepath)
+                    if content is not None:
+                        lines = content.split('\n')
+                        # 默认显示前10行
+                        head_lines = lines[:10]
+                        for line in head_lines:
+                            await session.send(f"{line}\r\n".encode())
+                    else:
+                        await session.send(f"head: cannot open '{filename}' for reading: No such file or directory\r\n".encode())
+                else:
+                    await session.send(b"Usage: head [file]\r\n")
+            elif lowered == "top":
+                await simulate_command_execution()
+                await session.send(b"top - 10:00:00 up 1 day,  1:00,  1 user,  load average: 0.00, 0.01, 0.05\r\n")
+                await session.send(b"Tasks: 100 total,   1 running,  99 sleeping,   0 stopped,   0 zombie\r\n")
+                await session.send(b"%Cpu(s):  0.3 us,  0.2 sy,  0.0 ni, 99.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\r\n")
+                await session.send(b"MiB Mem :   2048.0 total,    800.0 free,   1200.0 used,    579.0 buff/cache\r\n")
+                await session.send(b"MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.   1100.0 avail Mem\r\n")
+                await session.send(b"\r\n")
+                await session.send(b"  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\r\n")
+                await session.send(b"    1 root      20   0  167348   8768   4564 S   0.0   0.4   0:01.23 systemd\r\n")
+                await session.send(b"  289 root      20   0   56784   6540   4092 S   0.0   0.3   0:00.23 systemd-journal\r\n")
+                await session.send(b"  312 root      20   0   23456   4321   2014 S   0.0   0.2   0:00.10 systemd-udevd\r\n")
+            elif lowered == "netstat":
+                await simulate_command_execution()
+                await session.send(b"Active Internet connections (w/o servers)\r\n")
+                await session.send(b"Proto Recv-Q Send-Q Local Address           Foreign Address         State\r\n")
+                await session.send(b"tcp        0      0 server01:ssh            192.168.1.105:54321     ESTABLISHED\r\n")
+                await session.send(b"tcp        0      0 server01:23             192.168.1.105:54322     ESTABLISHED\r\n")
+                await session.send(b"Active UNIX domain sockets (w/o servers)\r\n")
+                await session.send(b"Proto RefCnt Flags       Type       State         I-Node   Path\r\n")
+                await session.send(b"unix  2      [ ]         DGRAM                    12345    /run/systemd/notify\r\n")
+            elif lowered.startswith("./"):
+                await simulate_command_execution()
+                # 模拟执行本地脚本
+                script_name = original_text[2:]
+                await session.send(f"bash: ./{script_name}: Permission denied\r\n".encode())
+            elif lowered == "clear":
+                # 发送清屏字符
+                await session.send(b"\x1b[2J\x1b[H")
             else:
                 # 通用回显
                 await session.send(b"bash: " + original_text.encode() + b": command not found\r\n")
+
+            # 将命令添加到历史记录中
+            if original_text and not original_text.startswith("history"):
+                command_history.append(original_text)
+                # 保持历史记录在合理范围内
+                if len(command_history) > 50:
+                    command_history.pop(0)
+
             await session.send(prompt)
 
     except Exception as exc:
