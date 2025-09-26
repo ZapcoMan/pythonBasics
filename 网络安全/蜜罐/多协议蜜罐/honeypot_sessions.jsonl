@@ -1,1 +1,349 @@
-{"session_id": "6719b090-8f63-4baf-a083-e97a81577352", "start_time": "2025-09-26T13:33:05.853261+00:00", "end_time": "2025-09-26T13:33:05.854429+00:00", "duration_seconds": 0.001171, "remote_ip": "127.0.0.1", "remote_port": 6218, "login": "admin", "password": "<captured>", "inputs": [{"ts": "2025-09-26T13:33:05.854155+00:00", "input": "whoami"}, {"ts": "2025-09-26T13:33:05.854380+00:00", "input": "exit"}], "raw_base64": "YWRtaW4KcGFzc3dvcmQxMjMKd2hvYW1pCmV4aXQK", "protocol": "telnet"}
+{
+  "session_id": "6719b090-8f63-4baf-a083-e97a81577352",
+  "start_time": "2025-09-26T13:33:05.853261+00:00",
+  "end_time": "2025-09-26T13:33:05.854429+00:00",
+  "duration_seconds": 0.001171,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6218,
+  "login": "admin",
+  "password": "<captured>",
+  "inputs": [
+    {
+      "ts": "2025-09-26T13:33:05.854155+00:00",
+      "input": "whoami"
+    },
+    {
+      "ts": "2025-09-26T13:33:05.854380+00:00",
+      "input": "exit"
+    }
+  ],
+  "raw_base64": "YWRtaW4KcGFzc3dvcmQxMjMKd2hvYW1pCmV4aXQK",
+  "protocol": "telnet"
+}
+{
+  "session_id": "591b9de9-7a68-4f47-bf78-1545131583f6",
+  "start_time": "2025-09-26T13:41:12.686807+00:00",
+  "end_time": "2025-09-26T13:41:13.189389+00:00",
+  "duration_seconds": 0.502592,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6757,
+  "raw_base64": "SGVsbG8gVENQIEhvbmV5cG90IC0gVGVzdCAxIQ==",
+  "protocol": "tcp"
+}
+{
+  "session_id": "e5c64a19-0d9d-4155-a085-d8336c06eb43",
+  "start_time": "2025-09-26T13:41:13.190441+00:00",
+  "end_time": "2025-09-26T13:41:13.691973+00:00",
+  "duration_seconds": 0.50154,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6758,
+  "raw_base64": "SGVsbG8gVENQIEhvbmV5cG90IC0gVGVzdCAyIQ==",
+  "protocol": "tcp"
+}
+{
+  "session_id": "847c195b-ee7f-4665-b72b-1fe4101cd09b",
+  "start_time": "2025-09-26T13:41:13.692741+00:00",
+  "end_time": "2025-09-26T13:41:14.193695+00:00",
+  "duration_seconds": 0.500964,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6759,
+  "raw_base64": "SGVsbG8gVENQIEhvbmV5cG90IC0gVGVzdCAzIQ==",
+  "protocol": "tcp"
+}
+{
+  "session_id": "08e6da1a-b406-49bd-ad0d-8b482d1b37d0",
+  "start_time": "2025-09-26T13:41:14.202398+00:00",
+  "end_time": "2025-09-26T13:41:14.202566+00:00",
+  "duration_seconds": 0.000176,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6760,
+  "inputs": [
+    "GET / HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\n\r\n"
+  ],
+  "raw_base64": "R0VUIC8gSFRUUC8xLjENCkhvc3Q6IDEyNy4wLjAuMTo4MDgwDQpVc2VyLUFnZW50OiBweXRob24tcmVxdWVzdHMvMi4zMi4zDQpBY2NlcHQtRW5jb2Rpbmc6IGd6aXAsIGRlZmxhdGUNCkFjY2VwdDogKi8qDQpDb25uZWN0aW9uOiBrZWVwLWFsaXZlDQoNCg==",
+  "protocol": "http"
+}
+{
+  "session_id": "c72c53e1-2b3d-4cc1-b25d-7f7b5f5b45ee",
+  "start_time": "2025-09-26T13:41:14.706052+00:00",
+  "end_time": "2025-09-26T13:41:14.706173+00:00",
+  "duration_seconds": 0.000126,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6763,
+  "inputs": [
+    "GET /index.html HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\n\r\n"
+  ],
+  "raw_base64": "R0VUIC9pbmRleC5odG1sIEhUVFAvMS4xDQpIb3N0OiAxMjcuMC4wLjE6ODA4MA0KVXNlci1BZ2VudDogcHl0aG9uLXJlcXVlc3RzLzIuMzIuMw0KQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlDQpBY2NlcHQ6ICovKg0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=",
+  "protocol": "http"
+}
+{
+  "session_id": "274ef3d4-cef6-4b0f-8e89-6bae146214c7",
+  "start_time": "2025-09-26T13:41:15.209518+00:00",
+  "end_time": "2025-09-26T13:41:15.209612+00:00",
+  "duration_seconds": 9.8e-05,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6764,
+  "inputs": [
+    "GET /test HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\n\r\n"
+  ],
+  "raw_base64": "R0VUIC90ZXN0IEhUVFAvMS4xDQpIb3N0OiAxMjcuMC4wLjE6ODA4MA0KVXNlci1BZ2VudDogcHl0aG9uLXJlcXVlc3RzLzIuMzIuMw0KQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlDQpBY2NlcHQ6ICovKg0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KDQo=",
+  "protocol": "http"
+}
+{
+  "session_id": "41b8fd44-2315-4c27-baf0-2afd95777f75",
+  "start_time": "2025-09-26T13:41:15.712716+00:00",
+  "end_time": "2025-09-26T13:41:15.712864+00:00",
+  "duration_seconds": 0.000155,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6769,
+  "inputs": [
+    "GET /api/data HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\n\r\n"
+  ],
+  "raw_base64": "R0VUIC9hcGkvZGF0YSBIVFRQLzEuMQ0KSG9zdDogMTI3LjAuMC4xOjgwODANClVzZXItQWdlbnQ6IHB5dGhvbi1yZXF1ZXN0cy8yLjMyLjMNCkFjY2VwdC1FbmNvZGluZzogZ3ppcCwgZGVmbGF0ZQ0KQWNjZXB0OiAqLyoNCkNvbm5lY3Rpb246IGtlZXAtYWxpdmUNCg0K",
+  "protocol": "http"
+}
+{
+  "session_id": "8b4399b1-ede8-445b-b55c-647d2120dedb",
+  "start_time": "2025-09-26T13:41:16.216067+00:00",
+  "end_time": "2025-09-26T13:41:16.216160+00:00",
+  "duration_seconds": 9.7e-05,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6771,
+  "inputs": [
+    "POST /test HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Length: 10\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nkey=value0"
+  ],
+  "raw_base64": "UE9TVCAvdGVzdCBIVFRQLzEuMQ0KSG9zdDogMTI3LjAuMC4xOjgwODANClVzZXItQWdlbnQ6IHB5dGhvbi1yZXF1ZXN0cy8yLjMyLjMNCkFjY2VwdC1FbmNvZGluZzogZ3ppcCwgZGVmbGF0ZQ0KQWNjZXB0OiAqLyoNCkNvbm5lY3Rpb246IGtlZXAtYWxpdmUNCkNvbnRlbnQtTGVuZ3RoOiAxMA0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi94LXd3dy1mb3JtLXVybGVuY29kZWQNCg0Ka2V5PXZhbHVlMA==",
+  "protocol": "http"
+}
+{
+  "session_id": "8151dca9-b342-4b44-b4e3-4f900f12e133",
+  "start_time": "2025-09-26T13:41:16.718712+00:00",
+  "end_time": "2025-09-26T13:41:16.737192+00:00",
+  "duration_seconds": 0.018492,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6772,
+  "inputs": [
+    "PUT /test HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Length: 10\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nkey=value1"
+  ],
+  "raw_base64": "UFVUIC90ZXN0IEhUVFAvMS4xDQpIb3N0OiAxMjcuMC4wLjE6ODA4MA0KVXNlci1BZ2VudDogcHl0aG9uLXJlcXVlc3RzLzIuMzIuMw0KQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlDQpBY2NlcHQ6ICovKg0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KQ29udGVudC1MZW5ndGg6IDEwDQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZA0KDQprZXk9dmFsdWUx",
+  "protocol": "http"
+}
+{
+  "session_id": "ce02c268-0ac0-4710-9357-6314f41b35e3",
+  "start_time": "2025-09-26T13:41:17.240437+00:00",
+  "end_time": "2025-09-26T13:41:17.251260+00:00",
+  "duration_seconds": 0.010838,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6773,
+  "inputs": [
+    "DELETE /test HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nUser-Agent: python-requests/2.32.3\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Length: 0\r\n\r\n"
+  ],
+  "raw_base64": "REVMRVRFIC90ZXN0IEhUVFAvMS4xDQpIb3N0OiAxMjcuMC4wLjE6ODA4MA0KVXNlci1BZ2VudDogcHl0aG9uLXJlcXVlc3RzLzIuMzIuMw0KQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlDQpBY2NlcHQ6ICovKg0KQ29ubmVjdGlvbjoga2VlcC1hbGl2ZQ0KQ29udGVudC1MZW5ndGg6IDANCg0K",
+  "protocol": "http"
+}
+{
+  "session_id": "32dbd72a-32e9-4a23-a907-0954c8df4be3",
+  "start_time": "2025-09-26T13:41:19.791043+00:00",
+  "end_time": "2025-09-26T13:41:20.291930+00:00",
+  "duration_seconds": 0.500894,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6791,
+  "raw_base64": "",
+  "protocol": "ssh"
+}
+{
+  "session_id": "75b56f30-abd1-45dc-a347-9c30b9b5a98a",
+  "start_time": "2025-09-26T13:41:20.292595+00:00",
+  "end_time": "2025-09-26T13:41:20.793166+00:00",
+  "duration_seconds": 0.500578,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6794,
+  "raw_base64": "",
+  "protocol": "ssh"
+}
+{
+  "session_id": "95f6e9d3-9f1e-4796-bb7a-50415f141d22",
+  "start_time": "2025-09-26T13:41:20.793993+00:00",
+  "end_time": "2025-09-26T13:41:21.294944+00:00",
+  "duration_seconds": 0.50096,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6795,
+  "raw_base64": "",
+  "protocol": "ssh"
+}
+{
+  "session_id": "5ebd130f-307c-4a85-9ce7-36136a8a7d48",
+  "start_time": "2025-09-26T13:41:21.298869+00:00",
+  "end_time": "2025-09-26T13:41:22.304478+00:00",
+  "duration_seconds": 1.005613,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6796,
+  "login": "testuser0",
+  "password": "<captured>",
+  "inputs": [
+    {
+      "ts": "2025-09-26T13:41:21.299805+00:00",
+      "input": "whoami"
+    },
+    {
+      "ts": "2025-09-26T13:41:21.500985+00:00",
+      "input": "get files"
+    },
+    {
+      "ts": "2025-09-26T13:41:21.701601+00:00",
+      "input": "ls -la"
+    },
+    {
+      "ts": "2025-09-26T13:41:21.902401+00:00",
+      "input": "pwd"
+    },
+    {
+      "ts": "2025-09-26T13:41:22.103318+00:00",
+      "input": "help"
+    },
+    {
+      "ts": "2025-09-26T13:41:22.304382+00:00",
+      "input": "exit"
+    }
+  ],
+  "raw_base64": "dGVzdHVzZXIwCnRlc3RwYXNzMAp3aG9hbWkKZ2V0IGZpbGVzCmxzIC1sYQpwd2QKaGVscApleGl0Cg==",
+  "protocol": "telnet"
+}
+{
+  "session_id": "b66a8e3e-c8ca-4032-b0a0-a5f791c850ba",
+  "start_time": "2025-09-26T13:41:23.305735+00:00",
+  "end_time": "2025-09-26T13:41:24.311276+00:00",
+  "duration_seconds": 1.005545,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6797,
+  "login": "testuser1",
+  "password": "<captured>",
+  "inputs": [
+    {
+      "ts": "2025-09-26T13:41:23.306770+00:00",
+      "input": "whoami"
+    },
+    {
+      "ts": "2025-09-26T13:41:23.507239+00:00",
+      "input": "get files"
+    },
+    {
+      "ts": "2025-09-26T13:41:23.707974+00:00",
+      "input": "ls -la"
+    },
+    {
+      "ts": "2025-09-26T13:41:23.909051+00:00",
+      "input": "pwd"
+    },
+    {
+      "ts": "2025-09-26T13:41:24.110582+00:00",
+      "input": "help"
+    },
+    {
+      "ts": "2025-09-26T13:41:24.311181+00:00",
+      "input": "exit"
+    }
+  ],
+  "raw_base64": "dGVzdHVzZXIxCnRlc3RwYXNzMQp3aG9hbWkKZ2V0IGZpbGVzCmxzIC1sYQpwd2QKaGVscApleGl0Cg==",
+  "protocol": "telnet"
+}
+{
+  "session_id": "915140cb-0127-4862-89dc-78403faade0b",
+  "start_time": "2025-09-26T13:41:25.314987+00:00",
+  "end_time": "2025-09-26T13:41:26.522436+00:00",
+  "duration_seconds": 1.207453,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6798,
+  "username": "ftpuser0",
+  "authenticated": true,
+  "inputs": [
+    {
+      "ts": "2025-09-26T13:41:25.315347+00:00",
+      "input": "USER ftpuser0"
+    },
+    {
+      "ts": "2025-09-26T13:41:25.315582+00:00",
+      "input": "PASS ftppass0"
+    },
+    {
+      "ts": "2025-09-26T13:41:25.315890+00:00",
+      "input": "SYST"
+    },
+    {
+      "ts": "2025-09-26T13:41:25.516540+00:00",
+      "input": "PWD"
+    },
+    {
+      "ts": "2025-09-26T13:41:25.718058+00:00",
+      "input": "CWD /tmp"
+    },
+    {
+      "ts": "2025-09-26T13:41:25.919108+00:00",
+      "input": "PWD"
+    },
+    {
+      "ts": "2025-09-26T13:41:26.119583+00:00",
+      "input": "LIST"
+    },
+    {
+      "ts": "2025-09-26T13:41:26.321076+00:00",
+      "input": "HELP"
+    },
+    {
+      "ts": "2025-09-26T13:41:26.522340+00:00",
+      "input": "QUIT"
+    }
+  ],
+  "raw_base64": "VVNFUiBmdHB1c2VyMApQQVNTIGZ0cHBhc3MwClNZU1QKUFdECkNXRCAvdG1wClBXRApMSVNUCkhFTFAKUVVJVAo=",
+  "protocol": "ftp"
+}
+{
+  "session_id": "6cf26b04-b952-41da-b746-2d5b9b1590aa",
+  "start_time": "2025-09-26T13:41:27.524116+00:00",
+  "end_time": "2025-09-26T13:41:28.730677+00:00",
+  "duration_seconds": 1.206566,
+  "remote_ip": "127.0.0.1",
+  "remote_port": 6802,
+  "username": "ftpuser1",
+  "authenticated": true,
+  "inputs": [
+    {
+      "ts": "2025-09-26T13:41:27.524521+00:00",
+      "input": "USER ftpuser1"
+    },
+    {
+      "ts": "2025-09-26T13:41:27.524753+00:00",
+      "input": "PASS ftppass1"
+    },
+    {
+      "ts": "2025-09-26T13:41:27.524941+00:00",
+      "input": "SYST"
+    },
+    {
+      "ts": "2025-09-26T13:41:27.725332+00:00",
+      "input": "PWD"
+    },
+    {
+      "ts": "2025-09-26T13:41:27.926725+00:00",
+      "input": "CWD /tmp"
+    },
+    {
+      "ts": "2025-09-26T13:41:28.128292+00:00",
+      "input": "PWD"
+    },
+    {
+      "ts": "2025-09-26T13:41:28.329144+00:00",
+      "input": "LIST"
+    },
+    {
+      "ts": "2025-09-26T13:41:28.529743+00:00",
+      "input": "HELP"
+    },
+    {
+      "ts": "2025-09-26T13:41:28.730568+00:00",
+      "input": "QUIT"
+    }
+  ],
+  "raw_base64": "VVNFUiBmdHB1c2VyMQpQQVNTIGZ0cHBhc3MxClNZU1QKUFdECkNXRCAvdG1wClBXRApMSVNUCkhFTFAKUVVJVAo=",
+  "protocol": "ftp"
+}
