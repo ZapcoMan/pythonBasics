@@ -57,7 +57,9 @@ FILESYSTEM = {
     "/home": ["admin", "user"],
     "/home/admin": [".bashrc", ".profile", "readme.txt"],
     "/home/user": [".bashrc", ".profile"],
-    "/tmp": ["test.tmp", "tempfile.log"]
+    "/tmp": ["test.tmp", "tempfile.log"],
+    "/var/www": ["html"],
+    "/var/www/html": ["index.html", "test.php"]
 }
 
 # 模拟文件内容
@@ -84,7 +86,9 @@ FILE_CONTENTS = {
         "cpu MHz\t\t: 1992.000",
         "cache size\t: 8192 KB"
     ]) + "\n",
-    "/home/admin/readme.txt": "This is a readme file for admin user.\nContains some basic information.\n"
+    "/home/admin/readme.txt": "This is a readme file for admin user.\nContains some basic information.\n",
+    "/var/www/html/index.html": "<html>\n<head><title>Welcome to server01</title></head>\n<body>\n<h1>Welcome to server01</h1>\n<p>This is a default web page.</p>\n</body>\n</html>\n",
+    "/var/www/html/test.php": "<?php\n// Test PHP file\necho 'Hello World';\n?>\n"
 }
 
 # 模拟环境变量
@@ -106,6 +110,13 @@ COMMAND_HISTORY = [
     "df -h",
     "free -h",
     "uname -a"
+]
+
+# 模拟服务列表
+SERVICES = [
+    ("ssh", "sshd", "listening on 0.0.0.0:22"),
+    ("http", "apache2", "listening on 0.0.0.0:80"),
+    ("mysql", "mysqld", "listening on 127.0.0.1:3306")
 ]
 
 DEFAULT_HOST = "0.0.0.0"
@@ -368,7 +379,7 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
                     ifconfig_lines.append("")
                 await session.send("\r\n".join(ifconfig_lines).encode())
             elif lowered == "help":
-                await session.send(b"Supported commands: ls, ls -l, ls -la, cd, cat, ps aux, df -h, free -h, ifconfig, ip addr, whoami, id, uname -a, pwd, env, export, history, help, exit, quit, logout\r\n")
+                await session.send(b"Supported commands: ls, ls -l, ls -la, cd, cat, ps aux, df -h, free -h, ifconfig, ip addr, whoami, id, uname -a, pwd, env, export, history, service, systemctl, help, exit, quit, logout\r\n")
             elif lowered.startswith("cat "):
                 await simulate_command_execution()
                 filename = original_text[4:].strip()  # 保留原始大小写
@@ -542,6 +553,58 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
             elif lowered == "clear":
                 # 发送清屏字符
                 await session.send(b"\x1b[2J\x1b[H")
+            elif lowered == "service --status-all":
+                await simulate_command_execution()
+                for service in ["apache2", "mysql", "ssh", "cron"]:
+                    status = "[ + ]" if random.choice([True, False]) else "[ - ]"
+                    await session.send(f"{status}  {service}\r\n".encode())
+            elif lowered.startswith("systemctl status "):
+                await simulate_command_execution()
+                service = original_text[17:].strip()
+                if service:
+                    await session.send(f"● {service}.service - {service.capitalize()} Service\r\n".encode())
+                    await session.send(b"   Loaded: loaded (/lib/systemd/system/" + service.encode() + b".service; enabled; vendor preset: enabled)\r\n")
+                    await session.send(b"   Active: active (running) since Mon 2022-02-10 09:15:22 UTC; 3 days ago\r\n")
+                    await session.send(b"  Process: 1234 ExecStart=/usr/sbin/" + service.encode() + b" (code=exited, status=0/SUCCESS)\r\n")
+                    await session.send(b" Main PID: 1235 (" + service.encode() + b")\r\n")
+                    await session.send(b"    Tasks: 10 (limit: 4915)\r\n")
+                    await session.send(b"   Memory: 5.2M\r\n")
+                    await session.send(b"   CGroup: /system.slice/" + service.encode() + b".service\r\n")
+                else:
+                    await session.send(b"systemctl status: no service specified\r\n")
+            elif lowered == "systemctl list-units --type=service":
+                await simulate_command_execution()
+                await session.send(b"UNIT                    LOAD   ACTIVE SUB     DESCRIPTION\r\n")
+                services = ["apache2.service", "mysql.service", "ssh.service", "cron.service", "rsyslog.service"]
+                for svc in services:
+                    active = "active" if random.choice([True, False, True]) else "inactive"  # 更多机会是active
+                    await session.send(f"{svc:<23} loaded {active:<6} running {svc[:-8].capitalize()} Service\r\n".encode())
+                await session.send(b"\r\nLOAD   = Reflects whether the unit definition was properly loaded.\r\n")
+                await session.send(b"ACTIVE = The high-level unit activation state, i.e. generalization of SUB.\r\n")
+                await session.send(b"SUB    = The low-level unit activation state, values depend on unit type.\r\n")
+            elif lowered.startswith("find "):
+                await simulate_command_execution()
+                parts = original_text.split()
+                if len(parts) >= 2:
+                    path = parts[1]
+                    await session.send(f"{path}/file1.txt\r\n".encode())
+                    await session.send(f"{path}/file2.log\r\n".encode())
+                    await session.send(f"{path}/subdir/\r\n".encode())
+                else:
+                    await session.send(b"Usage: find path\r\n")
+            elif lowered.startswith("du -h"):
+                await simulate_command_execution()
+                await session.send(b"4.0K\t./.ssh\r\n")
+                await session.send(b"8.0K\t./Documents\r\n")
+                await session.send(b"12K\t.\r\n")
+            elif lowered.startswith("chmod "):
+                await simulate_command_execution()
+                await session.send(prompt)
+                continue
+            elif lowered.startswith("chown "):
+                await simulate_command_execution()
+                await session.send(prompt)
+                continue
             else:
                 # 通用回显
                 await session.send(b"bash: " + original_text.encode() + b": command not found\r\n")
