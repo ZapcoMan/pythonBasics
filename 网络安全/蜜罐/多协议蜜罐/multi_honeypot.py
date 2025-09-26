@@ -36,6 +36,13 @@ DEFAULTS = {
 
 # ---------------------- 工具函数：JSONL追加（异步安全） ----------------
 async def append_jsonl(entry: dict, path: str = DEFAULT_LOG_FILE):
+    """
+    将条目以JSONL格式异步追加到文件中
+
+    Args:
+        entry (dict): 要写入的条目字典
+        path (str): 日志文件路径
+    """
     loop = asyncio.get_running_loop()
     s = json.dumps(entry, ensure_ascii=False)
     def _write():
@@ -46,11 +53,30 @@ async def append_jsonl(entry: dict, path: str = DEFAULT_LOG_FILE):
     await loop.run_in_executor(None, _write)
 
 def now_iso():
+    """
+    获取当前UTC时间的ISO格式字符串
+
+    Returns:
+        str: ISO格式的时间字符串
+    """
     return datetime.now(timezone.utc).isoformat()
 
 # ---------------------- 基础协议处理器 ------------------------------
 class ProtocolHandler:
+    """
+    协议处理器基类，定义所有协议处理器的通用接口和功能
+    """
+
     def __init__(self, name: str, host: str, port: int, log_file: str):
+        """
+        初始化协议处理器
+
+        Args:
+            name (str): 协议名称
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         self.name = name
         self.host = host
         self.port = port
@@ -58,9 +84,15 @@ class ProtocolHandler:
         self._server: Optional[asyncio.base_events.Server] = None
 
     async def start(self):
+        """
+        启动协议处理器
+        """
         raise NotImplementedError
 
     async def stop(self):
+        """
+        停止协议处理器
+        """
         if self._server:
             self._server.close()
             try:
@@ -70,6 +102,12 @@ class ProtocolHandler:
         op_logger.info("%s 处理器已停止", self.name)
 
     async def persist(self, session_entry: dict):
+        """
+        持久化会话条目到日志文件
+
+        Args:
+            session_entry (dict): 会话条目数据
+        """
         # 强制添加协议字段并写入
         session_entry.setdefault("protocol", self.name)
         try:
@@ -79,15 +117,30 @@ class ProtocolHandler:
 
 # ---------------------- Telnet处理器（交互式伪shell） ----------
 class TelnetHandler(ProtocolHandler):
+    """
+    Telnet协议处理器，模拟Telnet服务端并记录客户端交互
+    """
+
     BANNER = b"Welcome to MiniTelnet Service\r\nAuthorized access only.\r\n"
     PROMPT = b"mini-shell> "
     LOGIN_PROMPT = b"login: "
     PASS_PROMPT = b"password: "
 
     def __init__(self, host, port, log_file):
+        """
+        初始化Telnet处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         super().__init__("telnet", host, port, log_file)
 
     async def start(self):
+        """
+        启动Telnet服务器
+        """
         self._server = await asyncio.start_server(self._handle_client, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
         op_logger.info("Telnet监听于 %s", addrs)
@@ -95,6 +148,13 @@ class TelnetHandler(ProtocolHandler):
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理Telnet客户端连接
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
         peer = writer.get_extra_info("peername") or ("unknown", 0)
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
@@ -179,20 +239,49 @@ class TelnetHandler(ProtocolHandler):
 
 # ---------------------- FTP处理器（控制通道最小实现） -------------
 class FTPHandler(ProtocolHandler):
+    """
+    FTP协议处理器，模拟FTP控制通道并记录客户端交互
+    """
+
     def __init__(self, host, port, log_file):
+        """
+        初始化FTP处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         super().__init__("ftp", host, port, log_file)
 
     async def start(self):
+        """
+        启动FTP服务器
+        """
         self._server = await asyncio.start_server(self._handle_client, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
         op_logger.info("FTP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _send_line(self, writer: asyncio.StreamWriter, line: str):
+        """
+        向客户端发送一行FTP响应
+
+        Args:
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+            line (str): 要发送的响应行
+        """
         writer.write((line + "\r\n").encode())
         await writer.drain()
 
     async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理FTP客户端连接
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
         peer = writer.get_extra_info("peername") or ("unknown", 0)
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
@@ -271,16 +360,38 @@ class FTPHandler(ProtocolHandler):
 
 # ---------------------- TCP回显处理器 ---------------------------------
 class TCPHandler(ProtocolHandler):
+    """
+    TCP协议处理器，实现简单的TCP回显服务
+    """
+
     def __init__(self, host, port, log_file):
+        """
+        初始化TCP处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         super().__init__("tcp", host, port, log_file)
 
     async def start(self):
+        """
+        启动TCP服务器
+        """
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
         op_logger.info("TCP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理TCP客户端连接，实现回显功能
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
         peer = writer.get_extra_info("peername") or ("unknown", 0)
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
@@ -320,18 +431,40 @@ class TCPHandler(ProtocolHandler):
 
 # ---------------------- HTTP处理器（最小实现） ----------------------------
 class HTTPHandler(ProtocolHandler):
+    """
+    HTTP协议处理器，模拟简单的HTTP服务端
+    """
+
     RESPONSE_BODY = b"<html><body><h1>Fake HTTP Service</h1></body></html>"
 
     def __init__(self, host, port, log_file):
+        """
+        初始化HTTP处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         super().__init__("http", host, port, log_file)
 
     async def start(self):
+        """
+        启动HTTP服务器
+        """
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
         op_logger.info("HTTP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理HTTP客户端请求
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
         peer = writer.get_extra_info("peername") or ("unknown", 0)
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
@@ -367,13 +500,30 @@ class HTTPHandler(ProtocolHandler):
 
 # ---------------------- HTTPS处理器（使用ssl包装HTTP） ----------------
 class HTTPSHandler(HTTPHandler):
+    """
+    HTTPS协议处理器，通过SSL包装HTTP处理器实现HTTPS服务
+    """
+
     def __init__(self, host, port, log_file, certfile: str, keyfile: str):
+        """
+        初始化HTTPS处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+            certfile (str): SSL证书文件路径
+            keyfile (str): SSL密钥文件路径
+        """
         super().__init__(host, port, log_file)
         self.name = "https"
         self.certfile = certfile
         self.keyfile = keyfile
 
     async def start(self):
+        """
+        启动HTTPS服务器
+        """
         try:
             # 创建SSL上下文
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
@@ -392,18 +542,40 @@ class HTTPSHandler(HTTPHandler):
 
 # ---------------------- SSH处理器（仅横幅） -------------------------
 class SSHHandler(ProtocolHandler):
+    """
+    SSH协议处理器，模拟SSH服务端并捕获客户端连接信息
+    """
+
     BANNER = b"SSH-2.0-OpenSSH_8.2p1 FakeHoneypot\r\n"
 
     def __init__(self, host, port, log_file):
+        """
+        初始化SSH处理器
+
+        Args:
+            host (str): 监听主机地址
+            port (int): 监听端口
+            log_file (str): 日志文件路径
+        """
         super().__init__("ssh", host, port, log_file)
 
     async def start(self):
+        """
+        启动SSH服务器
+        """
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
         op_logger.info("SSH监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理SSH客户端连接，捕获客户端横幅信息
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
         peer = writer.get_extra_info("peername") or ("unknown", 0)
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
@@ -442,16 +614,32 @@ class SSHHandler(ProtocolHandler):
 
 # ---------------------- 管理器协调处理器 -------------------
 class HoneypotManager:
+    """
+    蜜罐管理器，用于协调和管理所有协议处理器
+    """
+
     def __init__(self, handlers):
+        """
+        初始化蜜罐管理器
+
+        Args:
+            handlers (list): 协议处理器列表
+        """
         self.handlers = handlers
 
     async def start(self):
+        """
+        启动所有协议处理器
+        """
         op_logger.info("启动蜜罐管理器，包含 %d 个处理器", len(self.handlers))
         # 并发启动处理器
         await asyncio.gather(*(h.start() for h in self.handlers))
         op_logger.info("所有处理器已启动")
 
     async def stop(self):
+        """
+        停止所有协议处理器
+        """
         op_logger.info("停止蜜罐管理器")
         await asyncio.gather(*(h.stop() for h in self.handlers), return_exceptions=True)
 
@@ -460,6 +648,14 @@ def ensure_self_signed(certfile: Path, keyfile: Path, common_name: str = "mini-h
     """
     如果文件缺失，尝试使用openssl命令生成自签名证书。
     需要在PATH中有openssl可用。
+
+    Args:
+        certfile (Path): 证书文件路径
+        keyfile (Path): 密钥文件路径
+        common_name (str): 证书通用名称
+
+    Returns:
+        bool: 生成成功返回True，否则返回False
     """
     if certfile.exists() and keyfile.exists():
         op_logger.info("找到现有证书/密钥: %s %s", certfile, keyfile)
@@ -484,6 +680,12 @@ def ensure_self_signed(certfile: Path, keyfile: Path, common_name: str = "mini-h
 
 # ---------------------- 命令行界面 / 入口点 ---------------------------------
 def parse_args():
+    """
+    解析命令行参数
+
+    Returns:
+        argparse.Namespace: 解析后的命令行参数
+    """
     p = argparse.ArgumentParser(description="多协议蜜罐（单文件）")
     p.add_argument("--host", default="0.0.0.0")
     p.add_argument("--log", default=DEFAULT_LOG_FILE)
@@ -499,6 +701,9 @@ def parse_args():
     return p.parse_args()
 
 async def main_async():
+    """
+    异步主函数，负责初始化和运行蜜罐
+    """
     args = parse_args()
     # 如果需要，确保证书存在
     certfile = Path(args.certfile)
@@ -532,6 +737,9 @@ async def main_async():
         await manager.stop()
 
 def main():
+    """
+    程序主入口函数
+    """
     try:
         asyncio.run(main_async())
     except Exception as e:
@@ -540,4 +748,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
