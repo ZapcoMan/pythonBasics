@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # multi_protocol_honeypot.py
-# Multi-protocol honeypot (single-file)
-# Protocols: TCP (echo), HTTP, HTTPS (TLS), SSH (banner-only), Telnet, FTP (control-channel minimal)
-# Python 3.11+
+# 多协议蜜罐（单文件）
+# 支持协议：TCP（回显）、HTTP、HTTPS（TLS）、SSH（仅横幅）、Telnet、FTP（控制通道最小实现）
+# 需要 Python 3.11+
 
 import argparse
 import asyncio
@@ -17,13 +17,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-# ---------------------- Operator logging & defaults ----------------------
+# ---------------------- 操作员日志记录和默认值 ----------------------
 OP_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=OP_LOG_LEVEL, format="%(asctime)s [%(levelname)s] %(message)s")
 op_logger = logging.getLogger("honeypot_operator")
 
 DEFAULT_LOG_FILE = "honeypot_sessions.jsonl"
-# Default ports (non-privileged so you can run without root)
+# 默认端口（非特权端口，因此无需root权限即可运行）
 DEFAULTS = {
     "tcp": 9000,
     "http": 8080,
@@ -34,7 +34,7 @@ DEFAULTS = {
 }
 # ------------------------------------------------------------------------
 
-# ---------------------- Utility: JSONL append (async-safe) ----------------
+# ---------------------- 工具函数：JSONL追加（异步安全） ----------------
 async def append_jsonl(entry: dict, path: str = DEFAULT_LOG_FILE):
     loop = asyncio.get_running_loop()
     s = json.dumps(entry, ensure_ascii=False)
@@ -48,7 +48,7 @@ async def append_jsonl(entry: dict, path: str = DEFAULT_LOG_FILE):
 def now_iso():
     return datetime.now(timezone.utc).isoformat()
 
-# ---------------------- Base ProtocolHandler ------------------------------
+# ---------------------- 基础协议处理器 ------------------------------
 class ProtocolHandler:
     def __init__(self, name: str, host: str, port: int, log_file: str):
         self.name = name
@@ -67,17 +67,17 @@ class ProtocolHandler:
                 await self._server.wait_closed()
             except Exception:
                 pass
-        op_logger.info("%s handler stopped", self.name)
+        op_logger.info("%s 处理器已停止", self.name)
 
     async def persist(self, session_entry: dict):
-        # enforce protocol field and write
+        # 强制添加协议字段并写入
         session_entry.setdefault("protocol", self.name)
         try:
             await append_jsonl(session_entry, path=self.log_file)
         except Exception:
-            op_logger.exception("Persist failed for %s", self.name)
+            op_logger.exception("持久化失败 %s", self.name)
 
-# ---------------------- Telnet Handler (interactive pseudo-shell) ----------
+# ---------------------- Telnet处理器（交互式伪shell） ----------
 class TelnetHandler(ProtocolHandler):
     BANNER = b"Welcome to MiniTelnet Service\r\nAuthorized access only.\r\n"
     PROMPT = b"mini-shell> "
@@ -90,8 +90,8 @@ class TelnetHandler(ProtocolHandler):
     async def start(self):
         self._server = await asyncio.start_server(self._handle_client, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("Telnet listening on %s", addrs)
-        # run serve_forever in background
+        op_logger.info("Telnet监听于 %s", addrs)
+        # 在后台运行serve_forever
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -103,7 +103,7 @@ class TelnetHandler(ProtocolHandler):
         login_text = None
         pwd_text = None
 
-        op_logger.info("Telnet new conn %s session=%s", peer, session_id)
+        op_logger.info("Telnet新连接 %s 会话=%s", peer, session_id)
         try:
             writer.write(self.BANNER)
             await writer.drain()
@@ -112,7 +112,7 @@ class TelnetHandler(ProtocolHandler):
             await writer.drain()
             login = await reader.readline()
             if not login:
-                raise ConnectionResetError("login empty")
+                raise ConnectionResetError("登录为空")
             raw_buf.extend(login)
             login_text = login.decode(errors="ignore").strip()
 
@@ -120,11 +120,11 @@ class TelnetHandler(ProtocolHandler):
             await writer.drain()
             pwd = await reader.readline()
             if not pwd:
-                raise ConnectionResetError("password empty")
+                raise ConnectionResetError("密码为空")
             raw_buf.extend(pwd)
             pwd_text = pwd.decode(errors="ignore").strip()
 
-            # Accept any credentials but do not write actual password to log (mask)
+            # 接受任何凭据但不在日志中写入实际密码（掩码）
             writer.write(b"\r\nLogin successful.\r\n")
             writer.write(self.PROMPT)
             await writer.drain()
@@ -136,7 +136,7 @@ class TelnetHandler(ProtocolHandler):
                 raw_buf.extend(data)
                 txt = data.decode(errors="ignore").rstrip("\r\n")
                 inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": txt})
-                op_logger.debug("Telnet %s input: %s", session_id, txt)
+                op_logger.debug("Telnet %s 输入: %s", session_id, txt)
 
                 cmd = txt.strip().lower()
                 if cmd in ("exit", "quit", "logout"):
@@ -153,9 +153,9 @@ class TelnetHandler(ProtocolHandler):
                 await writer.drain()
 
         except asyncio.CancelledError:
-            op_logger.info("Telnet session cancelled %s", session_id)
+            op_logger.info("Telnet会话已取消 %s", session_id)
         except Exception as e:
-            op_logger.exception("Telnet handler error %s: %s", session_id, e)
+            op_logger.exception("Telnet处理器错误 %s: %s", session_id, e)
         finally:
             entry = {
                 "session_id": session_id,
@@ -175,9 +175,9 @@ class TelnetHandler(ProtocolHandler):
                 await writer.wait_closed()
             except Exception:
                 pass
-            op_logger.info("Telnet closed session %s from %s", session_id, peer)
+            op_logger.info("Telnet关闭会话 %s 来自 %s", session_id, peer)
 
-# ---------------------- FTP Handler (control-channel minimal) -------------
+# ---------------------- FTP处理器（控制通道最小实现） -------------
 class FTPHandler(ProtocolHandler):
     def __init__(self, host, port, log_file):
         super().__init__("ftp", host, port, log_file)
@@ -185,7 +185,7 @@ class FTPHandler(ProtocolHandler):
     async def start(self):
         self._server = await asyncio.start_server(self._handle_client, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("FTP listening on %s", addrs)
+        op_logger.info("FTP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _send_line(self, writer: asyncio.StreamWriter, line: str):
@@ -201,7 +201,7 @@ class FTPHandler(ProtocolHandler):
         username = None
         authenticated = False
 
-        op_logger.info("FTP new conn %s session=%s", peer, session_id)
+        op_logger.info("FTP新连接 %s 会话=%s", peer, session_id)
         try:
             await self._send_line(writer, "220 mini-ftp Service ready")
             while True:
@@ -212,7 +212,7 @@ class FTPHandler(ProtocolHandler):
                 try:
                     text = line.decode(errors="ignore").rstrip("\r\n")
                 except Exception:
-                    text = "<non-decodable>"
+                    text = "<无法解码>"
                 inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": text})
                 op_logger.debug("FTP %s: %s", session_id, text)
 
@@ -233,11 +233,11 @@ class FTPHandler(ProtocolHandler):
                 elif cmd == "CWD":
                     await self._send_line(writer, "250 Directory changed")
                 elif cmd == "LIST":
-                    # no data connection: send canned success
+                    # 无数据连接：发送预设的成功消息
                     await self._send_line(writer, "150 Opening ASCII mode data connection for file list")
                     await self._send_line(writer, "226 Transfer complete")
                 elif cmd in ("RETR", "STOR"):
-                    # refuse actual transfer for safety
+                    # 出于安全原因拒绝实际传输
                     await self._send_line(writer, "550 Action not taken (simulated)")
                 elif cmd == "QUIT":
                     await self._send_line(writer, "221 Goodbye.")
@@ -245,9 +245,9 @@ class FTPHandler(ProtocolHandler):
                 else:
                     await self._send_line(writer, "502 Command not implemented")
         except asyncio.CancelledError:
-            op_logger.info("FTP session cancelled %s", session_id)
+            op_logger.info("FTP会话已取消 %s", session_id)
         except Exception as e:
-            op_logger.exception("FTP handler error %s: %s", session_id, e)
+            op_logger.exception("FTP处理器错误 %s: %s", session_id, e)
         finally:
             entry = {
                 "session_id": session_id,
@@ -267,9 +267,9 @@ class FTPHandler(ProtocolHandler):
                 await writer.wait_closed()
             except Exception:
                 pass
-            op_logger.info("FTP closed session %s from %s", session_id, peer)
+            op_logger.info("FTP关闭会话 %s 来自 %s", session_id, peer)
 
-# ---------------------- TCP Echo Handler ---------------------------------
+# ---------------------- TCP回显处理器 ---------------------------------
 class TCPHandler(ProtocolHandler):
     def __init__(self, host, port, log_file):
         super().__init__("tcp", host, port, log_file)
@@ -277,7 +277,7 @@ class TCPHandler(ProtocolHandler):
     async def start(self):
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("TCP listening on %s", addrs)
+        op_logger.info("TCP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -286,20 +286,20 @@ class TCPHandler(ProtocolHandler):
         start_ts = datetime.now(timezone.utc)
         raw_buf = bytearray()
 
-        op_logger.info("TCP new conn %s session=%s", peer, session_id)
+        op_logger.info("TCP新连接 %s 会话=%s", peer, session_id)
         try:
             while True:
                 data = await reader.read(1024)
                 if not data:
                     break
                 raw_buf.extend(data)
-                # echo back
+                # 回显
                 writer.write(data)
                 await writer.drain()
         except asyncio.CancelledError:
-            op_logger.info("TCP session cancelled %s", session_id)
+            op_logger.info("TCP会话已取消 %s", session_id)
         except Exception as e:
-            op_logger.exception("TCP handler error %s: %s", session_id, e)
+            op_logger.exception("TCP处理器错误 %s: %s", session_id, e)
         finally:
             entry = {
                 "session_id": session_id,
@@ -316,9 +316,9 @@ class TCPHandler(ProtocolHandler):
                 await writer.wait_closed()
             except Exception:
                 pass
-            op_logger.info("TCP closed session %s from %s", session_id, peer)
+            op_logger.info("TCP关闭会话 %s 来自 %s", session_id, peer)
 
-# ---------------------- HTTP Handler (minimal) ----------------------------
+# ---------------------- HTTP处理器（最小实现） ----------------------------
 class HTTPHandler(ProtocolHandler):
     RESPONSE_BODY = b"<html><body><h1>Fake HTTP Service</h1></body></html>"
 
@@ -328,7 +328,7 @@ class HTTPHandler(ProtocolHandler):
     async def start(self):
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("HTTP listening on %s", addrs)
+        op_logger.info("HTTP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -336,9 +336,9 @@ class HTTPHandler(ProtocolHandler):
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
         try:
-            raw = await reader.read(64 * 1024)  # read up to 64KB for headers+body
+            raw = await reader.read(64 * 1024)  # 读取最多64KB的头部和内容
             text = raw.decode(errors="ignore")
-            # respond with simple page
+            # 响应简单页面
             body = self.RESPONSE_BODY
             resp = b"HTTP/1.1 200 OK\r\nContent-Length: %d\r\nContent-Type: text/html; charset=utf-8\r\n\r\n%s" % (len(body), body)
             writer.write(resp)
@@ -356,16 +356,16 @@ class HTTPHandler(ProtocolHandler):
             }
             await self.persist(entry)
         except Exception as e:
-            op_logger.exception("HTTP handler error %s: %s", session_id, e)
+            op_logger.exception("HTTP处理器错误 %s: %s", session_id, e)
         finally:
             try:
                 writer.close()
                 await writer.wait_closed()
             except Exception:
                 pass
-            op_logger.info("HTTP closed session %s from %s", session_id, peer)
+            op_logger.info("HTTP关闭会话 %s 来自 %s", session_id, peer)
 
-# ---------------------- HTTPS Handler (wraps HTTP with ssl) ----------------
+# ---------------------- HTTPS处理器（使用ssl包装HTTP） ----------------
 class HTTPSHandler(HTTPHandler):
     def __init__(self, host, port, log_file, certfile: str, keyfile: str):
         super().__init__(host, port, log_file)
@@ -374,16 +374,23 @@ class HTTPSHandler(HTTPHandler):
         self.keyfile = keyfile
 
     async def start(self):
-        # create SSL context
-        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        ctx.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # disable old
-        ctx.load_cert_chain(certfile=self.certfile, keyfile=self.keyfile)
-        self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port, ssl=ctx)
-        addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("HTTPS listening on %s", addrs)
-        asyncio.create_task(self._server.serve_forever())
+        try:
+            # 创建SSL上下文
+            ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            ctx.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # 福建旧版本
+            ctx.load_cert_chain(certfile=self.certfile, keyfile=self.keyfile)
+            self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port, ssl=ctx)
+            addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
+            op_logger.info("HTTPS监听于 %s", addrs)
+            asyncio.create_task(self._server.serve_forever())
+        except FileNotFoundError:
+            op_logger.error("找不到SSL证书文件: certfile=%s keyfile=%s", self.certfile, self.keyfile)
+            op_logger.error("请使用--generate-cert参数自动生成证书，或手动提供证书文件")
+        except Exception as e:
+            op_logger.exception("HTTPS服务器启动失败: %s", e)
 
-# ---------------------- SSH Handler (banner-only) -------------------------
+
+# ---------------------- SSH处理器（仅横幅） -------------------------
 class SSHHandler(ProtocolHandler):
     BANNER = b"SSH-2.0-OpenSSH_8.2p1 FakeHoneypot\r\n"
 
@@ -393,7 +400,7 @@ class SSHHandler(ProtocolHandler):
     async def start(self):
         self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port)
         addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
-        op_logger.info("SSH listening on %s", addrs)
+        op_logger.info("SSH监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
@@ -401,12 +408,12 @@ class SSHHandler(ProtocolHandler):
         session_id = str(uuid.uuid4())
         start_ts = datetime.now(timezone.utc)
         raw_buf = bytearray()
-        op_logger.info("SSH new conn %s session=%s", peer, session_id)
+        op_logger.info("SSH新连接 %s 会话=%s", peer, session_id)
         try:
-            # send banner and read once to capture client banner or any early bytes
+            # 发送横幅并读取一次以捕获客户端横幅或任何早期字节
             writer.write(self.BANNER)
             await writer.drain()
-            # attempt to read a small buffer; don't block long
+            # 尝试读取小缓冲区；不长时间阻塞
             try:
                 data = await asyncio.wait_for(reader.read(1024), timeout=5.0)
                 if data:
@@ -414,7 +421,7 @@ class SSHHandler(ProtocolHandler):
             except asyncio.TimeoutError:
                 pass
         except Exception as e:
-            op_logger.exception("SSH handler exception %s: %s", session_id, e)
+            op_logger.exception("SSH处理器异常 %s: %s", session_id, e)
         finally:
             entry = {
                 "session_id": session_id,
@@ -431,34 +438,34 @@ class SSHHandler(ProtocolHandler):
                 await writer.wait_closed()
             except Exception:
                 pass
-            op_logger.info("SSH closed session %s from %s", session_id, peer)
+            op_logger.info("SSH关闭会话 %s 来自 %s", session_id, peer)
 
-# ---------------------- Manager to orchestrate handlers -------------------
+# ---------------------- 管理器协调处理器 -------------------
 class HoneypotManager:
     def __init__(self, handlers):
         self.handlers = handlers
 
     async def start(self):
-        op_logger.info("Starting HoneypotManager with %d handlers", len(self.handlers))
-        # start handlers concurrently
+        op_logger.info("启动蜜罐管理器，包含 %d 个处理器", len(self.handlers))
+        # 并发启动处理器
         await asyncio.gather(*(h.start() for h in self.handlers))
-        op_logger.info("All handlers started")
+        op_logger.info("所有处理器已启动")
 
     async def stop(self):
-        op_logger.info("Stopping HoneypotManager")
+        op_logger.info("停止蜜罐管理器")
         await asyncio.gather(*(h.stop() for h in self.handlers), return_exceptions=True)
 
-# ---------------------- Helper: generate self-signed cert via openssl -----
+# ---------------------- 工具函数：通过openssl生成自签名证书 -----
 def ensure_self_signed(certfile: Path, keyfile: Path, common_name: str = "mini-honeypot.local"):
     """
-    Try to generate a self-signed cert using openssl command if files missing.
-    Requires openssl available in PATH.
+    如果文件缺失，尝试使用openssl命令生成自签名证书。
+    需要在PATH中有openssl可用。
     """
     if certfile.exists() and keyfile.exists():
-        op_logger.info("Found existing cert/key: %s %s", certfile, keyfile)
+        op_logger.info("找到现有证书/密钥: %s %s", certfile, keyfile)
         return True
 
-    # attempt to run openssl
+    # 尝试运行openssl
     cmd = [
         "openssl", "req", "-x509", "-nodes", "-days", "365",
         "-newkey", "rsa:2048",
@@ -467,17 +474,17 @@ def ensure_self_signed(certfile: Path, keyfile: Path, common_name: str = "mini-h
         "-subj", f"/CN={common_name}"
     ]
     try:
-        op_logger.info("Generating self-signed cert via openssl...")
+        op_logger.info("通过openssl生成自签名证书...")
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        op_logger.info("Generated cert/key at %s %s", certfile, keyfile)
+        op_logger.info("生成证书/密钥于 %s %s", certfile, keyfile)
         return True
     except Exception as e:
-        op_logger.error("Failed to generate cert/key with openssl: %s", e)
+        op_logger.error("使用openssl生成证书/密钥失败: %s", e)
         return False
 
-# ---------------------- CLI / Entrypoint ---------------------------------
+# ---------------------- 命令行界面 / 入口点 ---------------------------------
 def parse_args():
-    p = argparse.ArgumentParser(description="Multi-protocol honeypot (single-file)")
+    p = argparse.ArgumentParser(description="多协议蜜罐（单文件）")
     p.add_argument("--host", default="0.0.0.0")
     p.add_argument("--log", default=DEFAULT_LOG_FILE)
     p.add_argument("--tcp-port", type=int, default=DEFAULTS["tcp"])
@@ -486,22 +493,22 @@ def parse_args():
     p.add_argument("--ssh-port", type=int, default=DEFAULTS["ssh"])
     p.add_argument("--telnet-port", type=int, default=DEFAULTS["telnet"])
     p.add_argument("--ftp-port", type=int, default=DEFAULTS["ftp"])
-    p.add_argument("--certfile", default="cert.pem", help="HTTPS cert (PEM)")
-    p.add_argument("--keyfile", default="key.pem", help="HTTPS key (PEM)")
-    p.add_argument("--generate-cert", action="store_true", help="Try to auto-generate self-signed cert with openssl if missing")
+    p.add_argument("--certfile", default="cert.pem", help="HTTPS证书（PEM格式）")
+    p.add_argument("--keyfile", default="key.pem", help="HTTPS密钥（PEM格式）")
+    p.add_argument("--generate-cert", action="store_true", help="如果缺失，尝试使用openssl自动创建自签名证书")
     return p.parse_args()
 
 async def main_async():
     args = parse_args()
-    # ensure certs if requested
+    # 如果需要，确保证书存在
     certfile = Path(args.certfile)
     keyfile = Path(args.keyfile)
     if args.generate_cert:
         ok = ensure_self_signed(certfile, keyfile)
         if not ok:
-            op_logger.warning("HTTPS will fail without valid cert/key. Continue anyway.")
+            op_logger.warning("没有有效的证书/密钥，HTTPS将失败。继续运行。")
 
-    # instantiate handlers
+    # 实例化处理器
     handlers = []
     handlers.append(TCPHandler(host=args.host, port=args.tcp_port, log_file=args.log))
     handlers.append(HTTPHandler(host=args.host, port=args.http_port, log_file=args.log))
@@ -513,14 +520,14 @@ async def main_async():
     manager = HoneypotManager(handlers)
     await manager.start()
 
-    # run until interrupted
+    # 运行直到被中断
     try:
         while True:
             await asyncio.sleep(3600)
     except asyncio.CancelledError:
         pass
     except KeyboardInterrupt:
-        op_logger.info("Keyboard interrupt received; shutting down")
+        op_logger.info("收到键盘中断；正在关闭")
     finally:
         await manager.stop()
 
@@ -528,8 +535,9 @@ def main():
     try:
         asyncio.run(main_async())
     except Exception as e:
-        op_logger.exception("Fatal error: %s", e)
+        op_logger.exception("致命错误: %s", e)
         sys.exit(1)
 
 if __name__ == "__main__":
     main()
+
