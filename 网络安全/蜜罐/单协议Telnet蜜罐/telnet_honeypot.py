@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 # telnet_honeypot.py
-# 简单的基于asyncio的Telnet蜜罐（单协议版本）
+# 简单的基于asyncio的TelnetService （单协议版本）
 # 将会话元数据和所有输入记录到JSONL文件中。
 
+import argparse
 import asyncio
 import logging
-import json
-import uuid
-import base64
-import argparse
-from datetime import datetime, timezone
+
+from 网络安全.蜜罐.单协议Telnet蜜罐.TelnetSession import TelnetSession
 
 # ---------- 配置 ----------
-BANNER = b"Welcome to MiniTelnet Service\r\n" \
-         b"Authorized access only. All activity may be monitored.\r\n"
-PROMPT = b"mini-shell> "
+BANNER = b"Welcome to MiniTelnet Service\r\n" 
+PROMPT = b"shell> "
 LOGIN_PROMPT = b"login: "
 PASS_PROMPT = b"password: "
 
@@ -29,68 +26,15 @@ LOG_FILE = "honeypot_sessions.jsonl"
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("honeypot")
 
-# 辅助函数：安全地追加JSON行
-async def append_session_log(entry: dict, path=LOG_FILE):
-    loop = asyncio.get_running_loop()
-    data = json.dumps(entry, ensure_ascii=False)
-    # 在线程中写入以避免长时间文件I/O阻塞事件循环
-    await loop.run_in_executor(None, lambda: open(path, "a", encoding="utf-8").write(data + "\n"))
-
-class TelnetSession:
-    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, remote):
-        self.reader = reader
-        self.writer = writer
-        self.remote = remote  # (ip, port)
-        self.id = str(uuid.uuid4())
-        self.start_time = datetime.now(timezone.utc)
-        self.inputs = []  # 文本命令列表（字符串）
-        self.raw_bytes = bytearray()
-        self.closed = False
-        self.login = None
-        self.password = None
-
-    async def send(self, data: bytes):
-        try:
-            self.writer.write(data)
-            await self.writer.drain()
-        except Exception as e:
-            logger.debug("发送错误: %s", e)
-
-    async def close(self):
-        if not self.closed:
-            self.closed = True
-            try:
-                self.writer.close()
-                await asyncio.wait_for(self.writer.wait_closed(), timeout=3)
-            except Exception:
-                pass
-
-    def record_raw(self, data: bytes):
-        # 保存原始字节
-        self.raw_bytes.extend(data)
-
-    def record_input(self, text: str):
-        # 存储输入以供后续分析
-        self.inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": text})
-
-    async def persist(self):
-        # 打包会话详情
-        entry = {
-            "session_id": self.id,
-            "start_time": self.start_time.isoformat(),
-            "end_time": datetime.now(timezone.utc).isoformat(),
-            "duration_seconds": (datetime.now(timezone.utc) - self.start_time).total_seconds(),
-            "remote_ip": self.remote[0],
-            "remote_port": self.remote[1],
-            "login": self.login,
-            "password": None if self.password is None else "<captured>",
-            "inputs": self.inputs,
-            "raw_base64": base64.b64encode(bytes(self.raw_bytes)).decode("ascii"),
-        }
-        # 持久化到JSONL
-        await append_session_log(entry)
 
 async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    """
+    处理Telnet连接的主要逻辑函数
+
+    Args:
+        reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+        writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+    """
     peer = writer.get_extra_info("peername") or ("unknown", 0)
     session = TelnetSession(reader, writer, peer)
     logger.info("新连接 %s 会话=%s", peer, session.id)
@@ -159,25 +103,44 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         await session.close()
         logger.info("关闭会话 %s 来自 %s", session.id, peer)
 
+
 async def start_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
+    """
+    启动TelnetService 服务器
+
+    Args:
+        host (str): 监听的主机地址
+        port (int): 监听的端口号
+    """
     server = await asyncio.start_server(handle_telnet, host, port)
     addrs = ", ".join(str(sock.getsockname()) for sock in server.sockets)
-    logger.info("Telnet蜜罐监听于 %s", addrs)
+    logger.info("TelnetService 监听于 %s", addrs)
     async with server:
         await server.serve_forever()
 
+
 def parse_args():
-    p = argparse.ArgumentParser(description="Mini Telnet蜜罐 (asyncio)")
+    """
+    解析命令行参数
+
+    Returns:
+        argparse.Namespace: 解析后的命令行参数
+    """
+    p = argparse.ArgumentParser(description="Mini TelnetService  (asyncio)")
     p.add_argument("--host", default=DEFAULT_HOST)
     p.add_argument("--port", default=DEFAULT_PORT, type=int)
     p.add_argument("--log", default=LOG_FILE)
     return p.parse_args()
 
+
 def main():
+    """
+    程序主入口函数
+    """
     args = parse_args()
     global LOG_FILE
     LOG_FILE = args.log
-    logger.info("启动蜜罐 (主机=%s 端口=%d) 日志=%s", args.host, args.port, LOG_FILE)
+    logger.info("启动Service  (主机=%s 端口=%d) 日志=%s", args.host, args.port, LOG_FILE)
     try:
         asyncio.run(start_server(args.host, args.port))
     except KeyboardInterrupt:
@@ -185,6 +148,6 @@ def main():
     except Exception as exc:
         logger.exception("致命错误: %s", exc)
 
+
 if __name__ == "__main__":
     main()
-
