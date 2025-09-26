@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-# telnet_honeypot.py
+# telnet_honeypot_standalone.py
 # 简单的基于asyncio的TelnetService （单协议版本）
 # 将会话元数据和所有输入记录到JSONL文件中。
 
 import argparse
 import asyncio
 import logging
+import json
+import uuid
+import base64
+from datetime import datetime, timezone
 import random
-import datetime
 import re
-
-from 网络安全.蜜罐.单协议Telnet蜜罐.TelnetSession import TelnetSession
 
 # ---------- 配置 ----------
 # 更真实的Telnet服务Banner，模仿真实设备
@@ -39,7 +40,6 @@ DEFAULT_HOST = "0.0.0.0"
 DEFAULT_PORT = 2323  # 如果你控制基础设施，使用23；2323避免需要root权限
 
 LOG_FILE = "honeypot_sessions.jsonl"
-# 你可以在这里更改编码/原始数据保存策略
 # ---------- 配置结束 ----------
 
 # 设置Python日志记录用于操作员日志（不是会话日志）
@@ -47,6 +47,114 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("honeypot")
 
 
+# ---------- TelnetSession 类 ----------
+class TelnetSession:
+    """
+    Telnet会话类，用于处理单个Telnet连接的生命周期
+    """
+
+    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, remote):
+        """
+        初始化Telnet会话
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+            remote (tuple): 远程地址信息 (ip, port)
+        """
+        self.reader = reader
+        self.writer = writer
+        self.remote = remote  # (ip, port)
+        self.id = str(uuid.uuid4())
+        self.start_time = datetime.now(timezone.utc)
+        self.inputs = []  # 文本命令列表（字符串）
+        self.raw_bytes = bytearray()
+        self.closed = False
+        self.login = None
+        self.password = None
+
+    async def send(self, data: bytes):
+        """
+        向客户端发送数据
+
+        Args:
+            data (bytes): 要发送的字节数据
+        """
+        try:
+            self.writer.write(data)
+            await self.writer.drain()
+        except Exception as e:
+            logger.debug("发送错误: %s", e)
+
+    async def close(self):
+        """
+        关闭会话连接
+        """
+        if not self.closed:
+            self.closed = True
+            try:
+                self.writer.close()
+                await asyncio.wait_for(self.writer.wait_closed(), timeout=3)
+            except Exception:
+                pass
+
+    def record_raw(self, data: bytes):
+        """
+        记录原始字节数据
+
+        Args:
+            data (bytes): 接收到的原始字节数据
+        """
+        # 保存原始字节
+        self.raw_bytes.extend(data)
+
+    def record_input(self, text: str):
+        """
+        记录用户输入的文本命令
+
+        Args:
+            text (str): 用户输入的命令文本
+        """
+        # 存储输入以供后续分析
+        self.inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": text})
+
+    async def persist(self):
+        """
+        将会话数据持久化到日志文件中
+        """
+        # 打包会话详情
+        end_time = datetime.now(timezone.utc)
+        entry = {
+            "session_id": self.id,
+            "start_time": self.start_time.isoformat(),
+            "end_time": end_time.isoformat(),
+            "duration_seconds": (end_time - self.start_time).total_seconds(),
+            "remote_ip": self.remote[0],
+            "remote_port": self.remote[1],
+            "login": self.login,
+            "password": None if self.password is None else "<captured>",
+            "inputs": self.inputs,
+            "raw_base64": base64.b64encode(bytes(self.raw_bytes)).decode("ascii"),
+        }
+        # 持久化到JSONL
+        await self.append_session_log(entry)
+
+    # 辅助函数：安全地追加JSON行
+    async def append_session_log(self, entry: dict, path=LOG_FILE):
+        """
+        将会话日志条目以JSON行格式追加到日志文件中
+
+        Args:
+            entry (dict): 包含会话信息的字典
+            path (str): 日志文件路径
+        """
+        loop = asyncio.get_running_loop()
+        data = json.dumps(entry, ensure_ascii=False)
+        # 在线程中写入以避免长时间文件I/O阻塞事件循环
+        await loop.run_in_executor(None, lambda: open(path, "a", encoding="utf-8").write(data + "\n"))
+
+
+# ---------- 工具函数 ----------
 # 模拟命令执行时间
 async def simulate_command_execution(min_time=0.1, max_time=1.5):
     # 模拟命令执行的延迟
@@ -72,6 +180,7 @@ def is_automated_scan(data_bytes):
     return False
 
 
+# ---------- 主要处理函数 ----------
 async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
     """
     处理Telnet连接的主要逻辑函数
@@ -82,7 +191,7 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
     """
     peer = writer.get_extra_info("peername") or ("unknown", 0)
     # 获取连接的精确时间（包含毫秒）
-    connection_time = datetime.datetime.now()
+    connection_time = datetime.now()
     connection_time_iso = connection_time.isoformat()
 
     session = TelnetSession(reader, writer, peer)
@@ -438,7 +547,6 @@ async def handle_telnet(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
     finally:
         try:
             # 在会话持久化之前添加连接时间信息
-            # 注意：这需要修改TelnetSession类以支持额外的连接时间字段
             await session.persist()
         except Exception as e:
             logger.exception("持久化错误: %s", e)
@@ -468,7 +576,7 @@ def parse_args():
     Returns:
         argparse.Namespace: 解析后的命令行参数
     """
-    p = argparse.ArgumentParser(description="Mini TelnetService  (asyncio)")
+    p = argparse.ArgumentParser(description="Standalone Telnet Honeypot Service")
     p.add_argument("--host", default=DEFAULT_HOST)
     p.add_argument("--port", default=DEFAULT_PORT, type=int)
     p.add_argument("--log", default=LOG_FILE)
