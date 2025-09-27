@@ -825,7 +825,7 @@ class HTTPHandler(ProtocolHandler):
     HTTP协议处理器，模拟简单的HTTP服务端
     """
 
-    RESPONSE_BODY = b"<html><body><h1>Microsoft-IIS/8.5</h1><p>Under Construction</p><hr><address>Microsoft-IIS/8.5 Server at localhost Port 80</address></body></html>"
+    RESPONSE_BODY = b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n"
 
     def __init__(self, host, port, log_file):
         """
@@ -861,9 +861,35 @@ class HTTPHandler(ProtocolHandler):
         try:
             raw = await reader.read(64 * 1024)  # 读取最多64KB的头部和内容
             text = raw.decode(errors="ignore")
+
+            # 解析请求路径，模拟真实Nginx行为
+            request_lines = text.split('\n')
+            if request_lines:
+                request_line = request_lines[0]
+                parts = request_line.split()
+                if len(parts) >= 2:
+                    method = parts[0]
+                    path = parts[1]
+
+                    # 如果请求的路径看起来像试图探测Python应用，则返回404
+                    if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+                        body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                        resp = b"HTTP/1.1 404 Not Found\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                            datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                            len(body),
+                            body
+                        )
+                        writer.write(resp)
+                        await writer.drain()
+                        return
+
             # 响应简单页面
             body = self.RESPONSE_BODY
-            resp = b"HTTP/1.1 200 OK\r\nServer: Microsoft-IIS/8.5\r\nContent-Length: %d\r\nContent-Type: text/html\r\n\r\n%s" % (len(body), body)
+            resp = b"HTTP/1.1 200 OK\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                len(body),
+                body
+            )
             writer.write(resp)
             await writer.drain()
 
@@ -893,6 +919,8 @@ class HTTPSHandler(HTTPHandler):
     """
     HTTPS协议处理器，通过SSL包装HTTP处理器实现HTTPS服务
     """
+
+    RESPONSE_BODY = b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n"
 
     def __init__(self, host, port, log_file, certfile: str, keyfile: str):
         """
@@ -928,6 +956,73 @@ class HTTPSHandler(HTTPHandler):
             op_logger.error("请使用--generate-cert参数自动生成证书，或手动提供证书文件")
         except Exception as e:
             op_logger.exception("HTTPS服务器启动失败: %s", e)
+
+    async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """
+        处理HTTP客户端请求
+
+        Args:
+            reader (asyncio.StreamReader): 用于从连接中读取数据的流读取器
+            writer (asyncio.StreamWriter): 用于向连接写入数据的流写入器
+        """
+        peer = writer.get_extra_info("peername") or ("unknown", 0)
+        session_id = str(uuid.uuid4())
+        start_ts = datetime.now(timezone.utc)
+        try:
+            raw = await reader.read(64 * 1024)  # 读取最多64KB的头部和内容
+            text = raw.decode(errors="ignore")
+
+            # 解析请求路径，模拟真实Nginx行为
+            request_lines = text.split('\n')
+            if request_lines:
+                request_line = request_lines[0]
+                parts = request_line.split()
+                if len(parts) >= 2:
+                    method = parts[0]
+                    path = parts[1]
+
+                    # 如果请求的路径看起来像试图探测Python应用，则返回404
+                    if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+                        body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                        resp = b"HTTP/1.1 404 Not Found\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                            datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                            len(body),
+                            body
+                        )
+                        writer.write(resp)
+                        await writer.drain()
+                        return
+
+            # 响应简单页面
+            body = self.RESPONSE_BODY
+            resp = b"HTTP/1.1 200 OK\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                len(body),
+                body
+            )
+            writer.write(resp)
+            await writer.drain()
+
+            entry = {
+                "session_id": session_id,
+                "start_time": start_ts.isoformat(),
+                "end_time": datetime.now(timezone.utc).isoformat(),
+                "duration_seconds": (datetime.now(timezone.utc) - start_ts).total_seconds(),
+                "remote_ip": peer[0],
+                "remote_port": peer[1],
+                "inputs": [text],
+                "raw_base64": base64.b64encode(raw).decode("ascii"),
+            }
+            await self.persist(entry)
+        except Exception as e:
+            op_logger.exception("HTTPS处理器错误 %s: %s", session_id, e)
+        finally:
+            try:
+                writer.close()
+                await writer.wait_closed()
+            except Exception:
+                pass
+            op_logger.info("HTTPS关闭会话 %s 来自 %s", session_id, peer)
 
 
 # ---------------------- SSH处理器（仅横幅） -------------------------
