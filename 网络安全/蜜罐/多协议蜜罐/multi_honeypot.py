@@ -16,6 +16,8 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+import random
+import re
 
 # ---------------------- 操作员日志记录和默认值 ----------------------
 OP_LOG_LEVEL = logging.INFO
@@ -31,6 +33,27 @@ DEFAULTS = {
     "ssh": 2222,
     "telnet": 2323,
     "ftp": 2121,
+}
+
+# Telnet配置
+TELNET_BANNER = b"\r\n\r\nWelcome to Telnet Server\r\n" + \
+         b"Login authentication\r\n\r\n"
+
+TELNET_PROMPT = b"Router> "
+TELNET_ENABLE_PROMPT = b"Router# "
+TELNET_LOGIN_PROMPT = b"Username: "
+TELNET_PASS_PROMPT = b"Password: "
+
+# 模拟网络设备信息
+DEVICE_INFO = {
+    "hostname": "Router",
+    "model": "Cisco IOS Router",
+    "version": "12.4(25b)",
+    "hardware": "CISCO2811",
+    "uptime": "3 days, 14 hours, 25 minutes",
+    "interfaces": [
+        "FastEthernet0/0", "FastEthernet0/1", "Serial0/0/0"
+    ]
 }
 # ------------------------------------------------------------------------
 
@@ -60,6 +83,30 @@ def now_iso():
         str: ISO格式的时间字符串
     """
     return datetime.now(timezone.utc).isoformat()
+
+# ---------------------- 工具函数 --------------------------
+# 模拟命令执行时间
+async def simulate_command_execution(min_time=0.1, max_time=1.5):
+    # 模拟命令执行的延迟
+    await asyncio.sleep(random.uniform(min_time, max_time))
+
+# 检测是否为自动化扫描工具
+def is_automated_scan(data_bytes):
+    # 检测常见的nmap探测模式
+    data_str = data_bytes.decode('utf-8', errors='ignore')
+
+    # Nmap探测特征
+    nmap_patterns = [
+        'Nmap', 'script', 'vuln', 'banner', 'ssh', 'telnet',
+        '<?xml', 'GET /', 'HEAD /', 'OPTIONS *', 'PUT /', 'POST /'
+    ]
+
+    # 检查是否包含任何nmap特征
+    for pattern in nmap_patterns:
+        if pattern in data_str:
+            return True
+
+    return False
 
 # ---------------------- 基础协议处理器 ------------------------------
 class ProtocolHandler:
@@ -121,11 +168,6 @@ class TelnetHandler(ProtocolHandler):
     Telnet协议处理器，模拟Telnet服务端并记录客户端交互
     """
 
-    BANNER = b"Welcome to MiniTelnet Service\r\nAuthorized access only.\r\n"
-    PROMPT = b"mini-shell> "
-    LOGIN_PROMPT = b"login: "
-    PASS_PROMPT = b"password: "
-
     def __init__(self, host, port, log_file):
         """
         初始化Telnet处理器
@@ -165,51 +207,377 @@ class TelnetHandler(ProtocolHandler):
 
         op_logger.info("Telnet新连接 %s 会话=%s", peer, session_id)
         try:
-            writer.write(self.BANNER)
+            # 发送系统Banner，模拟真实设备的延迟
+            await asyncio.sleep(random.uniform(0.1, 0.5))
+            writer.write(TELNET_BANNER)
             await writer.drain()
 
-            writer.write(self.LOGIN_PROMPT)
+            # 检查是否有初始数据（可能是扫描工具）
+            try:
+                # 设置较短的超时时间来检测快速扫描
+                initial_data = await asyncio.wait_for(reader.readline(), timeout=1.0)
+                if initial_data:
+                    raw_buf.extend(initial_data)
+
+                    # 检查是否为扫描工具
+                    if is_automated_scan(initial_data):
+                        op_logger.info("检测到自动化扫描工具，会话=%s", session_id)
+                        # 对扫描工具做出适当响应
+                        if b'GET /' in initial_data or b'HEAD /' in initial_data:
+                            # HTTP请求响应
+                            writer.write(b"HTTP/1.1 400 Bad Request\r\n")
+                            writer.write(b"Content-Type: text/html\r\n")
+                            writer.write(b"Connection: close\r\n")
+                            writer.write(b"\r\n")
+                            writer.write(b"<html><body><h1>400 Bad Request</h1></body></html>\r\n")
+                            await writer.drain()
+                            await self._close_writer(writer)
+                            return
+                        elif b'script' in initial_data.lower() or b'nmap' in initial_data.lower():
+                            # Nmap脚本扫描响应，模拟SSH服务
+                            writer.write(b"SSH-2.0-OpenSSH_7.9p1 Debian-10+deb10u2\r\n")
+                            await asyncio.sleep(random.uniform(0.1, 0.5))
+                            await self._close_writer(writer)
+                            return
+                        elif b'OPTIONS *' in initial_data:
+                            # WebDAV探测
+                            writer.write(b"HTTP/1.1 405 Method Not Allowed\r\n")
+                            writer.write(b"Allow: GET, HEAD, POST\r\n")
+                            writer.write(b"\r\n")
+                            await writer.drain()
+                            await self._close_writer(writer)
+                            return
+            except asyncio.TimeoutError:
+                # 没有初始数据，继续正常流程
+                pass
+
+            # 基本的假登录序列
+            writer.write(TELNET_LOGIN_PROMPT)
             await writer.drain()
             login = await reader.readline()
             if not login:
-                raise ConnectionResetError("登录为空")
+                await self._close_writer(writer)
+                return
             raw_buf.extend(login)
             login_text = login.decode(errors="ignore").strip()
+            op_logger.info("会话 %s 登录=%s", session_id, login_text)
 
-            writer.write(self.PASS_PROMPT)
+            writer.write(TELNET_PASS_PROMPT)
             await writer.drain()
-            pwd = await reader.readline()
-            if not pwd:
-                raise ConnectionResetError("密码为空")
-            raw_buf.extend(pwd)
-            pwd_text = pwd.decode(errors="ignore").strip()
+            # 读取密码原始数据（我们将其视为一行）
+            password = await reader.readline()
+            if not password:
+                await self._close_writer(writer)
+                return
+            raw_buf.extend(password)
+            pwd_text = password.decode(errors="ignore").strip()
 
-            # 接受任何凭据但不在日志中写入实际密码（掩码）
-            writer.write(b"\r\nLogin successful.\r\n")
-            writer.write(self.PROMPT)
+            # 模拟登录延迟和验证
+            await asyncio.sleep(random.uniform(1.0, 3.0))
+
+            # 模拟登录失败重试机制
+            login_attempts = 1
+            while login_attempts < 3 and (not login_text or not pwd_text):
+                if login_attempts > 1:
+                    writer.write(b"\r\n% Login invalid\r\n\r\n")
+                    # 模拟真实系统在多次失败后的延迟增加
+                    await asyncio.sleep(random.uniform(1.0, 2.0) * login_attempts)
+                    writer.write(TELNET_LOGIN_PROMPT)
+                    await writer.drain()
+                    login = await reader.readline()
+                    if not login:
+                        await self._close_writer(writer)
+                        return
+                    raw_buf.extend(login)
+                    login_text = login.decode(errors="ignore").strip()
+
+                    writer.write(TELNET_PASS_PROMPT)
+                    await writer.drain()
+                    password = await reader.readline()
+                    if not password:
+                        await self._close_writer(writer)
+                        return
+                    raw_buf.extend(password)
+                    pwd_text = password.decode(errors="ignore").strip()
+
+                login_attempts += 1
+
+            # 三次登录失败后断开连接
+            if login_attempts >= 3 and (not login_text or not pwd_text):
+                writer.write(b"\r\n% Login invalid\r\n")
+                writer.write(b"% Login timed out after 3 minutes\r\n")
+                await writer.drain()
+                await self._close_writer(writer)
+                return
+
+            # 接受任何凭据（模拟弱密码策略）
+            writer.write(b"\r\nUser Access Verification\r\n\r\n")
             await writer.drain()
 
+            # 显示设备信息
+            writer.write(f"{DEVICE_INFO['hostname']}>".encode())
+            await writer.drain()
+
+            # 进入命令模式
+            mode = "user"  # user or enable
+            prompt = TELNET_PROMPT
+
+            # 交互循环：读取行，回显预设响应但记录所有内容
             while True:
                 data = await reader.readline()
                 if not data:
                     break
                 raw_buf.extend(data)
-                txt = data.decode(errors="ignore").rstrip("\r\n")
-                inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": txt})
-                op_logger.debug("Telnet %s 输入: %s", session_id, txt)
+                # 尽力解码用于日志记录
+                text = data.decode(errors="ignore").rstrip("\r\n")
+                inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": text})
+                op_logger.debug("Telnet %s 输入: %s", session_id, text)
 
-                cmd = txt.strip().lower()
-                if cmd in ("exit", "quit", "logout"):
-                    writer.write(b"Goodbye.\r\n")
+                # 简单命令处理（网络设备命令）
+                lowered = text.strip().lower()
+                original_text = text.strip()
+
+                if lowered in ("exit", "quit"):
+                    writer.write(b"\r\n% Connection closed by foreign host.\r\n")
                     await writer.drain()
                     break
-                elif cmd.startswith("get "):
-                    writer.write(b"dummy-file.txt\r\n")
-                elif cmd == "whoami":
-                    writer.write((login_text + "\r\n").encode())
+                elif lowered == "logout":
+                    writer.write(b"\r\n% Logout successful.\r\n")
+                    await writer.drain()
+                    break
+                elif lowered == "enable":
+                    # 进入特权模式
+                    mode = "enable"
+                    prompt = TELNET_ENABLE_PROMPT
+                    writer.write(prompt)
+                    await writer.drain()
+                    continue
+                elif lowered.startswith("disable"):
+                    # 退出特权模式
+                    mode = "user"
+                    prompt = TELNET_PROMPT
+                    writer.write(prompt)
+                    await writer.drain()
+                    continue
+                elif lowered == "show version" or lowered == "sh ver":
+                    await simulate_command_execution(0.5, 1.5)
+                    writer.write(f"\r\nCisco IOS Software, {DEVICE_INFO['hardware']} Software (C2800NM-ADVENTERPRISEK9-M), Version {DEVICE_INFO['version']}, RELEASE SOFTWARE (fc1)\r\n".encode())
+                    writer.write(b"Technical Support: http://www.cisco.com/techsupport\r\n")
+                    writer.write(b"Copyright (c) 1986-2010 by Cisco Systems, Inc.\r\n")
+                    writer.write(b"Compiled Thu 09-Sep-10 13:53 by prod_rel_team\r\n\r\n")
+                    writer.write(f"ROM: System Bootstrap, Version 12.4(13r)T11, RELEASE SOFTWARE (fc1)\r\n\r\n".encode())
+                    writer.write(f"{DEVICE_INFO['hostname']} uptime is {DEVICE_INFO['uptime']}\r\n".encode())
+                    writer.write(b"System returned to ROM by power-on\r\n")
+                    writer.write(b"System image file is \"flash:c2800nm-adventerprisek9-mz.124-25b.bin\"\r\n\r\n")
+                    writer.write(b"This product contains cryptographic features and is subject to United\r\n")
+                    writer.write(b"States and local country laws governing import, export, transfer and\r\n")
+                    writer.write(b"use. Delivery of Cisco cryptographic products does not imply\r\n")
+                    writer.write(b"third-party authority to import, export, distribute or use encryption.\r\n")
+                    writer.write(b"Importers, exporters, distributors and users are responsible for\r\n")
+                    writer.write(b"compliance with U.S. and local country laws. By using this product you\r\n")
+                    writer.write(b"agree to comply with applicable laws and regulations. If you are unable\r\n")
+                    writer.write(b"to comply with U.S. and local laws, return this product immediately.\r\n\r\n")
+                    writer.write(b"A summary of U.S. laws governing Cisco cryptographic products may be found at:\r\n")
+                    writer.write(b"http://www.cisco.com/wwl/export/crypto/tool/stqrg.html\r\n\r\n")
+                    writer.write(b"If you require further assistance please contact us by sending email to\r\n")
+                    writer.write(b"export@cisco.com.\r\n\r\n")
+                    writer.write(b"cisco {DEVICE_INFO['hardware']} (revision 2.0) with 503808K/24576K bytes of memory.\r\n".encode())
+                    writer.write(b"Processor board ID FTX1043A0K8\r\n")
+                    writer.write(b"2 FastEthernet interfaces\r\n")
+                    writer.write(b"1 Serial interface\r\n")
+                    writer.write(b"1 Virtual Private Network (VPN) Module\r\n")
+                    writer.write(b"4 Network Processing Engine(s)\r\n")
+                    writer.write(b"DRAM configuration is 64 bits wide with parity enabled.\r\n")
+                    writer.write(b"255K bytes of non-volatile configuration memory.\r\n")
+                    writer.write(b"62464K bytes of ATA CompactFlash (Read/Write)\r\n\r\n")
+                    writer.write(b"Configuration register is 0x2102\r\n")
+                    await writer.drain()
+                elif lowered == "show ip interface brief" or lowered == "sh ip int br":
+                    await simulate_command_execution(0.5, 1.2)
+                    writer.write(b"\r\nInterface                  IP-Address      OK? Method Status                Protocol\r\n")
+                    writer.write(b"FastEthernet0/0            192.168.1.1     YES NVRAM  up                    up      \r\n")
+                    writer.write(b"FastEthernet0/1            10.0.0.1        YES NVRAM  administratively down down    \r\n")
+                    writer.write(b"Serial0/0/0                unassigned      YES NVRAM  up                    up      \r\n")
+                    await writer.drain()
+                elif lowered == "show interfaces" or lowered == "sh int":
+                    await simulate_command_execution(1.0, 2.5)
+                    for interface in DEVICE_INFO["interfaces"]:
+                        writer.write(f"\r\n{interface} is up, line protocol is up\r\n".encode())
+                        writer.write(b"  Hardware is CNFGT, address is 0000.0000.0000 (bia 0000.0000.0000)\r\n")
+                        writer.write(b"  MTU 1500 bytes, BW 100000 Kbit, DLY 100 usec,\r\n")
+                        writer.write(b"     reliability 255/255, txload 1/255, rxload 1/255\r\n")
+                        writer.write(b"  Encapsulation ARPA, loopback not set\r\n")
+                        writer.write(b"  Keepalive set (10 sec)\r\n")
+                        writer.write(b"  Full-duplex, 100Mb/s, 100BaseTX/FX\r\n")
+                        writer.write(b"  ARP type: ARPA, ARP Timeout 04:00:00\r\n")
+                        rx_pkts = random.randint(10000, 999999)
+                        tx_pkts = random.randint(10000, 999999)
+                        writer.write(f"  Last input 00:00:02, output 00:00:01, output hang never\r\n".encode())
+                        writer.write(f"  Last clearing of \"show interface\" counters never\r\n".encode())
+                        writer.write(f"  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\r\n".encode())
+                        writer.write(f"  Queueing strategy: fifo\r\n".encode())
+                        writer.write(f"  Output queue: 0/40 (size/max)\r\n".encode())
+                        writer.write(f"  5 minute input rate 0 bits/sec, 0 packets/sec\r\n".encode())
+                        writer.write(f"  5 minute output rate 0 bits/sec, 0 packets/sec\r\n".encode())
+                        writer.write(f"     {rx_pkts} packets input, {rx_pkts*random.randint(64, 1500)} bytes\r\n".encode())
+                        writer.write(f"     Received {random.randint(0, 10)} broadcasts (0 IP multicasts)\r\n".encode())
+                        writer.write(f"     0 runts, 0 giants, 0 throttles\r\n".encode())
+                        writer.write(f"     {random.randint(0, 5)} input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\r\n".encode())
+                        writer.write(f"     0 watchdog, 0 multicast, 0 pause input\r\n".encode())
+                        writer.write(f"     {tx_pkts} packets output, {tx_pkts*random.randint(64, 1500)} bytes, 0 underruns\r\n".encode())
+                        writer.write(f"     0 output errors, 0 collisions, 1 interface resets\r\n".encode())
+                        writer.write(f"     0 babbles, 0 late collision, 0 deferred\r\n".encode())
+                        writer.write(f"     0 lost carrier, 0 no carrier, 0 PAUSE output\r\n".encode())
+                        writer.write(f"     0 output buffer failures, 0 output buffers swapped out\r\n".encode())
+                    await writer.drain()
+                elif lowered == "show running-config" or lowered == "sh run":
+                    await simulate_command_execution(1.5, 3.0)
+                    writer.write(b"\r\nBuilding configuration...\r\n\r\n")
+                    writer.write(b"Current configuration : 2048 bytes\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"version 12.4\r\n")
+                    writer.write(b"no service pad\r\n")
+                    writer.write(b"service timestamps debug datetime msec\r\n")
+                    writer.write(b"service timestamps log datetime msec\r\n")
+                    writer.write(b"no service password-encryption\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(f"hostname {DEVICE_INFO['hostname']}\r\n".encode())
+                    writer.write(b"!\r\n")
+                    writer.write(b"boot-start-marker\r\n")
+                    writer.write(b"boot-end-marker\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"enable secret 5 $1$1234$abcdefghijklmnopqrstuvwx\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"username admin privilege 15 password 0 admin\r\n")
+                    writer.write(b"username user password 0 password\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"interface FastEthernet0/0\r\n")
+                    writer.write(b" ip address 192.168.1.1 255.255.255.0\r\n")
+                    writer.write(b" ip nat inside\r\n")
+                    writer.write(b" ip virtual-reassembly\r\n")
+                    writer.write(b" duplex auto\r\n")
+                    writer.write(b" speed auto\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"interface FastEthernet0/1\r\n")
+                    writer.write(b" no ip address\r\n")
+                    writer.write(b" shutdown\r\n")
+                    writer.write(b" duplex auto\r\n")
+                    writer.write(b" speed auto\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"interface Serial0/0/0\r\n")
+                    writer.write(b" no ip address\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"ip route 0.0.0.0 0.0.0.0 Serial0/0/0\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"ip http server\r\n")
+                    writer.write(b"no ip http secure-server\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"control-plane\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"line con 0\r\n")
+                    writer.write(b" exec-timeout 0 0\r\n")
+                    writer.write(b" privilege level 15\r\n")
+                    writer.write(b" logging synchronous\r\n")
+                    writer.write(b"line aux 0\r\n")
+                    writer.write(b"line vty 0 4\r\n")
+                    writer.write(b" login local\r\n")
+                    writer.write(b" transport input telnet\r\n")
+                    writer.write(b"!\r\n")
+                    writer.write(b"end\r\n")
+                    await writer.drain()
+                elif lowered == "show startup-config" or lowered == "sh start":
+                    await simulate_command_execution(0.8, 1.8)
+                    writer.write(b"\r\nstartup-config is not set\r\n")
+                    await writer.drain()
+                elif lowered == "show users" or lowered == "sh users":
+                    await simulate_command_execution(0.3, 0.8)
+                    writer.write(b"\r\n    Line       User       Host(s)              Idle       Location\r\n")
+                    writer.write(f"   0 con 0                {peer[0]}               00:00:00   \r\n".encode())
+                    writer.write(b"*  1 vty 0     admin      192.168.1.100        00:00:02   \r\n")
+                    writer.write(b"   2 vty 1                idle                 01:23:45   \r\n")
+                    await writer.drain()
+                elif lowered == "show processes" or lowered == "sh proc":
+                    await simulate_command_execution(0.8, 2.0)
+                    writer.write(b"\r\nCPU utilization for five seconds: 1%/0%; one minute: 2%; five minutes: 1%\r\n")
+                    writer.write(b" PID Runtime(ms)     Invoked      uSecs   5Sec   1Min   5Min TTY Process\r\n")
+                    writer.write(b"   1          12        1605          7  0.00%  0.00%  0.00%   0 Chunk Manager\r\n")
+                    writer.write(b"   2           4         542          7  0.00%  0.00%  0.00%   0 Load Meter\r\n")
+                    writer.write(b"   3         100        1500         66  0.00%  0.00%  0.00%   0 DHCPD Timer\r\n")
+                    writer.write(b"   4        2000       12000        166  0.00%  0.00%  0.00%   0 IP SNMP\r\n")
+                    writer.write(b"   5         150        1200        125  0.00%  0.00%  0.00%   0 TCP Timer\r\n")
+                    await writer.drain()
+                elif lowered == "help":
+                    writer.write(b"\r\nCisco CLI Help System\r\n\r\n")
+                    writer.write(b"show version                - System hardware and software status\r\n")
+                    writer.write(b"show interfaces             - Interface status and configuration\r\n")
+                    writer.write(b"show ip interface brief     - Brief IP interface status\r\n")
+                    writer.write(b"show running-config         - Current system configuration\r\n")
+                    writer.write(b"show startup-config         - Startup configuration\r\n")
+                    writer.write(b"show users                  - Display information about terminal lines\r\n")
+                    writer.write(b"show processes              - CPU usage statistics\r\n")
+                    writer.write(b"enable                      - Turn on privileged commands\r\n")
+                    writer.write(b"disable                     - Turn off privileged commands\r\n")
+                    writer.write(b"exit                        - Exit from the EXEC\r\n")
+                    writer.write(b"logout                      - Exit from the EXEC\r\n")
+                    await writer.drain()
+                elif lowered.startswith("ping "):
+                    await simulate_command_execution(1.0, 2.0)
+                    target = original_text[5:].strip()
+                    if target:
+                        writer.write(f"\r\nType escape sequence to abort.\r\n".encode())
+                        writer.write(f"Sending 5, 100-byte ICMP Echos to {target}, timeout is 2 seconds:\r\n".encode())
+                        writer.write(b"!!!!!\r\n")
+                        writer.write(b"Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms\r\n")
+                    else:
+                        writer.write(b"\r\nUsage: ping <target>\r\n")
+                    await writer.drain()
+                elif lowered.startswith("traceroute "):
+                    await simulate_command_execution(1.5, 3.0)
+                    target = original_text[11:].strip()
+                    if target:
+                        writer.write(f"\r\nType escape sequence to abort.\r\n".encode())
+                        writer.write(f"Tracing the route to {target}\r\n\r\n".encode())
+                        writer.write(b"  1 192.168.1.1 0 msec 0 msec 4 msec\r\n")
+                        writer.write(b"  2 10.0.0.1 4 msec 4 msec 4 msec\r\n")
+                        writer.write(b"  3 8.8.8.8 8 msec *  8 msec\r\n")
+                    else:
+                        writer.write(b"\r\nUsage: traceroute <target>\r\n")
+                    await writer.drain()
+                elif lowered == "reload":
+                    writer.write(b"\r\nProceed with reload? [confirm]\r\n")
+                    await writer.drain()
+                    # 等待确认
+                    confirm = await reader.readline()
+                    raw_buf.extend(confirm)
+                    confirm_text = confirm.decode(errors="ignore").rstrip("\r\n")
+                    inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": confirm_text})
+                    if confirm_text.lower() in ["y", "yes", ""]:
+                        writer.write(b"\r\nSystem configuration has been modified. Save? [yes/no]:\r\n")
+                        await writer.drain()
+                        save_confirm = await reader.readline()
+                        raw_buf.extend(save_confirm)
+                        save_text = save_confirm.decode(errors="ignore").rstrip("\r\n")
+                        inputs.append({"ts": datetime.now(timezone.utc).isoformat(), "input": save_text})
+                        writer.write(b"\r\nBuilding configuration...\r\n")
+                        writer.write(b"[OK]\r\n")
+                        writer.write(b"Reloading...\r\n")
+                        await writer.drain()
+                        await asyncio.sleep(2)
+                        writer.write(b"\r\n% Connection closed by foreign host.\r\n")
+                        await writer.drain()
+                        break
+                    else:
+                        writer.write(b"\r\nReload cancelled.\r\n")
+                        await writer.drain()
                 else:
-                    writer.write(b"Command received: " + data)
-                writer.write(self.PROMPT)
+                    # 通用错误消息，模拟真实网络设备
+                    if mode == "user" and lowered.startswith("show"):
+                        writer.write(b"\r\n% Incomplete command.\r\n\r\n")
+                    else:
+                        writer.write(b"\r\n% Ambiguous command:  \"" + original_text.encode() + b"\"\r\n\r\n")
+                    await writer.drain()
+
+                writer.write(prompt)
                 await writer.drain()
 
         except asyncio.CancelledError:
@@ -230,12 +598,18 @@ class TelnetHandler(ProtocolHandler):
                 "raw_base64": base64.b64encode(bytes(raw_buf)).decode("ascii"),
             }
             await self.persist(entry)
-            try:
-                writer.close()
-                await writer.wait_closed()
-            except Exception:
-                pass
+            await self._close_writer(writer)
             op_logger.info("Telnet关闭会话 %s 来自 %s", session_id, peer)
+
+    async def _close_writer(self, writer):
+        """
+        安全关闭writer
+        """
+        try:
+            writer.close()
+            await writer.wait_closed()
+        except Exception:
+            pass
 
 # ---------------------- FTP处理器（控制通道最小实现） -------------
 class FTPHandler(ProtocolHandler):
@@ -292,7 +666,7 @@ class FTPHandler(ProtocolHandler):
 
         op_logger.info("FTP新连接 %s 会话=%s", peer, session_id)
         try:
-            await self._send_line(writer, "220 mini-ftp Service ready")
+            await self._send_line(writer, "220 Microsoft FTP Service")
             while True:
                 line = await reader.readline()
                 if not line:
@@ -311,16 +685,16 @@ class FTPHandler(ProtocolHandler):
 
                 if cmd == "USER":
                     username = arg
-                    await self._send_line(writer, "331 Username ok, need password")
+                    await self._send_line(writer, "331 Password required for " + username)
                 elif cmd == "PASS":
-                    await self._send_line(writer, "230 Login successful")
+                    await self._send_line(writer, "230 User " + username + " logged in")
                     authenticated = True
                 elif cmd == "SYST":
                     await self._send_line(writer, "215 UNIX Type: L8")
                 elif cmd == "PWD":
                     await self._send_line(writer, '257 "/" is current directory')
                 elif cmd == "CWD":
-                    await self._send_line(writer, "250 Directory changed")
+                    await self._send_line(writer, "250 CWD command successful")
                 elif cmd == "LIST":
                     # 无数据连接：发送预设的成功消息
                     await self._send_line(writer, "150 Opening ASCII mode data connection for file list")
@@ -399,6 +773,8 @@ class TCPHandler(ProtocolHandler):
 
         op_logger.info("TCP新连接 %s 会话=%s", peer, session_id)
         try:
+            writer.write(b"Microsoft Windows [Version 10.0.19041.1]\n(c) 2020 Microsoft Corporation. All rights reserved.\n\nC:\\Users\\Administrator>")
+            await writer.drain()
             while True:
                 data = await reader.read(1024)
                 if not data:
@@ -406,6 +782,20 @@ class TCPHandler(ProtocolHandler):
                 raw_buf.extend(data)
                 # 回显
                 writer.write(data)
+                await writer.drain()
+
+                # 如果收到命令，模拟Windows命令行响应
+                try:
+                    text = data.decode(errors="ignore").strip()
+                    if text.lower() == "ipconfig":
+                        response = b"\nWindows IP Configuration\n\nEthernet adapter Ethernet:\n   Connection-specific DNS Suffix  . : localdomain\n   IPv4 Address. . . . . . . . . . . : 192.168.1.100\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 192.168.1.1\n\n"
+                        writer.write(response)
+                    elif text.lower() == "ver":
+                        writer.write(b"\nMicrosoft Windows [Version 10.0.19041.1]\n")
+                except:
+                    pass
+
+                writer.write(b"\nC:\\Users\\Administrator>")
                 await writer.drain()
         except asyncio.CancelledError:
             op_logger.info("TCP会话已取消 %s", session_id)
@@ -435,7 +825,7 @@ class HTTPHandler(ProtocolHandler):
     HTTP协议处理器，模拟简单的HTTP服务端
     """
 
-    RESPONSE_BODY = b"<html><body><h1>Fake HTTP Service</h1></body></html>"
+    RESPONSE_BODY = b"<html><body><h1>Microsoft-IIS/8.5</h1><p>Under Construction</p><hr><address>Microsoft-IIS/8.5 Server at localhost Port 80</address></body></html>"
 
     def __init__(self, host, port, log_file):
         """
@@ -473,7 +863,7 @@ class HTTPHandler(ProtocolHandler):
             text = raw.decode(errors="ignore")
             # 响应简单页面
             body = self.RESPONSE_BODY
-            resp = b"HTTP/1.1 200 OK\r\nContent-Length: %d\r\nContent-Type: text/html; charset=utf-8\r\n\r\n%s" % (len(body), body)
+            resp = b"HTTP/1.1 200 OK\r\nServer: Microsoft-IIS/8.5\r\nContent-Length: %d\r\nContent-Type: text/html\r\n\r\n%s" % (len(body), body)
             writer.write(resp)
             await writer.drain()
 
@@ -527,7 +917,7 @@ class HTTPSHandler(HTTPHandler):
         try:
             # 创建SSL上下文
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-            ctx.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # 福建旧版本
+            ctx.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # 禁用旧版本
             ctx.load_cert_chain(certfile=self.certfile, keyfile=self.keyfile)
             self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port, ssl=ctx)
             addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
@@ -546,7 +936,7 @@ class SSHHandler(ProtocolHandler):
     SSH协议处理器，模拟SSH服务端并捕获客户端连接信息
     """
 
-    BANNER = b"SSH-2.0-OpenSSH_8.2p1 FakeHoneypot\r\n"
+    BANNER = b"SSH-2.0-OpenSSH_7.9\r\n"
 
     def __init__(self, host, port, log_file):
         """
