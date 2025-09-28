@@ -825,7 +825,55 @@ class HTTPHandler(ProtocolHandler):
     HTTP协议处理器，模拟简单的HTTP服务端
     """
 
-    RESPONSE_BODY = b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n"
+    # 多个响应页面内容，增加随机性
+    RESPONSE_BODIES = [
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n",
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Test Page for nginx</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>This is a test page used to test the correct operation of the nginx.</p>\n</body>\n</html>\n",
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Default Web Page</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Default Web Page</h1>\n<p>This is the default web page for this server.</p>\n<p>The web server software is running but no content has been added, yet.</p>\n</body>\n</html>\n"
+    ]
+
+    # 真实的nginx版本号
+    NGINX_VERSIONS = [
+        "nginx/1.18.0",
+        "nginx/1.20.1",
+        "nginx/1.21.6",
+        "nginx/1.22.1",
+        "nginx/1.23.3",
+        "nginx/1.24.0"
+    ]
+
+    # 登录页面模板
+    LOGIN_PAGE = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+        .login-container { width: 300px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #005a87; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # 静态资源内容
+    STATIC_CONTENTS = {
+        "/favicon.ico": (b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00", "image/x-icon"),
+        "/robots.txt": (b"User-agent: *\nDisallow: /admin/\nDisallow: /private/\n", "text/plain"),
+        "/sitemap.xml": (b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n<url>\n<loc>http://localhost/</loc>\n</url>\n</urlset>", "application/xml"),
+    }
 
     def __init__(self, host, port, log_file):
         """
@@ -837,6 +885,18 @@ class HTTPHandler(ProtocolHandler):
             log_file (str): 日志文件路径
         """
         super().__init__("http", host, port, log_file)
+        # 生成带hash的动态路径
+        self.dynamic_paths = self._generate_dynamic_paths()
+
+    def _generate_dynamic_paths(self):
+        """生成带hash的动态路径"""
+        paths = {}
+        # 生成多个带hash的JS和CSS文件路径
+        for i in range(5):
+            hash_val = ''.join(random.choices('0123456789abcdef', k=5))
+            paths[f"/static/js/app.{hash_val}.js"] = (b"console.log('App loaded');", "application/javascript")
+            paths[f"/css/style.{hash_val}.css"] = (b"body { margin: 0; padding: 0; }", "text/css")
+        return paths
 
     async def start(self):
         """
@@ -847,7 +907,27 @@ class HTTPHandler(ProtocolHandler):
         op_logger.info("HTTP监听于 %s", addrs)
         asyncio.create_task(self._server.serve_forever())
 
-    async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    def _generate_session_id(self):
+        """生成随机会话ID"""
+        return ''.join(random.choices('0123456789abcdef', k=32))
+
+    def _generate_etag(self):
+        """生成ETag"""
+        return '"' + ''.join(random.choices('0123456789abcdef', k=16)) + '"'
+
+    async def _simulate_network_delay(self, writer, content_length):
+        """模拟网络延迟和带宽限制"""
+        # 模拟网络延迟 (50ms - 300ms)
+        delay = random.uniform(0.05, 0.3)
+        await asyncio.sleep(delay)
+
+        # 模拟带宽限制 (10KB/s - 100KB/s)
+        bandwidth = random.uniform(10 * 1024, 100 * 1024)  # bytes per second
+        transmission_time = content_length / bandwidth
+        if transmission_time > 0:
+            await asyncio.sleep(transmission_time)
+
+    async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamReader):
         """
         处理HTTP客户端请求
 
@@ -862,34 +942,156 @@ class HTTPHandler(ProtocolHandler):
             raw = await reader.read(64 * 1024)  # 读取最多64KB的头部和内容
             text = raw.decode(errors="ignore")
 
-            # 解析请求路径，模拟真实Nginx行为
+            # 解析请求
             request_lines = text.split('\n')
-            if request_lines:
-                request_line = request_lines[0]
-                parts = request_line.split()
-                if len(parts) >= 2:
-                    method = parts[0]
-                    path = parts[1]
+            if not request_lines:
+                writer.close()
+                return
 
-                    # 如果请求的路径看起来像试图探测Python应用，则返回404
-                    if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
-                        body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
-                        resp = b"HTTP/1.1 404 Not Found\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
-                            datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
-                            len(body),
-                            body
-                        )
-                        writer.write(resp)
-                        await writer.drain()
-                        return
+            request_line = request_lines[0].strip()
+            headers = {}
+            for line in request_lines[1:]:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    headers[key.strip().lower()] = value.strip()
 
-            # 响应简单页面
-            body = self.RESPONSE_BODY
-            resp = b"HTTP/1.1 200 OK\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
-                datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
-                len(body),
-                body
-            )
+            parts = request_line.split()
+            if len(parts) < 3:
+                writer.close()
+                return
+
+            method, path, version = parts[0], parts[1], parts[2]
+
+            # 检查是否为可疑路径
+            if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理登录页面请求
+            if path == "/login" and method == "GET":
+                body = self.LOGIN_PAGE
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                await self._simulate_network_delay(writer, len(body))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理登录表单提交
+            if path == "/login" and method == "POST":
+                # 记录提交的登录凭据
+                post_data = ""
+                for line in request_lines:
+                    if line.startswith(method) and "Content-Length:" in text:
+                        content_length_line = [l for l in request_lines if "Content-Length:" in l][0]
+                        content_length = int(content_length_line.split(":")[1].strip())
+                        # 这里简化处理，实际应该读取body内容
+                        post_data = f"<{content_length} bytes of POST data>"
+
+                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 401 Unauthorized\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                writer.write(resp)
+                await writer.drain()
+
+                # 记录登录尝试
+                op_logger.info("Login attempt from %s: %s", peer[0], post_data)
+                return
+
+            # 处理静态资源请求
+            all_static_contents = {**self.STATIC_CONTENTS, **self.dynamic_paths}
+            if path in all_static_contents:
+                content, content_type = all_static_contents[path]
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nETag: %s\r\nCache-Control: max-age=3600\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
+                    len(content),
+                    self._generate_etag().encode(),
+                    content
+                )
+                await self._simulate_network_delay(writer, len(content))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理/favicon.ico特殊请求
+            if path == "/favicon.ico":
+                content = b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00"
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: image/x-icon\r\nContent-Length: %d\r\nETag: %s\r\nCache-Control: max-age=86400\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(content),
+                    self._generate_etag().encode(),
+                    content
+                )
+                await self._simulate_network_delay(writer, len(content))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 检查是否需要返回304
+            if 'if-none-match' in headers:
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 304 Not Modified\r\nServer: %s\r\nDate: %s\r\nETag: %s\r\nConnection: close\r\n\r\n" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    self._generate_etag().encode()
+                )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 生成Cookie
+            has_cookie = 'cookie' in headers
+            session_cookie = ""
+            if not has_cookie:
+                session_cookie = "Set-Cookie: sessionid=%s; Path=/; HttpOnly\r\n" % self._generate_session_id()
+
+            # 随机选择响应页面
+            body = random.choice(self.RESPONSE_BODIES)
+
+            # 随机选择nginx版本
+            server_header = random.choice(self.NGINX_VERSIONS)
+
+            # 构建响应
+            resp_headers = [
+                "HTTP/1.1 200 OK",
+                "Server: %s" % server_header,
+                "Date: %s" % datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT'),
+                "Content-Type: text/html",
+                "Content-Length: %d" % len(body),
+                "ETag: %s" % self._generate_etag(),
+                "Cache-Control: no-cache",
+                "Connection: close"
+            ]
+
+            if not has_cookie:
+                resp_headers.append(session_cookie.rstrip())
+
+            resp = ("\r\n".join(resp_headers) + "\r\n\r\n").encode() + body
+            await self._simulate_network_delay(writer, len(body))
             writer.write(resp)
             await writer.drain()
 
@@ -920,7 +1122,55 @@ class HTTPSHandler(HTTPHandler):
     HTTPS协议处理器，通过SSL包装HTTP处理器实现HTTPS服务
     """
 
-    RESPONSE_BODY = b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n"
+    # 多个响应页面内容，增加随机性
+    RESPONSE_BODIES = [
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Welcome to nginx!</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>If you see this page, the nginx web server is successfully installed and\nworking. Further configuration is required.</p>\n\n<p>For online documentation and support please refer to\n<a href=\"http://nginx.org/\">nginx.org</a>.<br/>\nCommercial support is available at\n<a href=\"http://nginx.com/\">nginx.com</a>.</p>\n\n<p><em>Thank you for using nginx.</em></p>\n</body>\n</html>\n",
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Test Page for nginx</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Welcome to nginx!</h1>\n<p>This is a test page used to test the correct operation of the nginx.</p>\n</body>\n</html>\n",
+        b"<!DOCTYPE html>\n<html>\n<head>\n<title>Default Web Page</title>\n<style>\n    body {\n        width: 35em;\n        margin: 0 auto;\n        font-family: Tahoma, Verdana, Arial, sans-serif;\n    }\n</style>\n</head>\n<body>\n<h1>Default Web Page</h1>\n<p>This is the default web page for this server.</p>\n<p>The web server software is running but no content has been added, yet.</p>\n</body>\n</html>\n"
+    ]
+
+    # 真实的nginx版本号
+    NGINX_VERSIONS = [
+        "nginx/1.18.0",
+        "nginx/1.20.1",
+        "nginx/1.21.6",
+        "nginx/1.22.1",
+        "nginx/1.23.3",
+        "nginx/1.24.0"
+    ]
+
+    # 登录页面模板
+    LOGIN_PAGE = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+        .login-container { width: 300px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007cba; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #005a87; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # 静态资源内容
+    STATIC_CONTENTS = {
+        "/favicon.ico": (b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00", "image/x-icon"),
+        "/robots.txt": (b"User-agent: *\nDisallow: /admin/\nDisallow: /private/\n", "text/plain"),
+        "/sitemap.xml": (b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n<url>\n<loc>http://localhost/</loc>\n</url>\n</urlset>", "application/xml"),
+    }
 
     def __init__(self, host, port, log_file, certfile: str, keyfile: str):
         """
@@ -937,6 +1187,8 @@ class HTTPSHandler(HTTPHandler):
         self.name = "https"
         self.certfile = certfile
         self.keyfile = keyfile
+        # 生成带hash的动态路径
+        self.dynamic_paths = self._generate_dynamic_paths()
 
     async def start(self):
         """
@@ -947,6 +1199,8 @@ class HTTPSHandler(HTTPHandler):
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
             ctx.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # 禁用旧版本
             ctx.load_cert_chain(certfile=self.certfile, keyfile=self.keyfile)
+            # 添加更强的SSL配置
+            ctx.set_ciphers('ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:!aNULL:!MD5:!DSS')
             self._server = await asyncio.start_server(self._handle, host=self.host, port=self.port, ssl=ctx)
             addrs = ", ".join(str(sock.getsockname()) for sock in self._server.sockets)
             op_logger.info("HTTPS监听于 %s", addrs)
@@ -956,6 +1210,14 @@ class HTTPSHandler(HTTPHandler):
             op_logger.error("请使用--generate-cert参数自动生成证书，或手动提供证书文件")
         except Exception as e:
             op_logger.exception("HTTPS服务器启动失败: %s", e)
+
+    def _generate_session_id(self):
+        """生成随机会话ID"""
+        return ''.join(random.choices('0123456789abcdef', k=32))
+
+    def _generate_etag(self):
+        """生成ETag"""
+        return '"' + ''.join(random.choices('0123456789abcdef', k=16)) + '"'
 
     async def _handle(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         """
@@ -972,34 +1234,156 @@ class HTTPSHandler(HTTPHandler):
             raw = await reader.read(64 * 1024)  # 读取最多64KB的头部和内容
             text = raw.decode(errors="ignore")
 
-            # 解析请求路径，模拟真实Nginx行为
+            # 解析请求
             request_lines = text.split('\n')
-            if request_lines:
-                request_line = request_lines[0]
-                parts = request_line.split()
-                if len(parts) >= 2:
-                    method = parts[0]
-                    path = parts[1]
+            if not request_lines:
+                writer.close()
+                return
 
-                    # 如果请求的路径看起来像试图探测Python应用，则返回404
-                    if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
-                        body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
-                        resp = b"HTTP/1.1 404 Not Found\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
-                            datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
-                            len(body),
-                            body
-                        )
-                        writer.write(resp)
-                        await writer.drain()
-                        return
+            request_line = request_lines[0].strip()
+            headers = {}
+            for line in request_lines[1:]:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    headers[key.strip().lower()] = value.strip()
 
-            # 响应简单页面
-            body = self.RESPONSE_BODY
-            resp = b"HTTP/1.1 200 OK\r\nServer: nginx\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
-                datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
-                len(body),
-                body
-            )
+            parts = request_line.split()
+            if len(parts) < 3:
+                writer.close()
+                return
+
+            method, path, version = parts[0], parts[1], parts[2]
+
+            # 检查是否为可疑路径
+            if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理登录页面请求
+            if path == "/login" and method == "GET":
+                body = self.LOGIN_PAGE
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                await self._simulate_network_delay(writer, len(body))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理登录表单提交
+            if path == "/login" and method == "POST":
+                # 记录提交的登录凭据
+                post_data = ""
+                for line in request_lines:
+                    if line.startswith(method) and "Content-Length:" in text:
+                        content_length_line = [l for l in request_lines if "Content-Length:" in l][0]
+                        content_length = int(content_length_line.split(":")[1].strip())
+                        # 这里简化处理，实际应该读取body内容
+                        post_data = f"<{content_length} bytes of POST data>"
+
+                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 401 Unauthorized\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(body),
+                    body
+                )
+                writer.write(resp)
+                await writer.drain()
+
+                # 记录登录尝试
+                op_logger.info("Login attempt from %s: %s", peer[0], post_data)
+                return
+
+            # 处理静态资源请求
+            all_static_contents = {**self.STATIC_CONTENTS, **self.dynamic_paths}
+            if path in all_static_contents:
+                content, content_type = all_static_contents[path]
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nETag: %s\r\nCache-Control: max-age=3600\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
+                    len(content),
+                    self._generate_etag().encode(),
+                    content
+                )
+                await self._simulate_network_delay(writer, len(content))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理/favicon.ico特殊请求
+            if path == "/favicon.ico":
+                content = b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00"
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: image/x-icon\r\nContent-Length: %d\r\nETag: %s\r\nCache-Control: max-age=86400\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    len(content),
+                    self._generate_etag().encode(),
+                    content
+                )
+                await self._simulate_network_delay(writer, len(content))
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 检查是否需要返回304
+            if 'if-none-match' in headers:
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 304 Not Modified\r\nServer: %s\r\nDate: %s\r\nETag: %s\r\nConnection: close\r\n\r\n" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    self._generate_etag().encode()
+                )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 生成Cookie
+            has_cookie = 'cookie' in headers
+            session_cookie = ""
+            if not has_cookie:
+                session_cookie = "Set-Cookie: sessionid=%s; Path=/; HttpOnly; Secure\r\n" % self._generate_session_id()
+
+            # 随机选择响应页面
+            body = random.choice(self.RESPONSE_BODIES)
+
+            # 随机选择nginx版本
+            server_header = random.choice(self.NGINX_VERSIONS)
+
+            # 构建响应
+            resp_headers = [
+                "HTTP/1.1 200 OK",
+                "Server: %s" % server_header,
+                "Date: %s" % datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT'),
+                "Content-Type: text/html",
+                "Content-Length: %d" % len(body),
+                "ETag: %s" % self._generate_etag(),
+                "Cache-Control: no-cache",
+                "Connection: close"
+            ]
+
+            if not has_cookie:
+                resp_headers.append(session_cookie.rstrip())
+
+            resp = ("\r\n".join(resp_headers) + "\r\n\r\n").encode() + body
+            await self._simulate_network_delay(writer, len(body))
             writer.write(resp)
             await writer.drain()
 
@@ -1023,7 +1407,6 @@ class HTTPSHandler(HTTPHandler):
             except Exception:
                 pass
             op_logger.info("HTTPS关闭会话 %s 来自 %s", session_id, peer)
-
 
 # ---------------------- SSH处理器（仅横幅） -------------------------
 class SSHHandler(ProtocolHandler):
