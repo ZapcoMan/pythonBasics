@@ -1154,6 +1154,7 @@ class HTTPHandler(ProtocolHandler):
             except Exception:
                 pass
             op_logger.info("HTTP关闭会话 %s 来自 %s", session_id, peer)
+
 # ---------------------- HTTPS处理器（使用ssl包装HTTP） ----------------
 class HTTPSHandler(HTTPHandler):
     """
