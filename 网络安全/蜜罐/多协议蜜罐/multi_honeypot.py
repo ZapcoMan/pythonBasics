@@ -876,6 +876,89 @@ class HTTPHandler(ProtocolHandler):
         b'{"error": "Unauthorized", "message": "Login failed. Please check your username and password."}'
     ]
 
+    # phpMyAdmin页面模板
+    PHPMYADMIN_PAGE = b"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>phpMyAdmin</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+        .container { max-width: 500px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #666; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #ffd600; color: black; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #e6c000; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to phpMyAdmin</h1>
+        <form method="post" action="index.php">
+            <div class="form-group">
+                <label for="server">Server:</label>
+                <input type="text" id="server" name="server" value="localhost" readonly>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Go</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # Admin面板页面模板
+    ADMIN_PAGE = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f1f1f1; }
+        .header { background-color: #333; color: white; padding: 15px; }
+        .login-form { width: 300px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="login-form">
+        <h3>Login</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # API数据示例
+    API_DATA = [
+        b'{"users": [{"id": 1, "name": "John Doe", "email": "john@example.com"}, {"id": 2, "name": "Jane Smith", "email": "jane@example.com"}], "total": 2}',
+        b'{"products": [{"id": 1, "name": "Product 1", "price": 29.99}, {"id": 2, "name": "Product 2", "price": 39.99}], "total": 2}',
+        b'{"orders": [{"id": 1001, "customer": "John Doe", "amount": 99.99, "status": "shipped"}, {"id": 1002, "customer": "Jane Smith", "amount": 149.99, "status": "pending"}], "total": 2}'
+    ]
+
     # 静态资源内容
     STATIC_CONTENTS = {
         "/favicon.ico": (b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00", "image/x-icon"),
@@ -971,7 +1054,7 @@ class HTTPHandler(ProtocolHandler):
             method, path, version = parts[0], parts[1], parts[2]
 
             # 检查是否为可疑路径
-            if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+            if any(pattern in path.lower() for pattern in ['manager', 'python', '.env', 'flask', 'django']):
                 body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
                 server_header = random.choice(self.NGINX_VERSIONS)
                 resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
@@ -980,6 +1063,156 @@ class HTTPHandler(ProtocolHandler):
                     len(body),
                     body
                 )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理phpMyAdmin页面请求
+            if path.startswith("/phpmyadmin"):
+                if path == "/phpmyadmin" or path == "/phpmyadmin/":
+                    if method == "GET":
+                        body = self.PHPMYADMIN_PAGE
+                        content_type = "text/html"
+                    elif method == "POST":
+                        # 记录登录尝试
+                        post_data = f"<PHPMyAdmin login attempt with {headers.get('content-length', 'unknown')} bytes of data>"
+                        op_logger.info("phpMyAdmin login attempt from %s: %s", peer[0], post_data)
+
+                        # 返回登录失败页面
+                        body = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>phpMyAdmin</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f5f5f5; }
+        .error { width: 500px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #f44336; }
+        .error h2 { color: #f44336; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #2196F3; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="error">
+        <h2>Login failed</h2>
+        <p>Invalid credentials. Please try again.</p>
+        <a href="index.php" class="back-link">Back to login</a>
+    </div>
+</body>
+</html>"""
+                        content_type = "text/html"
+                    else:
+                        body = b'{"error": "Method not allowed"}'
+                        content_type = "application/json"
+
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        content_type.encode(),
+                        len(body),
+                        body
+                    )
+                    await self._simulate_network_delay(writer, len(body))
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+                else:
+                    # phpMyAdmin子路径返回404
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        len(body),
+                        body
+                    )
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+
+            # 处理Admin面板请求
+            if path.startswith("/admin"):
+                if path == "/admin" or path == "/admin/":
+                    if method == "GET":
+                        body = self.ADMIN_PAGE
+                        content_type = "text/html"
+                    elif method == "POST":
+                        # 记录登录尝试
+                        post_data = f"<Admin panel login attempt with {headers.get('content-length', 'unknown')} bytes of data>"
+                        op_logger.info("Admin panel login attempt from %s: %s", peer[0], post_data)
+
+                        # 返回登录失败页面
+                        body = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f1f1f1; }
+        .header { background-color: #333; color: white; padding: 15px; }
+        .error { width: 300px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #f44336; }
+        .error h3 { color: #f44336; margin-top: 0; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #2196F3; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="error">
+        <h3>Login Failed</h3>
+        <p>Invalid username or password.</p>
+        <a href="/" class="back-link">Back to login</a>
+    </div>
+</body>
+</html>"""
+                        content_type = "text/html"
+                    else:
+                        body = b'{"error": "Method not allowed"}'
+                        content_type = "application/json"
+
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        content_type.encode(),
+                        len(body),
+                        body
+                    )
+                    await self._simulate_network_delay(writer, len(body))
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+                else:
+                    # Admin子路径返回404
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        len(body),
+                        body
+                    )
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+
+            # 处理API请求
+            if path.startswith("/api/"):
+                if method == "GET":
+                    body = random.choice(self.API_DATA)
+                    content_type = "application/json"
+                else:
+                    body = b'{"error": "Method not allowed"}'
+                    content_type = "application/json"
+
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
+                    len(body),
+                    body
+                )
+                await self._simulate_network_delay(writer, len(body))
                 writer.write(resp)
                 await writer.drain()
                 return
@@ -1212,6 +1445,89 @@ class HTTPSHandler(HTTPHandler):
         b'{"error": "Unauthorized", "message": "Login failed. Please check your username and password."}'
     ]
 
+    # phpMyAdmin页面模板
+    PHPMYADMIN_PAGE = b"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>phpMyAdmin</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; }
+        .container { max-width: 500px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #666; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #ffd600; color: black; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #e6c000; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to phpMyAdmin</h1>
+        <form method="post" action="index.php">
+            <div class="form-group">
+                <label for="server">Server:</label>
+                <input type="text" id="server" name="server" value="localhost" readonly>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Go</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # Admin面板页面模板
+    ADMIN_PAGE = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f1f1f1; }
+        .header { background-color: #333; color: white; padding: 15px; }
+        .login-form { width: 300px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="login-form">
+        <h3>Login</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>"""
+
+    # API数据示例
+    API_DATA = [
+        b'{"users": [{"id": 1, "name": "John Doe", "email": "john@example.com"}, {"id": 2, "name": "Jane Smith", "email": "jane@example.com"}], "total": 2}',
+        b'{"products": [{"id": 1, "name": "Product 1", "price": 29.99}, {"id": 2, "name": "Product 2", "price": 39.99}], "total": 2}',
+        b'{"orders": [{"id": 1001, "customer": "John Doe", "amount": 99.99, "status": "shipped"}, {"id": 1002, "customer": "Jane Smith", "amount": 149.99, "status": "pending"}], "total": 2}'
+    ]
+
     # 静态资源内容
     STATIC_CONTENTS = {
         "/favicon.ico": (b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00", "image/x-icon"),
@@ -1302,7 +1618,7 @@ class HTTPSHandler(HTTPHandler):
             method, path, version = parts[0], parts[1], parts[2]
 
             # 检查是否为可疑路径
-            if any(pattern in path.lower() for pattern in ['admin', 'manager', 'python', '.env', 'flask', 'django']):
+            if any(pattern in path.lower() for pattern in ['manager', 'python', '.env', 'flask', 'django']):
                 body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
                 server_header = random.choice(self.NGINX_VERSIONS)
                 resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
@@ -1311,6 +1627,156 @@ class HTTPSHandler(HTTPHandler):
                     len(body),
                     body
                 )
+                writer.write(resp)
+                await writer.drain()
+                return
+
+            # 处理phpMyAdmin页面请求
+            if path.startswith("/phpmyadmin"):
+                if path == "/phpmyadmin" or path == "/phpmyadmin/":
+                    if method == "GET":
+                        body = self.PHPMYADMIN_PAGE
+                        content_type = "text/html"
+                    elif method == "POST":
+                        # 记录登录尝试
+                        post_data = f"<PHPMyAdmin login attempt with {headers.get('content-length', 'unknown')} bytes of data>"
+                        op_logger.info("phpMyAdmin login attempt from %s: %s", peer[0], post_data)
+
+                        # 返回登录失败页面
+                        body = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>phpMyAdmin</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f5f5f5; }
+        .error { width: 500px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #f44336; }
+        .error h2 { color: #f44336; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #2196F3; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="error">
+        <h2>Login failed</h2>
+        <p>Invalid credentials. Please try again.</p>
+        <a href="index.php" class="back-link">Back to login</a>
+    </div>
+</body>
+</html>"""
+                        content_type = "text/html"
+                    else:
+                        body = b'{"error": "Method not allowed"}'
+                        content_type = "application/json"
+
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        content_type.encode(),
+                        len(body),
+                        body
+                    )
+                    await self._simulate_network_delay(writer, len(body))
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+                else:
+                    # phpMyAdmin子路径返回404
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        len(body),
+                        body
+                    )
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+
+            # 处理Admin面板请求
+            if path.startswith("/admin"):
+                if path == "/admin" or path == "/admin/":
+                    if method == "GET":
+                        body = self.ADMIN_PAGE
+                        content_type = "text/html"
+                    elif method == "POST":
+                        # 记录登录尝试
+                        post_data = f"<Admin panel login attempt with {headers.get('content-length', 'unknown')} bytes of data>"
+                        op_logger.info("Admin panel login attempt from %s: %s", peer[0], post_data)
+
+                        # 返回登录失败页面
+                        body = b"""<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f1f1f1; }
+        .header { background-color: #333; color: white; padding: 15px; }
+        .error { width: 300px; margin: 100px auto; background: white; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #f44336; }
+        .error h3 { color: #f44336; margin-top: 0; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #2196F3; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Admin Panel</h2>
+    </div>
+    <div class="error">
+        <h3>Login Failed</h3>
+        <p>Invalid username or password.</p>
+        <a href="/" class="back-link">Back to login</a>
+    </div>
+</body>
+</html>"""
+                        content_type = "text/html"
+                    else:
+                        body = b'{"error": "Method not allowed"}'
+                        content_type = "application/json"
+
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        content_type.encode(),
+                        len(body),
+                        body
+                    )
+                    await self._simulate_network_delay(writer, len(body))
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+                else:
+                    # Admin子路径返回404
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>404 Not Found</title>\n</head>\n<body>\n<center><h1>404 Not Found</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    server_header = random.choice(self.NGINX_VERSIONS)
+                    resp = b"HTTP/1.1 404 Not Found\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                        server_header.encode(),
+                        datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                        len(body),
+                        body
+                    )
+                    writer.write(resp)
+                    await writer.drain()
+                    return
+
+            # 处理API请求
+            if path.startswith("/api/"):
+                if method == "GET":
+                    body = random.choice(self.API_DATA)
+                    content_type = "application/json"
+                else:
+                    body = b'{"error": "Method not allowed"}'
+                    content_type = "application/json"
+
+                server_header = random.choice(self.NGINX_VERSIONS)
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    server_header.encode(),
+                    datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
+                    len(body),
+                    body
+                )
+                await self._simulate_network_delay(writer, len(body))
                 writer.write(resp)
                 await writer.drain()
                 return
