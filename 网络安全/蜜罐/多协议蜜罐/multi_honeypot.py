@@ -868,6 +868,14 @@ class HTTPHandler(ProtocolHandler):
 </body>
 </html>"""
 
+    # 登录API的JSON响应
+    LOGIN_JSON_RESPONSES = [
+        b'{"success": false, "message": "Invalid credentials"}',
+        b'{"success": false, "message": "Authentication failed"}',
+        b'{"error": {"code": "INVALID_CREDENTIALS", "message": "The provided credentials are incorrect"}}',
+        b'{"error": "Unauthorized", "message": "Login failed. Please check your username and password."}'
+    ]
+
     # 静态资源内容
     STATIC_CONTENTS = {
         "/favicon.ico": (b"\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00", "image/x-icon"),
@@ -978,11 +986,22 @@ class HTTPHandler(ProtocolHandler):
 
             # 处理登录页面请求
             if path == "/login" and method == "GET":
-                body = self.LOGIN_PAGE
+                # 检查Accept头以决定返回HTML还是JSON
+                accept_header = headers.get('accept', '')
+                if 'application/json' in accept_header and 'text/html' not in accept_header:
+                    # 返回JSON格式的登录页面信息
+                    body = b'{"login_url": "/login", "method": "POST", "fields": ["username", "password"]}'
+                    content_type = "application/json"
+                else:
+                    # 返回HTML登录页面
+                    body = self.LOGIN_PAGE
+                    content_type = "text/html"
+
                 server_header = random.choice(self.NGINX_VERSIONS)
-                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
                     server_header.encode(),
                     datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
                     len(body),
                     body
                 )
@@ -993,20 +1012,40 @@ class HTTPHandler(ProtocolHandler):
 
             # 处理登录表单提交
             if path == "/login" and method == "POST":
-                # 记录提交的登录凭据
-                post_data = ""
-                for line in request_lines:
-                    if line.startswith(method) and "Content-Length:" in text:
-                        content_length_line = [l for l in request_lines if "Content-Length:" in l][0]
-                        content_length = int(content_length_line.split(":")[1].strip())
-                        # 这里简化处理，实际应该读取body内容
-                        post_data = f"<{content_length} bytes of POST data>"
+                # 检查Content-Type以决定如何处理请求
+                content_type_header = headers.get('content-type', '').lower()
 
-                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                # 记录提交的登录凭据
+                post_data = b""
+                content_length = 0
+                if "content-length" in headers:
+                    try:
+                        content_length = int(headers["content-length"])
+                    except ValueError:
+                        pass
+
+                # 简化处理，实际应该读取body内容
+                post_data = f"<{content_length} bytes of POST data>".encode()
+
+                # 根据请求的Accept头决定返回什么类型的数据
+                accept_header = headers.get('accept', '')
+                if 'application/json' in accept_header and 'text/html' not in accept_header:
+                    # 返回JSON格式的错误响应
+                    body = random.choice(self.LOGIN_JSON_RESPONSES)
+                    content_type = "application/json"
+                    status_line = "HTTP/1.1 401 Unauthorized"
+                else:
+                    # 返回HTML格式的错误响应
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    content_type = "text/html"
+                    status_line = "HTTP/1.1 401 Unauthorized"
+
                 server_header = random.choice(self.NGINX_VERSIONS)
-                resp = b"HTTP/1.1 401 Unauthorized\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                resp = b"%s\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    status_line.encode(),
                     server_header.encode(),
                     datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
                     len(body),
                     body
                 )
@@ -1014,7 +1053,7 @@ class HTTPHandler(ProtocolHandler):
                 await writer.drain()
 
                 # 记录登录尝试
-                op_logger.info("Login attempt from %s: %s", peer[0], post_data)
+                op_logger.info("Login attempt from %s: %s", peer[0], post_data.decode(errors="ignore"))
                 return
 
             # 处理静态资源请求
@@ -1115,7 +1154,6 @@ class HTTPHandler(ProtocolHandler):
             except Exception:
                 pass
             op_logger.info("HTTP关闭会话 %s 来自 %s", session_id, peer)
-
 # ---------------------- HTTPS处理器（使用ssl包装HTTP） ----------------
 class HTTPSHandler(HTTPHandler):
     """
@@ -1164,6 +1202,14 @@ class HTTPSHandler(HTTPHandler):
     </div>
 </body>
 </html>"""
+
+    # 登录API的JSON响应
+    LOGIN_JSON_RESPONSES = [
+        b'{"success": false, "message": "Invalid credentials"}',
+        b'{"success": false, "message": "Authentication failed"}',
+        b'{"error": {"code": "INVALID_CREDENTIALS", "message": "The provided credentials are incorrect"}}',
+        b'{"error": "Unauthorized", "message": "Login failed. Please check your username and password."}'
+    ]
 
     # 静态资源内容
     STATIC_CONTENTS = {
@@ -1270,11 +1316,22 @@ class HTTPSHandler(HTTPHandler):
 
             # 处理登录页面请求
             if path == "/login" and method == "GET":
-                body = self.LOGIN_PAGE
+                # 检查Accept头以决定返回HTML还是JSON
+                accept_header = headers.get('accept', '')
+                if 'application/json' in accept_header and 'text/html' not in accept_header:
+                    # 返回JSON格式的登录页面信息
+                    body = b'{"login_url": "/login", "method": "POST", "fields": ["username", "password"]}'
+                    content_type = "application/json"
+                else:
+                    # 返回HTML登录页面
+                    body = self.LOGIN_PAGE
+                    content_type = "text/html"
+
                 server_header = random.choice(self.NGINX_VERSIONS)
-                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                resp = b"HTTP/1.1 200 OK\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
                     server_header.encode(),
                     datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
                     len(body),
                     body
                 )
@@ -1285,20 +1342,40 @@ class HTTPSHandler(HTTPHandler):
 
             # 处理登录表单提交
             if path == "/login" and method == "POST":
-                # 记录提交的登录凭据
-                post_data = ""
-                for line in request_lines:
-                    if line.startswith(method) and "Content-Length:" in text:
-                        content_length_line = [l for l in request_lines if "Content-Length:" in l][0]
-                        content_length = int(content_length_line.split(":")[1].strip())
-                        # 这里简化处理，实际应该读取body内容
-                        post_data = f"<{content_length} bytes of POST data>"
+                # 检查Content-Type以决定如何处理请求
+                content_type_header = headers.get('content-type', '').lower()
 
-                body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                # 记录提交的登录凭据
+                post_data = b""
+                content_length = 0
+                if "content-length" in headers:
+                    try:
+                        content_length = int(headers["content-length"])
+                    except ValueError:
+                        pass
+
+                # 简化处理，实际应该读取body内容
+                post_data = f"<{content_length} bytes of POST data>".encode()
+
+                # 根据请求的Accept头决定返回什么类型的数据
+                accept_header = headers.get('accept', '')
+                if 'application/json' in accept_header and 'text/html' not in accept_header:
+                    # 返回JSON格式的错误响应
+                    body = random.choice(self.LOGIN_JSON_RESPONSES)
+                    content_type = "application/json"
+                    status_line = "HTTP/1.1 401 Unauthorized"
+                else:
+                    # 返回HTML格式的错误响应
+                    body = b'<!DOCTYPE html>\n<html>\n<head>\n<title>Login Failed</title>\n</head>\n<body>\n<center><h1>Login Failed</h1></center>\n<hr><center>nginx</center>\n</body>\n</html>\n'
+                    content_type = "text/html"
+                    status_line = "HTTP/1.1 401 Unauthorized"
+
                 server_header = random.choice(self.NGINX_VERSIONS)
-                resp = b"HTTP/1.1 401 Unauthorized\r\nServer: %s\r\nDate: %s\r\nContent-Type: text/html\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                resp = b"%s\r\nServer: %s\r\nDate: %s\r\nContent-Type: %s\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s" % (
+                    status_line.encode(),
                     server_header.encode(),
                     datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT').encode(),
+                    content_type.encode(),
                     len(body),
                     body
                 )
@@ -1306,7 +1383,7 @@ class HTTPSHandler(HTTPHandler):
                 await writer.drain()
 
                 # 记录登录尝试
-                op_logger.info("Login attempt from %s: %s", peer[0], post_data)
+                op_logger.info("Login attempt from %s: %s", peer[0], post_data.decode(errors="ignore"))
                 return
 
             # 处理静态资源请求
@@ -1407,6 +1484,7 @@ class HTTPSHandler(HTTPHandler):
             except Exception:
                 pass
             op_logger.info("HTTPS关闭会话 %s 来自 %s", session_id, peer)
+
 
 # ---------------------- SSH处理器（仅横幅） -------------------------
 class SSHHandler(ProtocolHandler):
