@@ -1,11 +1,13 @@
-import pandas as pd
-import jieba
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+import logging
 from collections import Counter
-import re
-import numpy as np
 
+import jieba
+import matplotlib.pyplot as plt
+import pandas as pd
+from wordcloud import WordCloud
+
+# 减少jieba日志输出
+jieba.setLogLevel(logging.INFO)
 # 解决中文显示问题
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
