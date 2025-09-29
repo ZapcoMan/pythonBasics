@@ -6,6 +6,10 @@ from collections import Counter
 import re
 import numpy as np
 
+# 解决中文显示问题
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
 # 读取CSV文件中的弹幕数据
 file_path = "BV1wbpRzaEhz_danmu.csv"
 df = pd.read_csv(file_path, encoding="utf-8-sig")
@@ -20,25 +24,8 @@ print(f"总弹幕数量: {len(df)}")
 print(f"数据列数: {len(df.columns)}")
 print(f"列名: {list(df.columns)}")
 
-# 1. 时间分布图
-plt.figure(figsize=(12, 8))
-
-# 创建子图
-plt.subplot(2, 2, 1)
-df['hour'] = df['send_time'].dt.hour
-hourly_counts = df['hour'].value_counts().sort_index()
-plt.bar(hourly_counts.index, hourly_counts.values, color='skyblue')
-plt.xlabel('小时')
-plt.ylabel('弹幕数量')
-plt.title('弹幕时间分布（按小时）')
-plt.xticks(range(0, 24))
-
-# 2. 词云图
-plt.subplot(2, 2, 2)
 # 提取所有弹幕内容
 contents = df['content'].tolist()
-
-# 合并所有弹幕为一个大文本
 all_text = ' '.join(contents)
 
 # 使用jieba进行中文分词
@@ -59,15 +46,31 @@ filtered_words = [word for word in words if len(word) > 1 and word not in stopwo
 word_freq = Counter(filtered_words)
 
 # 显示高频词
-print("\n高频词汇 Top 20:")
-for word, freq in word_freq.most_common(20):
+print("\n高频词汇 Top 25:")
+for word, freq in word_freq.most_common(25):
     print(f"{word}: {freq}")
 
-# 生成词云
+# 1. 时间分布图
+plt.figure(figsize=(10, 6))
+df['hour'] = df['send_time'].dt.hour
+hourly_counts = df['hour'].value_counts().sort_index()
+plt.bar(hourly_counts.index, hourly_counts.values, color='skyblue')
+plt.xlabel('小时')
+plt.ylabel('弹幕数量')
+plt.title('弹幕时间分布（按小时）')
+plt.xticks(range(0, 24))
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.savefig('danmu_time_distribution.png', dpi=300, bbox_inches='tight')
+plt.show()
+print("\n时间分布图已保存为 danmu_time_distribution.png")
+
+# 2. 词云图
+plt.figure(figsize=(10, 8))
 try:
     wordcloud = WordCloud(
-        width=400,
-        height=300,
+        width=800,
+        height=600,
         background_color='white',
         font_path='simhei.ttf',  # Windows系统黑体
         max_words=100,
@@ -77,8 +80,8 @@ try:
 except OSError:
     # 如果找不到指定字体，使用默认设置
     wordcloud = WordCloud(
-        width=400,
-        height=300,
+        width=800,
+        height=600,
         background_color='white',
         max_words=100,
         relative_scaling=0.5,
@@ -88,9 +91,13 @@ except OSError:
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis('off')
 plt.title('弹幕词云图')
+plt.tight_layout()
+plt.savefig('danmu_wordcloud.png', dpi=300, bbox_inches='tight')
+plt.show()
+print("\n词云图已保存为 danmu_wordcloud.png")
 
 # 3. 关键词统计图
-plt.subplot(2, 2, 3)
+plt.figure(figsize=(10, 6))
 # 定义关键词
 keywords = ['开盒', '个人信息', '电报', '缓刑', '犯罪', '法律', '处罚', '网络', '平台', '主播']
 keyword_counts = {}
@@ -99,28 +106,39 @@ for keyword in keywords:
     keyword_counts[keyword] = df['content'].str.contains(keyword, na=False).sum()
 
 # 绘制关键词统计图
-plt.barh(list(keyword_counts.keys()), list(keyword_counts.values()), color='lightcoral')
-plt.xlabel('出现次数')
+bars = plt.bar(keywords, list(keyword_counts.values()), color='lightcoral')
+plt.xlabel('关键词')
+plt.ylabel('出现次数')
 plt.title('关键词统计')
+plt.xticks(rotation=45)
+plt.grid(axis='y', alpha=0.3)
+
+# 在柱状图上添加数值标签
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height,
+             f'{int(height)}',
+             ha='center', va='bottom')
+
+plt.tight_layout()
+plt.savefig('danmu_keyword_statistics.png', dpi=300, bbox_inches='tight')
+plt.show()
+print("\n关键词统计图已保存为 danmu_keyword_statistics.png")
 
 # 4. 弹幕长度分布
-plt.subplot(2, 2, 4)
+plt.figure(figsize=(10, 6))
 df['content_length'] = df['content'].apply(len)
-length_counts = df['content_length'].value_counts().sort_index()
 plt.hist(df['content_length'], bins=30, color='lightgreen', edgecolor='black')
 plt.xlabel('弹幕长度（字符数）')
 plt.ylabel('弹幕数量')
 plt.title('弹幕长度分布')
-
-# 调整布局
+plt.grid(axis='y', alpha=0.3)
 plt.tight_layout()
+plt.savefig('danmu_length_distribution.png', dpi=300, bbox_inches='tight')
 plt.show()
+print("\n弹幕长度分布图已保存为 danmu_length_distribution.png")
 
-# 保存图表
-plt.savefig('danmu_analysis.png', dpi=300, bbox_inches='tight')
-print("\n分析图表已保存为 danmu_analysis.png")
-
-# 输出一些统计信息
+# 输出统计信息
 print(f"\n弹幕统计信息:")
 print(f"平均每条弹幕长度: {df['content_length'].mean():.2f} 字符")
 print(f"最长弹幕: {df['content_length'].max()} 字符")
