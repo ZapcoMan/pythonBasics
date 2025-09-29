@@ -22,7 +22,7 @@ contents = df['content'].astype(str).tolist()
 all_text = ' '.join(contents)
 
 # 使用jieba进行中文分词
-words = jieba.lcut(all_text)
+words = list(jieba.cut(all_text))
 
 # 过滤掉单字符和无意义的词
 stopwords = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
@@ -33,20 +33,31 @@ word_freq = Counter(filtered_words)
 
 # 显示高频词
 print("\n高频词汇 Top 20:")
-for word, freq in word_freq.most_common(20):
+for word, freq in word_freq.most_common(30):
     print(f"{word}: {freq}")
 
 # 生成词云
 # 需要指定中文字体路径，如果没有默认字体可能无法显示中文
-wordcloud = WordCloud(
-    width=800,
-    height=600,
-    background_color='white',
-    font_path='simhei.ttf',  # Windows系统黑体
-    max_words=200,
-    relative_scaling=0.5,
-    random_state=42
-).generate_from_frequencies(word_freq)
+try:
+    wordcloud = WordCloud(
+        width=800,
+        height=600,
+        background_color='white',
+        font_path='simhei.ttf',  # Windows系统黑体
+        max_words=200,
+        relative_scaling=0.5,
+        random_state=42
+    ).generate_from_frequencies(word_freq)
+except OSError:
+    # 如果找不到指定字体，使用默认设置
+    wordcloud = WordCloud(
+        width=800,
+        height=600,
+        background_color='white',
+        max_words=200,
+        relative_scaling=0.5,
+        random_state=42
+    ).generate_from_frequencies(word_freq)
 
 # 显示词云图
 plt.figure(figsize=(10, 8))
