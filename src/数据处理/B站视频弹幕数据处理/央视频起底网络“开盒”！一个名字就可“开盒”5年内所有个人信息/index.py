@@ -31,23 +31,16 @@ all_text = ' '.join(contents)
 # 使用jieba进行中文分词
 words = list(jieba.cut(all_text))
 
-# 过滤掉单字符和无意义的词
-stopwords = {
-    '的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个',
-    '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好',
-    '自己', '这', '个', '那', '被', '被开', '开盒', '信息', '可以', '什么', '我们',
-    '他们', '就是', '还是', '应该', '因为', '所以', '然后', '但是', '这个', '那个',
-    '还有', '已经', '现在', '时候', '可能', '不能', '不要', '开始', '出来', '出来',
-    '一下', '一些', '一样', '一直', '一起', '一点', '一定', '一种', '一直', '一种'
-}
+# 过滤掉单字符和无意义的词 (使用和之前一致的停用词)
+stopwords = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
 filtered_words = [word for word in words if len(word) > 1 and word not in stopwords]
 
 # 统计词频
 word_freq = Counter(filtered_words)
 
-# 显示高频词
-print("\n高频词汇 Top 25:")
-for word, freq in word_freq.most_common(25):
+# 显示高频词 (恢复到Top 30)
+print("\n高频词汇 Top 30:")
+for word, freq in word_freq.most_common(30):
     print(f"{word}: {freq}")
 
 # 1. 时间分布图
@@ -65,7 +58,7 @@ plt.savefig('danmu_time_distribution.png', dpi=300, bbox_inches='tight')
 plt.show()
 print("\n时间分布图已保存为 danmu_time_distribution.png")
 
-# 2. 词云图
+# 2. 词云图 (使用相同的词频数据)
 plt.figure(figsize=(10, 8))
 try:
     wordcloud = WordCloud(
