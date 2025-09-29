@@ -66,8 +66,9 @@ df = pd.DataFrame(danmus)
 df.to_csv(OUTPUT_CSV, index=False, encoding="utf-8-sig")
 print(f"弹幕已保存到 {OUTPUT_CSV}")
 
-# ---------- 4. 简单输出前10条弹幕 ----------
-for d in danmus[:10]:
+# ---------- 4. 输出全部弹幕 ----------
+print(f"弹幕内容预览 (共 {len(danmus)} 条):")
+for d in danmus:
     try:
         print(tuple(d.values()))
     except UnicodeEncodeError:
