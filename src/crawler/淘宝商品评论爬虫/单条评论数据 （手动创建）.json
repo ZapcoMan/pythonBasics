@@ -1,0 +1,112 @@
+{
+  'addCartUrl': 'https://sku.taobao.com/index.htm?itemId=979802405623&bottomMode=ADDCART&asyncApiType=normalBuy&skuId=5935262896595',
+  'allowComment': 'true',
+  'allowInteract': 'true',
+  'allowNote': 'true',
+  'allowReportReview': 'true',
+  'allowReportUser': 'false',
+  'allowShieldReview': 'false',
+  'allowShieldUser': 'false',
+  'annoy': '0',
+  'auctionNumId': '979802405623',
+  'auctionTitle': '官方正品新款i16p大屏拍照智能手机备用机电竞游戏学生党便宜百元',
+  'copy': 'false',
+  'createTime': '9月26日',
+  'createTimeInterval': '3天前',
+  'creditLevel': '11',
+  'extraInfoMap': {
+    'userGrade': '5',
+    'report_url': 'https://market.m.taobao.com/app/msd/buyer-aqcenter/report.html?bizSource=taobao&from=ItemComment&subjectType=ITEM_RATE&subjectId=1284684257912#/index'
+  },
+  'feedPicList': [
+    {
+      'cover': 'false',
+      'extraMap': {
+        'matchExpression': 'false'
+      },
+      'fileId': '1545008579801244494',
+      'height': '1707',
+      'status': '1',
+      'thumbnail': '//img.alicdn.com/imgextra/i4/4611686018427385498/O1CN01hKvxQK1q89eSX9f3e_!!4611686018427385498-0-rate.jpg',
+      'width': '1280'
+    },
+    {
+      'cover': 'false',
+      'extraMap': {
+        'matchExpression': 'false'
+      },
+      'fileId': '1545008578125249157',
+      'height': '1707',
+      'status': '1',
+      'thumbnail': '//img.alicdn.com/imgextra/i1/4611686018427385498/O1CN01UyMrlI1q89eQhjM6n_!!4611686018427385498-0-rate.jpg',
+      'width': '1280'
+    }
+  ],
+  'feedPicPathList': [
+    '//img.alicdn.com/imgextra/i4/4611686018427385498/O1CN01hKvxQK1q89eSX9f3e_!!4611686018427385498-0-rate.jpg',
+    '//img.alicdn.com/imgextra/i1/4611686018427385498/O1CN01UyMrlI1q89eQhjM6n_!!4611686018427385498-0-rate.jpg'
+  ],
+  'feedback': '非常不错，很流畅，不卡顿，刷视频也很方便',
+  'feedbackDate': '2025年9月26日',
+  'formalBlackUser': 'false',
+  'goldUser': 'false',
+  'hasDetail': 'true',
+  'headFrameUrl': '',
+  'headPicUrl': '//sns.m.taobao.com/avatar/sns/user/flag/sns_logo?type=taobao&kn=wwc_tb_11&bizCode=taobao_avatar&userFlag=RAzN84GK7wS8eNasUwUq9T61dEUwv6Ax6joSTEmDFCsJCbRkEyff58iiHkByYmhQ1x2P1pjegyRfda7YVzSJdUfwYXQ3wd8esCiZp91CLE7NnLpe66Pdsemf2WMgms3X9Nru2JBd7EwhuKTvdC2K2LHynj4yZN26H3TMaYq',
+  'homepageUrl': 'https://market.m.taobao.com/app/mtb/personal-homepage/pages/index/index.html?disableNav=YES&userId=LRD2lwYeId2x45PEEJTtig%3D%3D&keyName=kc_lightspeed&source=rate_list&initTab=homepage',
+  'id': '1284684257912',
+  'interactInfo': {
+    'alreadyDislike': 'false',
+    'alreadyLike': 'false',
+    'commentCount': '1',
+    'enableComment': 'true',
+    'enableLike': 'true',
+    'enableShare': 'true',
+    'likeCount': '0',
+    'readCount': '129'
+  },
+  'own': 'false',
+  'rateGradeIcon': 'https://gw.alicdn.com/imgextra/i3/O1CN018jrmzM1Rh5ONrXt6O_!!6000000002142-2-tps-216-56.png',
+  'rateTagList': [],
+  'rateType': '1',
+  'recomDesc': '我还写了购物笔记哦',
+  'reduceUserNick': '天**质',
+  'repeatBusiness': 'true',
+  'share': {
+    'detailShareUrl': 'https://meta.m.taobao.com/app/taobao-ugc-community/rate-detail/?wh_weex=true&weex_mode=dom&wx_navbar_hidden=true&wx_navbar_transparent=true&wx_statusbar_hidden=true&disableNav=YES&rateId=1284684257912',
+    'detailUrl': '//h5.m.taobao.com/tnode/index.htm?tnode=page_ratedetail%40ugc%3fpangesture%3dpullrightexit%26navbarHide%3dtrue%26immersive%3dtrue&rateId=1284684257912&headPic=http%3A%2F%2Fsns.m.taobao.com%2Favatar%2Fsns%2Fuser%2Fflag%2Fsns_logo%3Ftype%3Dtaobao%26kn%3Dwwc_tb_11%26bizCode%3Dtaobao_avatar%26userFlag%3DRAzN84GK7wS8eNasUwUq9T61dEUwv6Ax6joSTEmDFCsJCbRkEyff58iiHkByYmhQ1x2P1pjegyRfda7YVzSJdUfwYXQ3wd8esCiZp91CLE7NnLpe66Pdsemf2WMgms3X9Nru2JBd7EwhuKTvdC2K2LHynj4yZN26H3TMaYq',
+    'shareCover': '//img.alicdn.com/imgextra/i4/4611686018427385498/O1CN01hKvxQK1q89eSX9f3e_!!4611686018427385498-0-rate.jpg',
+    'shareSupport': 'true',
+    'shareURL': '//h5.m.taobao.com/user_comment/comment_detail.html?rateId=1284684257912&sellerId=MMG*zP8xyv88yX88WP0c4MmRhPG*hPHgGvFlhvHPzM8kT&isEncode=true'
+  },
+  'skuId': '5935262896595',
+  'skuMap': {
+    '机身颜色': '黑旋风 【i16 PRO MAX免费试用-质保5年】',
+    '网络类型': '5G全网通',
+    '版本类型': '中国大陆',
+    '套餐类型': '套餐六[蓝牙耳機]',
+    '存储容量': '16GB+1024GB'
+  },
+  'skuValueStr': '黑旋风 【i16 PRO MAX免费试用-质保5年】；5G全网通；中国大陆；套餐六[蓝牙耳機]；16GB+1024GB',
+  'skuVids': '40659328212#20313245742#7195672376#3284565#27772',
+  'structTagEndSize': '0',
+  'topRate': '0',
+  'userId': '0',
+  'userIndexURL': '',
+  'userMark': 'JPhxNfA80rL11bqvKgmsoEm/6CfbfQ1HZtt2md8cMko=',
+  'userNick': '天**质',
+  'userStar': '9',
+  'userStarPic': 'https://img.alicdn.com/imgextra/i3/O1CN01PIYxrZ22FGrmiDphN_!!6000000007090-2-tps-92-45.png',
+  'userTagList': [
+    {
+      'extraInfo': {
+        'level': '11'
+      },
+      'tagCode': 'credit',
+      'tagDesc': '信用等级',
+      'tagIconHeight': '27',
+      'tagIconPic': 'https://img.alicdn.com/imgextra/i3/O1CN01PIYxrZ22FGrmiDphN_!!6000000007090-2-tps-92-45.png',
+      'tagIconWidth': '53'
+    }
+  ]
+}
