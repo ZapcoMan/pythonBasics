@@ -402,12 +402,12 @@ def generate_service_contacts(count):
 
 # 生成 vCard
 vcf_entries = []
-total_contacts = 2540
-family_count = 300   # 家庭联系人数量
-leader_count = 150   # 领导数量
-colleague_count = 250 # 同事数量
-friend_count = 200   # 朋友数量
-service_count = 150  # 服务人员数量
+total_contacts = 30
+family_count = 10   # 家庭联系人数量
+leader_count = 5   # 领导数量
+colleague_count = 5 # 同事数量
+friend_count = 2   # 朋友数量
+service_count = 1  # 服务人员数量
 random_count = total_contacts - family_count - leader_count - colleague_count - friend_count - service_count  # 随机联系人
 
 # 生成家庭联系人vCard条目
@@ -421,16 +421,16 @@ for relation in family_relations_list:
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;{
-relation};
-FN:{name}({relation})
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;{
+        relation};
+        FN:{name}({relation})
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 生成领导联系人vCard条目
@@ -443,16 +443,16 @@ for leader in generate_leader_contacts(leader_count):
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;{
-leader};
-FN:{name}({leader})
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;{
+        leader};
+        FN:{name}({leader})
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 生成同事联系人vCard条目
@@ -465,16 +465,16 @@ for colleague in generate_colleague_contacts(colleague_count):
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;{
-colleague};
-FN:{name}({colleague})
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;{
+        colleague};
+        FN:{name}({colleague})
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 生成朋友联系人vCard条目
@@ -487,16 +487,16 @@ for friend in generate_friend_contacts(friend_count):
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;{
-friend};
-FN:{name}({friend})
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;{
+        friend};
+        FN:{name}({friend})
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 生成服务人员联系人vCard条目
@@ -509,16 +509,16 @@ for service in generate_service_contacts(service_count):
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;{
-service};
-FN:{name}({service})
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;{
+        service};
+        FN:{name}({service})
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 生成随机姓名联系人vCard条目
@@ -531,15 +531,15 @@ for _ in range(random_count):
     address = generate_address()
     uid = str(uuid.uuid4())
     entry = f"""BEGIN:VCARD
-VERSION:3.0
-N:{name};;;; 
-FN:{name}
-TEL;TYPE=CELL:{phone}
-EMAIL:{email}
-ADR:;;{address}
-BDAY:{birthday}
-UID:{uid}
-END:VCARD"""
+        VERSION:3.0
+        N:{name};;;; 
+        FN:{name}
+        TEL;TYPE=CELL:{phone}
+        EMAIL:{email}
+        ADR:;;{address}
+        BDAY:{birthday}
+        UID:{uid}
+        END:VCARD"""
     vcf_entries.append(entry)
 
 # 打乱联系人顺序
