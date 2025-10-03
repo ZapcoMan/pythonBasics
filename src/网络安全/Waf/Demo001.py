@@ -30,6 +30,18 @@ logger.addHandler(fh)
 app = FastAPI()
 
 def normalize_payload(path: str, query: str, ua: str, body: str) -> str:
+    """
+    对HTTP请求的各个部分进行标准化处理，便于后续检测
+
+    Args:
+        path: 请求路径
+        query: 查询参数字符串
+        ua: User-Agent头部信息
+        body: 请求体内容
+
+    Returns:
+        str: 标准化后的payload字符串
+    """
     # 最基础的正规化：URL decode（一次），小写，拼接
     try:
         q = unquote_plus(query or "")
@@ -42,6 +54,16 @@ def normalize_payload(path: str, query: str, ua: str, body: str) -> str:
 
 @app.middleware("http")
 async def waf_middleware(request: Request, call_next):
+    """
+    WAF中间件，用于检测和拦截恶意请求
+
+    Args:
+        request: HTTP请求对象
+        call_next: 调用下一个处理函数的回调
+
+    Returns:
+        Response: HTTP响应对象
+    """
     try:
         body_bytes = await request.body()
         body = body_bytes.decode(errors="ignore")
@@ -55,6 +77,7 @@ async def waf_middleware(request: Request, call_next):
                 score += WEIGHTS.get(rid, 10)
                 matched.append(rid)
 
+        # 记录请求信息和检测结果
         record = {
             "ts": int(time.time()),
             "src_ip": request.client.host if request.client else None,
@@ -87,9 +110,25 @@ async def waf_middleware(request: Request, call_next):
 
 @app.get("/health")
 async def health():
+    """
+    健康检查端点
+
+    Returns:
+        dict: 包含状态信息的字典
+    """
     return {"status": "ok"}
 
 @app.post("/echo")
 async def echo(req: Request):
+    """
+    回显端点，用于测试
+
+    Args:
+        req: HTTP请求对象
+
+    Returns:
+        dict: 包含请求体内容的字典
+    """
     body = await req.body()
     return {"echo": body.decode(errors="ignore")[:1000]}
+
