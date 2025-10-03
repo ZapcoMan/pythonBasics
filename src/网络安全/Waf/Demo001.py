@@ -16,10 +16,11 @@ RULES = [
     ("xss_event", r"(?i)onerror\s*=|javascript:", 20),
 ]
 
+# 预编译正则表达式规则以提高匹配效率，并构建权重映射字典
 COMPILED = [(rid, re.compile(pat)) for rid, pat, w in [(r[0], r[1], r[2]) for r in RULES]]
 WEIGHTS = {r[0]: r[2] for r in RULES}
 
-# logger (append json-lines)
+# 初始化日志记录器，使用JSON格式记录日志便于后续分析
 logger = logging.getLogger("waf")
 logger.setLevel(logging.INFO)
 fh = logging.FileHandler(LOG_PATH, encoding="utf8")
