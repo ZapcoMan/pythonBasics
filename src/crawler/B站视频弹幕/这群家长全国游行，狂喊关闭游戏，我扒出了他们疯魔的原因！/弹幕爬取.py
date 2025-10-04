@@ -11,7 +11,7 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 # 输出CSV文件名
-OUTPUT_CSV = f"公孙田浩弹幕_{BVID}_danmu.csv"
+OUTPUT_CSV = f"这群家长全国游行，狂喊关闭游戏，我扒出了他们疯魔的原因！{BVID}_danmu.csv"
 
 # ---------- 1. 获取所有 P 的 cid ----------
 # 构造获取视频分P信息的API地址
