@@ -127,6 +127,8 @@ for pageNumber in range(1, 8):
             print(dit)
             csv_writer.writerow(dit)
             # break
+        except KeyError as e:
+            print(f"商品缺少字段{e}，跳过: {item}")
         except Exception as e:
             # 捕获其他未预期的异常并打印详细信息，但不中断程序执行
             print(f"未预期的错误: {type(e).__name__}: {e}")
