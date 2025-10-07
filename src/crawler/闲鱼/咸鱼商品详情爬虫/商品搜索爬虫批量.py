@@ -34,9 +34,9 @@ def get_sign(page_number):
     '''
     current_timestamp = int(time.time() * 1000)
     print(f"当前时间戳: {current_timestamp}")
-    sixteen_hours_ago = current_timestamp - (16 * 60 * 60 * 1000)
-    # j = str(int(time.time() * 1000))
-    j = str(sixteen_hours_ago)
+    # hours_ago = current_timestamp -   (13 * 60 * 60 * 1000) - (37 * 60 * 1000)
+    j = str(current_timestamp)
+    # j = str(hours_ago)
     h = '34839810'
     c_data = '{"pageNumber":%d,"keyword":"python爬虫","fromFilter":false,"rowsPerPage":30,"sortValue":"","sortField":"","customDistance":"","gps":"","propValueStr":{},"customGps":"","searchReqFromPage":"pcSearch","extraFilterValue":"{}","userPositionJson":"{}"}' % page_number
     string = token + "&" + j + "&" + h + "&" + c_data
@@ -44,6 +44,7 @@ def get_sign(page_number):
     sign = hashlib.md5(string.encode('utf-8')).hexdigest()
 
     return j, c_data, sign
+
 
 # 打开CSV文件准备写入数据
 f = open('商品搜索爬虫批量.csv', mode='w', newline='', encoding='utf-8')
@@ -65,7 +66,7 @@ csv_writer.writeheader()
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "Referer": "https://www.goofish.com/",
-    "Cookie": "t=333d89bdd8d3c7f1680d61c314977359; tracknick=tb575736359; cna=5dFRIU3sMHMBASQJijx6xuFX; isg=BA4O1Z6E6rPx1V7kM_eYllnfX-TQj9KJBFr77zhXA5HMm671oBaHmbdQ18f3hsqh; sgcookie=E100lSj5ts%2Bd9eb0HAVpdFmW%2BsVh9FYgXvUZuwcDxh0BtMKbwlSXJGs5OlNCOdjXKrrUB4oRAn7SpNlLypY%2BSmUclm%2Fn0PN6lsfI%2FDaqY7Dmno6l%2F5%2BZX8Jlqq1URukGipG2; unb=2209968140617; xlly_s=1; cookie2=184bb6d7c762f3df2761ff34ab231abd; mtop_partitioned_detect=1; _m_h5_tk=f587cb55a9103086d0a7747176ea0a2c_1759886677213; _m_h5_tk_enc=ac2f8003e269ca5e9de8224ab8d1af52; tfstk=gRnSd-wxu_fSEjgTPkJVlh37idrB_K-NA9wKIvIPpuER96HTgbPz4pxQ9bVq47kz2T0m_AIr4UqFAuq3vCRwbhyoEkqpsUZrCTqYd8_pYyFRHu2UK2HT_hkoEtEp_C-wb9_WulwL9XU8k-eaM6ed2XEAkRFA2JI8pspbKSEd2yIdkteUITQLeXHvhJVY9kU-9opbKSFLvkh2YswePJHWBkCb0nL87YFfvMnJxzN_pwSCAlw8Pck8G8wSc8a76yCgucm-gvnrqrYlzkDq5XgK6I7zwVwsGPuW1gGsZJhYHbJF--gIpcqur9SE1uGQW0UfpGMT2SqbHcpFSSobaXn7kdS_8onaWu32oQzUVRGKqb6CvfHqQ04mAC1Yt4ygDJiHBwNQJgrCb5a_1w6bSMwb_K9f-wX8QDdOzH2Rlze0ehJXhs_3y-2b_K9f-w48n83whK1f-"
+    "Cookie": "t=333d89bdd8d3c7f1680d61c314977359; tracknick=tb575736359; cna=5dFRIU3sMHMBASQJijx6xuFX; isg=BA4O1Z6E6rPx1V7kM_eYllnfX-TQj9KJBFr77zhXA5HMm671oBaHmbdQ18f3hsqh; sgcookie=E100lSj5ts%2Bd9eb0HAVpdFmW%2BsVh9FYgXvUZuwcDxh0BtMKbwlSXJGs5OlNCOdjXKrrUB4oRAn7SpNlLypY%2BSmUclm%2Fn0PN6lsfI%2FDaqY7Dmno6l%2F5%2BZX8Jlqq1URukGipG2; unb=2209968140617; xlly_s=1; cookie2=184bb6d7c762f3df2761ff34ab231abd; mtop_partitioned_detect=1; _m_h5_tk=f587cb55a9103086d0a7747176ea0a2c_1759886677213; _m_h5_tk_enc=ac2f8003e269ca5e9de8224ab8d1af52; tfstk=gTWohS9ZZ_R5JIkSZkv7wvvo_pFvNL9BMwHpJpLUgE8jy4HRY2bhuNI-e9Ie-wbvlYC8NBLnxL6AwvL8PpjFWp4TWReOVg96LPUTzeU4Dd-iU4uKaqy2pH0fv_0GVg9Icm3U6sSSxVU9Z3JF8KR2fhve4e-zmI-BYpkyTYlquEteLplyaiy2AHceYwJUmi8XA4JeawR4mHT28pJEZUlyW95N3ylylxCcbz1vqQYN4USRVtuvwbsWogjP33j5-glILvWDqQX4vDNugQCFfC6RXJDXeGf23HXQbXYHs6WJ3Tz4QIOFtw-fGycHS6SR1tdjYbScKUANUImi3iJXYwRhGPD9qLCDsTf7AqSPWUfwFMngyiAGiCt2gDcye1IOdCWzEVTv1HbD6_4iENSyzjlaYKMB0kBqOXOycnYOi15Asi_tyjr0mfIBant6WoqmOXOycnYTmocOdQ-XfFC.."
 }
 
 # 循环爬取多页搜索结果数据
@@ -88,8 +89,10 @@ for pageNumber in range(1, 8):
         "api": "mtop.taobao.idlemtopsearch.pc.search",
         "sessionOption": "AutoLoginOnly",
         "spm_cnt": "a21ybx.search.0.0",
-        "spm_pre": "a21ybx.search.searchInput.0"
+        "spm_pre": "a21ybx.home.searchHistory.1.4c053da6U2ak7d",
+        "log_id": "4c053da6U2ak7d"
     }
+
 
     # 构造请求数据
     data = {
@@ -133,4 +136,3 @@ for pageNumber in range(1, 8):
             # 捕获其他未预期的异常并打印详细信息，但不中断程序执行
             print(f"未预期的错误: {type(e).__name__}: {e}")
             pass
-
