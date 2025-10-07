@@ -7,6 +7,21 @@ import hashlib
 
 
 def get_sign(page_number):
+    """
+    生成请求签名和相关参数
+
+    该函数根据页面编号生成用于闲鱼搜索接口的签名和时间戳参数。
+    通过特定算法生成签名，确保请求能够通过接口验证。
+
+    Args:
+        page_number (int): 需要请求的搜索结果页码
+
+    Returns:
+        tuple: 包含三个元素的元组
+            - str: 时间戳字符串
+            - str: 请求数据的JSON字符串
+            - str: 生成的MD5签名
+    """
     token = '9a7fd05c49b25d5075fab51a234be307'
     '''
     # 原本我也是按照视频里的代码运行但是失败了没有数据过来，于是我就不断比对视频里的代码 和 
@@ -45,15 +60,21 @@ csv_writer = csv.DictWriter(f, fieldnames=[
 ])
 # 写入表头
 csv_writer.writeheader()
+
+# 设置请求头信息，包括User-Agent、Referer和Cookie等
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "Referer": "https://www.goofish.com/",
     "Cookie": "t=333d89bdd8d3c7f1680d61c314977359; tracknick=tb575736359; cna=5dFRIU3sMHMBASQJijx6xuFX; isg=BA4O1Z6E6rPx1V7kM_eYllnfX-TQj9KJBFr77zhXA5HMm671oBaHmbdQ18f3hsqh; cookie2=1bd479bb51a7304737dd39912bcce0eb; _samesite_flag_=true; sgcookie=E100lSj5ts%2Bd9eb0HAVpdFmW%2BsVh9FYgXvUZuwcDxh0BtMKbwlSXJGs5OlNCOdjXKrrUB4oRAn7SpNlLypY%2BSmUclm%2Fn0PN6lsfI%2FDaqY7Dmno6l%2F5%2BZX8Jlqq1URukGipG2; csg=2de4d3fd; _tb_token_=3f65e75e137d5; unb=2209968140617; sdkSilent=1759879902293; xlly_s=1; mtop_partitioned_detect=1; _m_h5_tk=9a7fd05c49b25d5075fab51a234be307_1759808103035; _m_h5_tk_enc=c4118ef3c44e5a8a979739e9dba2c653; tfstk=gBw-nFcf0ZbkVK8y2yfcKGNY-0IcssqzZzr6K20kOrUYfl8oO8DuJBUuYycCzY2LkkaO4DbzK3P4Sl9uE_kHpYkEdNbGIOmz4vkB0iYP2UJjbD6HVLgIUxO_ruBOIOqzV3m5jo6gKL3BIDuIdbGIcKgqvpOQRXgjlqoEAUiBFiEjuqiBRpOSlniixeT7RvsYcqoEVvG7RxsxYqgIdvGkzg32V0pLNHUa4cQlNCRaH0h-Jp0vpVwDIb01eq9ppqzIwQqSkp9QHWdeq235_n0EE4rq2yWwUYGLO8DbFZ6IC5zYpfMOtgkTDSViwSQWpq2ouf2SBH67DY3-1-h6vdz_DkNiM-j1QYHSPWDzxhQuD8Uu4-EHAIM-EShTeA6wP2V0XJnLLwWYWkZaOjepyglzIRHPLF0txQsADBRENmRxupw3Fgv2Bm3GVbOeTXmqDVjADBRENmoxSg9WTBln0"
 }
+
+# 循环爬取多页搜索结果数据
 for pageNumber in range(1, 8):
     print(f'正在采集第{pageNumber}页的数据内容')
     url = "https://h5api.m.goofish.com/h5/mtop.taobao.idlemtopsearch.pc.search/1.0/"
     j, c_data, sign = get_sign(pageNumber)
+
+    # 构造请求参数
     params = {
         "jsv": "2.7.2",
         "appKey": "34839810",
@@ -70,16 +91,20 @@ for pageNumber in range(1, 8):
         "spm_pre": "a21ybx.search.searchInput.0"
     }
 
+    # 构造请求数据
     data = {
         'data': c_data
     }
 
+    # 发送POST请求获取搜索结果
     response = requests.post(url, headers=headers, params=params, data=data)
     json_data = response.json()
     # pprint(json_data)
     # exit()
     resultList = json_data['data']['resultList']
     # pprint(resultList)
+
+    # 遍历搜索结果，提取并保存商品信息
     for item in resultList:
         try:
             main = item['data']['item']['main']
@@ -106,3 +131,4 @@ for pageNumber in range(1, 8):
             # 捕获其他未预期的异常并打印详细信息，但不中断程序执行
             print(f"未预期的错误: {type(e).__name__}: {e}")
             pass
+
