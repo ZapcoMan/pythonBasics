@@ -1,5 +1,21 @@
-import requests
+import csv
 
+import requests
+# 打开CSV文件准备写入数据
+f = open('data.csv', mode='w', newline='', encoding='utf-8')
+writer = csv.writer(f)
+# 创建DictWriter对象，指定列名
+csv_writer = csv.DictWriter(f, fieldnames=[
+    '价格',
+    '标签',
+    '产品简介',
+    '标题',
+    '昵称',
+    '区域',
+    '标题详情',
+])
+# 写入表头
+csv_writer.writeheader()
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "Referer": "https://www.goofish.com/",
@@ -52,6 +68,7 @@ for item in resultList:
             '标题详情':main['exContent']['title'],
         }
         print(dit)
+        csv_writer.writerow(dit)
         # break
     except Exception as e:
         # 捕获其他未预期的异常并打印详细信息，但不中断程序执行
