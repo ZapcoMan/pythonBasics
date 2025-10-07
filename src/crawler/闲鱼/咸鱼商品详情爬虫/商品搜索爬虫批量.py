@@ -65,7 +65,7 @@ csv_writer.writeheader()
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "Referer": "https://www.goofish.com/",
-    "Cookie": "t=333d89bdd8d3c7f1680d61c314977359; tracknick=tb575736359; cna=5dFRIU3sMHMBASQJijx6xuFX; isg=BA4O1Z6E6rPx1V7kM_eYllnfX-TQj9KJBFr77zhXA5HMm671oBaHmbdQ18f3hsqh; cookie2=1bd479bb51a7304737dd39912bcce0eb; _samesite_flag_=true; sgcookie=E100lSj5ts%2Bd9eb0HAVpdFmW%2BsVh9FYgXvUZuwcDxh0BtMKbwlSXJGs5OlNCOdjXKrrUB4oRAn7SpNlLypY%2BSmUclm%2Fn0PN6lsfI%2FDaqY7Dmno6l%2F5%2BZX8Jlqq1URukGipG2; csg=2de4d3fd; _tb_token_=3f65e75e137d5; unb=2209968140617; sdkSilent=1759879902293; xlly_s=1; mtop_partitioned_detect=1; _m_h5_tk=9a7fd05c49b25d5075fab51a234be307_1759808103035; _m_h5_tk_enc=c4118ef3c44e5a8a979739e9dba2c653; tfstk=gBw-nFcf0ZbkVK8y2yfcKGNY-0IcssqzZzr6K20kOrUYfl8oO8DuJBUuYycCzY2LkkaO4DbzK3P4Sl9uE_kHpYkEdNbGIOmz4vkB0iYP2UJjbD6HVLgIUxO_ruBOIOqzV3m5jo6gKL3BIDuIdbGIcKgqvpOQRXgjlqoEAUiBFiEjuqiBRpOSlniixeT7RvsYcqoEVvG7RxsxYqgIdvGkzg32V0pLNHUa4cQlNCRaH0h-Jp0vpVwDIb01eq9ppqzIwQqSkp9QHWdeq235_n0EE4rq2yWwUYGLO8DbFZ6IC5zYpfMOtgkTDSViwSQWpq2ouf2SBH67DY3-1-h6vdz_DkNiM-j1QYHSPWDzxhQuD8Uu4-EHAIM-EShTeA6wP2V0XJnLLwWYWkZaOjepyglzIRHPLF0txQsADBRENmRxupw3Fgv2Bm3GVbOeTXmqDVjADBRENmoxSg9WTBln0"
+    "Cookie": "t=333d89bdd8d3c7f1680d61c314977359; tracknick=tb575736359; cna=5dFRIU3sMHMBASQJijx6xuFX; isg=BA4O1Z6E6rPx1V7kM_eYllnfX-TQj9KJBFr77zhXA5HMm671oBaHmbdQ18f3hsqh; sgcookie=E100lSj5ts%2Bd9eb0HAVpdFmW%2BsVh9FYgXvUZuwcDxh0BtMKbwlSXJGs5OlNCOdjXKrrUB4oRAn7SpNlLypY%2BSmUclm%2Fn0PN6lsfI%2FDaqY7Dmno6l%2F5%2BZX8Jlqq1URukGipG2; unb=2209968140617; xlly_s=1; cookie2=184bb6d7c762f3df2761ff34ab231abd; mtop_partitioned_detect=1; _m_h5_tk=f587cb55a9103086d0a7747176ea0a2c_1759886677213; _m_h5_tk_enc=ac2f8003e269ca5e9de8224ab8d1af52; tfstk=gRnSd-wxu_fSEjgTPkJVlh37idrB_K-NA9wKIvIPpuER96HTgbPz4pxQ9bVq47kz2T0m_AIr4UqFAuq3vCRwbhyoEkqpsUZrCTqYd8_pYyFRHu2UK2HT_hkoEtEp_C-wb9_WulwL9XU8k-eaM6ed2XEAkRFA2JI8pspbKSEd2yIdkteUITQLeXHvhJVY9kU-9opbKSFLvkh2YswePJHWBkCb0nL87YFfvMnJxzN_pwSCAlw8Pck8G8wSc8a76yCgucm-gvnrqrYlzkDq5XgK6I7zwVwsGPuW1gGsZJhYHbJF--gIpcqur9SE1uGQW0UfpGMT2SqbHcpFSSobaXn7kdS_8onaWu32oQzUVRGKqb6CvfHqQ04mAC1Yt4ygDJiHBwNQJgrCb5a_1w6bSMwb_K9f-wX8QDdOzH2Rlze0ehJXhs_3y-2b_K9f-w48n83whK1f-"
 }
 
 # 循环爬取多页搜索结果数据
@@ -99,7 +99,7 @@ for pageNumber in range(1, 8):
     # 发送POST请求获取搜索结果
     response = requests.post(url, headers=headers, params=params, data=data)
     json_data = response.json()
-    # pprint(json_data)
+    pprint(json_data)
     # exit()
     resultList = json_data['data']['resultList']
     # pprint(resultList)
