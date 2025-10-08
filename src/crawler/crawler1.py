@@ -42,7 +42,7 @@ def get_page_title(url):
             encoding = chardet.detect(response.content)['encoding']
 
             # 解析HTML
-            soup = BeautifulSoup(response.content, 'html.parser', from_encoding=encoding)
+            soup = bs4.BeautifulSoup(response.content, 'html.parser', from_encoding=encoding)
 
             # 获取页面标题
             title = soup.title.string if soup.title else None
