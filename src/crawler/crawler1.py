@@ -25,6 +25,17 @@ def get_page_title(url):
     try:
         response = session.get(url, timeout=10)
 
+        '''
+        处理HTTP响应并提取页面标题
+        
+        Args:
+            response: HTTP响应对象
+            url: 请求的URL地址
+            
+        Returns:
+            str: 页面标题，如果获取失败则返回None
+        '''
+
         # 更细致地处理HTTP响应状态码
         if response.status_code == 200:
             # 使用chardet检测编码
@@ -46,6 +57,7 @@ def get_page_title(url):
     except requests.RequestException as e:
         logging.error(f"An error occurred: {e}")
         return None
+
 
 if __name__ == '__main__':
     # 测试函数
