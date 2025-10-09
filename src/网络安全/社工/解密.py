@@ -5,15 +5,20 @@
 # @Project : pythonBasics
 import base64
 
+# 使用Base64解码加密字符串并尝试以UTF-8格式解析
 encrypted_mobile = "3sCt3iAAMzEyODc5NDY0AM8HAO7Jtk8nC4JRDBAAAADanqT08oz8oQBbiNP3ND4j"
 decoded_bytes = base64.b64decode(encrypted_mobile)
 decoded_string = decoded_bytes.decode('utf-8', errors='ignore')
 print(decoded_string)
+
 import urllib.parse
 
+# 对URL编码的字符串进行解码处理
 url_encoded_string = "3sCt3iAAMzEyODc5NDY0AM8HAO7Jtk8nC4JRDBAAAADanqT08oz8oQBbiNP3ND4j"
 url_decoded_string = urllib.parse.unquote(url_encoded_string)
 print(f"URL Decoded String: {url_decoded_string}")
+
+# 尝试将字符串作为十六进制数据进行解码（如果可能）
 hex_string = "3sCt3iAAMzEyODc5NDY0AM8HAO7Jtk8nC4JRDBAAAADanqT08oz8oQBbiNP3ND4j"
 try:
     hex_decoded_bytes = bytes.fromhex(hex_string)
@@ -24,16 +29,28 @@ except ValueError as e:
 
 
 def xor_decrypt(data, key):
+    """
+    使用异或操作对给定的数据进行简单解密。
+
+    参数:
+        data (str): 需要被解密的原始字符串。
+        key (str): 用于异或运算的密钥字符串。
+
+    返回:
+        str: 经过异或解密后的结果字符串。
+    """
     return ''.join(chr(ord(c) ^ ord(key[i % len(key)])) for i, c in enumerate(data))
 
 
+# 对加密手机号使用不同密钥进行XOR暴力破解尝试
 encrypted_mobile = "3sCt3iAAMzEyODc5NDY0AM8HAO7Jtk8nC4JRDBAAAADanqT08oz8oQBbiNP3ND4j"
-key = "some_key"  # 假设的密钥
+key = "some_key"  # 假设的初始密钥（未实际使用）
 
-# 尝试不同的密钥
+# 尝试多个候选密钥进行XOR解密
 for key in ["1234", "abcd", "key", "secret"]:
     decrypted_string = xor_decrypt(encrypted_mobile, key)
     print(f"XOR Decrypted String with key '{key}': {decrypted_string}")
+
 import requests
 
 # 定义请求的 URL
@@ -98,7 +115,7 @@ params = {
     "__NS_xfalcon": "HUDR_sFnX+n5uAUNVsMPNK3DOP5wnti1Lc8Axjy5z88T61A==%24TE_eef1680e0ed2fdff9f80a5d2fdff9f80a5a4a2a7a5927a3d091fb77f8410bb0b8dfc2ca4fff39b7fdef39b5ea5"
 }
 
-# 定义请求头
+# 定义HTTP请求头部信息
 headers = {
     "X-REQUESTID": "173969100104068043",
     "User-Agent": "kwai-android aegon/4.3.2",
@@ -108,7 +125,7 @@ headers = {
     "X-Client-Info": "model=ONEPLUS A3000;os=Android;nqe-score=-1;network=WIFI;"
 }
 
-# 定义请求数据，并更换手机号码
+# 定义POST请求体内容，并指定目标手机号码
 data = {
     "mobileCountryCode": "+86",
     "mobile": "15066427783",  # 替换为新的手机号码
@@ -120,9 +137,9 @@ data = {
     "uQaTag": ""
 }
 
-# 发送 POST 请求
+# 向服务器发送验证码请求
 response = requests.post(url, params=params, headers=headers, data=data)
 
-# 打印响应状态码和响应体
+# 输出响应的状态码与正文内容
 print(f"Status Code: {response.status_code}")
 print(f"Response Body: {response.text}")
