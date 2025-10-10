@@ -17,6 +17,7 @@ file_path = "公孙田浩弹幕_BV19R4y1K7yc_danmu.csv"
 df = pd.read_csv(file_path, encoding="utf-8-sig")
 
 # 数据清洗和预处理
+# 将 send_time 列转换为 datetime 类型，content 列确保为字符串类型
 df['send_time'] = pd.to_datetime(df['send_time'], unit='s')
 df['content'] = df['content'].astype(str)
 
@@ -26,7 +27,7 @@ print(f"总弹幕数量: {len(df)}")
 print(f"数据列数: {len(df.columns)}")
 print(f"列名: {list(df.columns)}")
 
-# 提取所有弹幕内容
+# 提取所有弹幕内容并拼接成一个字符串
 contents = df['content'].tolist()
 all_text = ' '.join(contents)
 
@@ -46,6 +47,7 @@ for word, freq in word_freq.most_common(30):
     print(f"{word}: {freq}")
 
 # 1. 时间分布图
+# 绘制弹幕按小时的时间分布柱状图
 plt.figure(figsize=(10, 6))
 df['hour'] = df['send_time'].dt.hour
 hourly_counts = df['hour'].value_counts().sort_index()
@@ -61,6 +63,7 @@ plt.show()
 print("\n时间分布图已保存为 danmu_time_distribution.png")
 
 # 2. 词云图 (使用相同的词频数据)
+# 根据词频生成词云图，并尝试使用指定字体
 plt.figure(figsize=(10, 8))
 try:
     wordcloud = WordCloud(
@@ -92,6 +95,7 @@ plt.show()
 print("\n词云图已保存为 danmu_wordcloud.png")
 
 # 3. 关键词统计图
+# 对特定关键词在弹幕中出现的次数进行统计并绘制柱状图
 plt.figure(figsize=(10, 6))
 # 定义关键词
 keywords = ['开盒', '个人信息', '电报', '缓刑', '犯罪', '法律', '处罚', '网络', '平台', '主播']
@@ -121,6 +125,7 @@ plt.show()
 print("\n关键词统计图已保存为 danmu_keyword_statistics.png")
 
 # 4. 弹幕长度分布
+# 统计每条弹幕的字符长度并绘制直方图
 plt.figure(figsize=(10, 6))
 df['content_length'] = df['content'].apply(len)
 plt.hist(df['content_length'], bins=30, color='lightgreen', edgecolor='black')
