@@ -1,5 +1,7 @@
 import requests
-from 网络安全.社工.IDCardTools.JsonFileOperator import JsonFileOperator
+
+from src.网络安全.社工.IDCardTools.JsonFileOperator import JsonFileOperator
+
 
 class QQNumberInfo:
     """
