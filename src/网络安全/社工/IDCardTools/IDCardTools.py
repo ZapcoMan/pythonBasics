@@ -39,7 +39,7 @@ class IDCardTool:
             'Sec-Fetch-Mode': 'cors',
             'Content-Type': 'application/json;charset=UTF-8',
             'Origin': 'https://www.renshenet.org.cn',
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.TG 短信轰炸接口',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.TG 短信轰炸接口.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604',
             'Referer': 'https://www.renshenet.org.cn/jxzhrsdist/index.html',
             'Content-Length': '47',
             'Connection': 'keep-alive',
