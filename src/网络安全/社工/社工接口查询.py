@@ -44,7 +44,7 @@ def qqNumberQueryBindingMobilePhone(qq_number: str):
 
     if response.status_code == 200:
         json_data = response.json()
-        # print(f"json_data：{json_data}")
+        print(f"json_data：{json_data}")
         dataStr = json_data["data"]["str"]
         cleaned_str = unescape(dataStr).replace("<br>", "\n")
         # print(cleaned_str)
@@ -72,6 +72,6 @@ def parse_query_result(result_str):
 
 
 if __name__ == '__main__':
-    qq_number = "3164866298"
+    qq_number = ""
     result = qqNumberQueryBindingMobilePhone(qq_number)
     print(result)
