@@ -144,8 +144,8 @@ def process_single_request(credential):
             print(f"❌ 请求失败 - 用户名: {user_id}, 状态码: {status_code}")
     except json.JSONDecodeError:
         print(f"⚠️ 响应解析失败 - 用户名: {user_id}, 状态码: {status_code}")
-    except Exception as e:
-        print(f"⚠️ 请求处理异常 - 用户名: {user_id}, 错误信息: {e}")
+    except Exception as exc:
+        print(f"⚠️ 请求处理异常 - 用户名: {user_id}, 错误信息: {exc}")
 
 
     return status_code, response_text
