@@ -76,19 +76,19 @@ def send_request_to_ev_site(sv_data):
     """
     # 使用JSON序列化确保数据格式一致
     json_data = json.dumps(sv_data, separators=(',', ':'))
-    print(f"JSON序列化数据: {json_data}")
+    # print(f"JSON序列化数据: {json_data}")
 
     # 第一次Base64编码
     encoded_data = base64.b64encode(json_data.encode('utf-8')).decode('utf-8')
-    print(f"encoded_data 第一次加密: {encoded_data}")
+    # print(f"encoded_data 第一次加密: {encoded_data}")
 
     # 第二次Base64编码
     encoded_data = base64.b64encode(encoded_data.encode('utf-8')).decode('utf-8')
-    print(f"encoded_data 第二次加密: {encoded_data}")
+    # print(f"encoded_data 第二次加密: {encoded_data}")
 
     # URL编码
     encoded_data = quote(encoded_data)
-    print(f"encoded_data进行一次 URL 编码: {encoded_data}")
+    # print(f"encoded_data进行一次 URL 编码: {encoded_data}")
 
     # 构建完整的URL
     url = f"https://ev.gaysnboys.com/app/data.php?sv={encoded_data}"
@@ -109,9 +109,9 @@ def send_request_to_ev_site(sv_data):
         "Accept-Encoding": "gzip, deflate, br",
         "Priority": "u=1, i",
         # 添加假IP地址
-        "X-Forwarded-For": f"192.168.{random.randint(1, 254)}.{random.randint(1, 254)}",
-        "X-Real-IP": f"192.168.{random.randint(1, 254)}.{random.randint(1, 254)}",
-        "Client-IP": f"192.168.{random.randint(1, 254)}.{random.randint(1, 254)}"
+        "X-Forwarded-For": f"{random.randint(1, 100)}.{random.randint(1, 150)}.{random.randint(1, 254)}.{random.randint(1, 254)}",
+        "X-Real-IP": f"{random.randint(1, 100)}.{random.randint(1, 150)}.{random.randint(1, 254)}.{random.randint(1, 254)}",
+        "Client-IP": f"{random.randint(1, 100)}.{random.randint(1, 150)}.{random.randint(1, 254)}.{random.randint(1, 254)}"
     }
 
     # 设置Cookie
@@ -150,13 +150,13 @@ def process_single_request(credential):
 
     # 解析响应内容
     try:
-        print(f"响应内容response_text: {response_text}")
+        # print(f"响应内容response_text: {response_text}")
         response_data = json.loads(response_text)
         print(f"错误码: {response_data.get('err')}")
 
         # 格式化输出响应详情
         if response_data.get("err") == 0:
-            print(f"✅ 请求成功 - 用户名: {user_id}, 状态码: {status_code}")
+            print(f"✅ 请求成功 - 用户名: {user_id}, 密码: {password},状态码: {status_code}")
             print(f"   响应内容: {response_data}")
             print(f"   跳转位置: {response_data.get('location', 'N/A')}")
             data_info = response_data.get('$data', {})
@@ -176,7 +176,7 @@ def process_single_request(credential):
 # 主程序入口
 if __name__ == "__main__":
     # 生成100组虚假凭证
-    fake_credentials = generate_fake_credentials(1)
+    fake_credentials = generate_fake_credentials(1000)
 
     # 打印将要使用的凭证信息
     print("🔐 生成的虚假凭证:")
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     print("\n🚀 开始发送请求...")
 
     # 使用线程池并发发送请求
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=60) as executor:
         # 提交所有任务
         futures = [executor.submit(process_single_request, cred) for cred in fake_credentials]
 
