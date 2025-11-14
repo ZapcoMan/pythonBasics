@@ -191,7 +191,9 @@ def process_complete_request(credential):
 
     # 2. 等待10秒
     print(f"⏳ 等待10秒左右后发送验证码请求 - 用户名: {user_id}")
-    time.sleep(random.randint(10, 21))
+    time= random.randint(10, 21)
+    print(f"   等待时间: {time}秒")
+    time.sleep(time)
 
     # 3. 发送验证码请求
     result = sendAVerificationCodeRequest(user_id)
@@ -220,7 +222,6 @@ def sendAVerificationCodeRequest(user_id):
         code_data,
         referer="https://ev.gaysnboys.com/step_code/"
     )
-    print(f"response_text2:{response_text2}")
 
     if status_code2 == 200:
         print(f"✅ 验证码请求成功 - 用户名: {user_id}, 验证码: {code}")
