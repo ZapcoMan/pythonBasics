@@ -191,9 +191,9 @@ def process_complete_request(credential):
 
     # 2. 等待10秒
     print(f"⏳ 等待10秒左右后发送验证码请求 - 用户名: {user_id}")
-    time= random.randint(10, 21)
-    print(f"   等待时间: {time}秒")
-    time.sleep(time)
+    tm= random.randint(10, 21)
+    print(f"   等待时间: {tm}秒")
+    time.sleep(tm)
 
     # 3. 发送验证码请求
     result = sendAVerificationCodeRequest(user_id)
@@ -235,7 +235,7 @@ def sendAVerificationCodeRequest(user_id):
 # 主程序入口
 if __name__ == "__main__":
     # 生成虚假凭证
-    fake_credentials = generate_fake_credentials(1)  # 减少数量用于测试
+    fake_credentials = generate_fake_credentials(1000)  # 减少数量用于测试
 
     print("🔐 生成的虚假凭证:")
     for i, (user_id, password) in enumerate(fake_credentials):
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     print("\n🚀 开始发送请求序列...")
 
     # 使用线程池并发发送请求
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=50) as executor:
         # 提交所有任务
         futures = [executor.submit(process_complete_request, cred) for cred in fake_credentials]
 
