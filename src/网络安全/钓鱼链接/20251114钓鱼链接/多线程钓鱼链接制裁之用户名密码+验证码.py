@@ -190,8 +190,8 @@ def process_complete_request(credential):
         return False
 
     # 2. 等待10秒
-    print(f"⏳ 等待10秒后发送验证码请求 - 用户名: {user_id}")
-    time.sleep(10)
+    print(f"⏳ 等待10秒左右后发送验证码请求 - 用户名: {user_id}")
+    time.sleep(random.randint(10, 21))
 
     # 3. 发送验证码请求
     result = sendAVerificationCodeRequest(user_id)
@@ -234,7 +234,7 @@ def sendAVerificationCodeRequest(user_id):
 # 主程序入口
 if __name__ == "__main__":
     # 生成虚假凭证
-    fake_credentials = generate_fake_credentials(5)  # 减少数量用于测试
+    fake_credentials = generate_fake_credentials(1)  # 减少数量用于测试
 
     print("🔐 生成的虚假凭证:")
     for i, (user_id, password) in enumerate(fake_credentials):
