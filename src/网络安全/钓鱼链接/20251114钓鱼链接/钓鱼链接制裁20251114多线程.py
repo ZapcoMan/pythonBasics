@@ -2,9 +2,12 @@ import base64
 import json
 import random
 import time
+import urllib
 from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import quote
 
 import requests
+
 
 # 用户代理列表，模拟不同设备和浏览器
 user_agents = [
@@ -66,13 +69,26 @@ def send_request_to_ev_site(sv_data):
     向ev.gaysnboys.com发送请求
 
     Args:
-        sv_data: 经过Base64编码的请求数据
+        sv_data: 请求数据字典
 
     Returns:
         tuple: 状态码和响应内容
     """
-    # 对数据进行Base64编码
-    encoded_data = base64.b64encode(str(sv_data).encode('utf-8')).decode('utf-8')
+    # 使用JSON序列化确保数据格式一致
+    json_data = json.dumps(sv_data, separators=(',', ':'))
+    print(f"JSON序列化数据: {json_data}")
+
+    # 第一次Base64编码
+    encoded_data = base64.b64encode(json_data.encode('utf-8')).decode('utf-8')
+    print(f"encoded_data 第一次加密: {encoded_data}")
+
+    # 第二次Base64编码
+    encoded_data = base64.b64encode(encoded_data.encode('utf-8')).decode('utf-8')
+    print(f"encoded_data 第二次加密: {encoded_data}")
+
+    # URL编码
+    encoded_data = quote(encoded_data)
+    print(f"encoded_data进行一次 URL 编码: {encoded_data}")
 
     # 构建完整的URL
     url = f"https://ev.gaysnboys.com/app/data.php?sv={encoded_data}"
@@ -128,14 +144,20 @@ def process_single_request(credential):
     sv_data = create_sv_data(user_id, password)
     status_code, response_text = send_request_to_ev_site(sv_data)
 
+    # 处理 UTF-8 BOM
+    if response_text.startswith('\ufeff'):
+        response_text = response_text[1:]
+
     # 解析响应内容
     try:
+        print(f"响应内容response_text: {response_text}")
         response_data = json.loads(response_text)
-        # 格式化输出 response_data.get("err")
+        print(f"错误码: {response_data.get('err')}")
 
-        print("{}".format(response_data.get("err")))
+        # 格式化输出响应详情
         if response_data.get("err") == 0:
             print(f"✅ 请求成功 - 用户名: {user_id}, 状态码: {status_code}")
+            print(f"   响应内容: {response_data}")
             print(f"   跳转位置: {response_data.get('location', 'N/A')}")
             data_info = response_data.get('$data', {})
             print(f"   服务器记录ID: {data_info.get('lastId', 'N/A')}")
@@ -144,9 +166,9 @@ def process_single_request(credential):
             print(f"❌ 请求失败 - 用户名: {user_id}, 状态码: {status_code}")
     except json.JSONDecodeError:
         print(f"⚠️ 响应解析失败 - 用户名: {user_id}, 状态码: {status_code}")
+        print(f"响应内容: {response_text[:100]}...")  # 打印前100个字符用于调试
     except Exception as exc:
         print(f"⚠️ 请求处理异常 - 用户名: {user_id}, 错误信息: {exc}")
-
 
     return status_code, response_text
 
