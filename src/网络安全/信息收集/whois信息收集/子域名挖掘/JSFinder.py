@@ -1,50 +1,66 @@
 #!/usr/bin/env python"
 # coding: utf-8
-# By Threezh1
+# 作者：Threezh1
 # https://threezh1.github.io/
+# 来自开源脚本：https://github.com/Threezh1/JSFinder
 
 import requests, argparse, sys, re
-from requests.packages import urllib3
+import urllib3
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(epilog='\tExample: \r\npython ' + sys.argv[0] + " -u http://www.baidu.com")
-    parser.add_argument("-u", "--url", help="The website")
-    parser.add_argument("-c", "--cookie", help="The website cookie")
-    parser.add_argument("-f", "--file", help="The file contains url or js")
-    parser.add_argument("-ou", "--outputurl", help="Output file name. ")
-    parser.add_argument("-os", "--outputsubdomain", help="Output file name. ")
-    parser.add_argument("-j", "--js", help="Find in js file", action="store_true")
-    parser.add_argument("-d", "--deep", help="Deep find", action="store_true")
+    """
+    解析命令行参数
+
+    Returns:
+        Namespace: 包含所有解析后的命令行参数的对象
+    """
+    parser = argparse.ArgumentParser(epilog='\t示例: \r\npython ' + sys.argv[0] + " -u http://www.baidu.com")
+    parser.add_argument("-u", "--url", help="目标网站")
+    parser.add_argument("-c", "--cookie", help="网站Cookie")
+    parser.add_argument("-f", "--file", help="包含URL或JS的文件")
+    parser.add_argument("-ou", "--outputurl", help="输出文件名")
+    parser.add_argument("-os", "--outputsubdomain", help="输出文件名")
+    parser.add_argument("-j", "--js", help="在JS文件中查找", action="store_true")
+    parser.add_argument("-d", "--deep", help="深度查找", action="store_true")
     return parser.parse_args()
 
 
-# Regular expression comes from https://github.com/GerbenJavado/LinkFinder
+# 正则表达式来源于 https://github.com/GerbenJavado/LinkFinder
 def extract_URL(JS):
+    """
+    从JavaScript代码中提取URL链接
+
+    Args:
+        JS (str): JavaScript代码字符串
+
+    Returns:
+        list: 提取出的URL列表
+    """
     pattern_raw = r"""
-	  (?:"|')                               # Start newline delimiter
+	  (?:"|')                               # 开始换行分隔符
 	  (
-	    ((?:[a-zA-Z]{1,10}://|//)           # Match a scheme [a-Z]*1-10 or //
-	    [^"'/]{1,}\.                        # Match a domainname (any character + dot)
-	    [a-zA-Z]{2,}[^"']{0,})              # The domainextension and/or path
+	    ((?:[a-zA-Z]{1,10}://|//)           # 匹配协议 [a-Z]*1-10 或 //
+	    [^"'/]{1,}\.                        # 匹配域名 (任意字符 + 点)
+	    [a-zA-Z]{2,}[^"']{0,})              # 域名扩展和/或路径
 	    |
-	    ((?:/|\.\./|\./)                    # Start with /,../,./
-	    [^"'><,;| *()(%%$^/\\\[\]]          # Next character can't be...
-	    [^"'><,;|()]{1,})                   # Rest of the characters can't be
+	    ((?:/|\.\./|\./)                    # 以 /,../,./ 开始
+	    [^"'><,;| *()(%%$^/\\\[\]]          # 下一个字符不能是...
+	    [^"'><,;|()]{1,})                   # 其余字符不能是
 	    |
-	    ([a-zA-Z0-9_\-/]{1,}/               # Relative endpoint with /
-	    [a-zA-Z0-9_\-/]{1,}                 # Resource name
-	    \.(?:[a-zA-Z]{1,4}|action)          # Rest + extension (length 1-4 or action)
-	    (?:[\?|/][^"|']{0,}|))              # ? mark with parameters
+	    ([a-zA-Z0-9_\-/]{1,}/               # 带/的相对端点
+	    [a-zA-Z0-9_\-/]{1,}                 # 资源名称
+	    \.(?:[a-zA-Z]{1,4}|action)          # 剩余部分 + 扩展名 (长度1-4或action)
+	    (?:[\?|/][^"|']{0,}|))              # ? 标记带参数
 	    |
-	    ([a-zA-Z0-9_\-]{1,}                 # filename
+	    ([a-zA-Z0-9_\-]{1,}                 # 文件名
 	    \.(?:php|asp|aspx|jsp|json|
-	         action|html|js|txt|xml)             # . + extension
-	    (?:\?[^"|']{0,}|))                  # ? mark with parameters
+	         action|html|js|txt|xml)             # . + 扩展名
+	    (?:\?[^"|']{0,}|))                  # ? 标记带参数
 	  )
-	  (?:"|')                               # End newline delimiter
+	  (?:"|')                               # 结束换行分隔符
 	"""
     pattern = re.compile(pattern_raw, re.VERBOSE)
     result = re.finditer(pattern, str(JS))
@@ -55,8 +71,17 @@ def extract_URL(JS):
             if match.group() not in js_url]
 
 
-# Get the page source
+# 获取页面源码
 def Extract_html(URL):
+    """
+    获取指定URL的页面源码
+
+    Args:
+        URL (str): 目标网页URL
+
+    Returns:
+        str: 页面HTML源码，如果获取失败则返回None
+    """
     header = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36",
         "Cookie": args.cookie}
@@ -68,9 +93,19 @@ def Extract_html(URL):
         return None
 
 
-# Handling relative URLs
+# 处理相对URL
 def process_url(URL, re_URL):
-    black_url = ["javascript:"]  # Add some keyword for filter url.
+    """
+    处理相对URL，将其转换为绝对URL
+
+    Args:
+        URL (str): 基础URL
+        re_URL (str): 需要处理的相对URL
+
+    Returns:
+        str: 转换后的绝对URL
+    """
+    black_url = ["javascript:"]  # 添加一些关键字用于过滤URL
     URL_raw = urlparse(URL)
     ab_URL = URL_raw.netloc
     host_URL = URL_raw.scheme
@@ -95,6 +130,16 @@ def process_url(URL, re_URL):
 
 
 def find_last(string, str):
+    """
+    查找字符串中某个子串的所有出现位置
+
+    Args:
+        string (str): 源字符串
+        str (str): 要查找的子串
+
+    Returns:
+        list: 所有匹配位置的索引列表
+    """
     positions = []
     last_position = -1
     while True:
@@ -106,14 +151,24 @@ def find_last(string, str):
 
 
 def find_by_url(url, js=False):
+    """
+    通过URL查找其中包含的链接
+
+    Args:
+        url (str): 目标网站URL
+        js (bool): 是否只在JS文件中查找，默认False
+
+    Returns:
+        list: 找到的URL列表
+    """
     if js == False:
         try:
-            print("url:" + url)
+            print("网址:" + url)
         except:
-            print("Please specify a URL like https://www.baidu.com")
+            print("请指定一个URL，例如 https://www.baidu.com")
         html_raw = Extract_html(url)
         if html_raw == None:
-            print("Fail to access " + url)
+            print("无法访问 " + url)
             return None
         # print(html_raw)
         html = BeautifulSoup(html_raw, "html.parser")
@@ -154,6 +209,16 @@ def find_by_url(url, js=False):
 
 
 def find_subdomain(urls, mainurl):
+    """
+    从URL列表中提取子域名
+
+    Args:
+        urls (list): URL列表
+        mainurl (str): 主域名URL
+
+    Returns:
+        list: 子域名列表
+    """
     url_raw = urlparse(mainurl)
     domain = url_raw.netloc
     miandomain = domain
@@ -172,9 +237,18 @@ def find_subdomain(urls, mainurl):
 
 
 def find_by_url_deep(url):
+    """
+    深度查找URL中的链接（递归查找页面中的链接）
+
+    Args:
+        url (str): 目标网站URL
+
+    Returns:
+        list: 找到的所有URL列表
+    """
     html_raw = Extract_html(url)
     if html_raw == None:
-        print("Fail to access " + url)
+        print("无法访问 " + url)
         return None
     html = BeautifulSoup(html_raw, "html.parser")
     html_as = html.findAll("a")
@@ -186,13 +260,13 @@ def find_by_url_deep(url):
         if link not in links:
             links.append(link)
     if links == []: return None
-    print("ALL Find " + str(len(links)) + " links")
+    print("总共找到 " + str(len(links)) + " 个链接")
     urls = []
     i = len(links)
     for link in links:
         temp_urls = find_by_url(link)
         if temp_urls == None: continue
-        print("Remaining " + str(i) + " | Find " + str(len(temp_urls)) + " URL in " + link)
+        print("剩余 " + str(i) + " | 在 " + link + " 中找到 " + str(len(temp_urls)) + " 个URL")
         for temp_url in temp_urls:
             if temp_url not in urls:
                 urls.append(temp_url)
@@ -201,10 +275,20 @@ def find_by_url_deep(url):
 
 
 def find_by_file(file_path, js=False):
+    """
+    从文件中读取URL并查找其中的链接
+
+    Args:
+        file_path (str): 包含URL的文件路径
+        js (bool): 是否只在JS文件中查找，默认False
+
+    Returns:
+        list: 找到的URL列表
+    """
     with open(file_path, "r") as fobject:
         links = fobject.read().split("\n")
     if links == []: return None
-    print("ALL Find " + str(len(links)) + " links")
+    print("总共找到 " + str(len(links)) + " 个链接")
     urls = []
     i = len(links)
     for link in links:
@@ -213,7 +297,7 @@ def find_by_file(file_path, js=False):
         else:
             temp_urls = find_by_url(link, js=True)
         if temp_urls == None: continue
-        print(str(i) + " Find " + str(len(temp_urls)) + " URL in " + link)
+        print(str(i) + " 在 " + link + " 中找到 " + str(len(temp_urls)) + " 个URL")
         for temp_url in temp_urls:
             if temp_url not in urls:
                 urls.append(temp_url)
@@ -222,29 +306,36 @@ def find_by_file(file_path, js=False):
 
 
 def giveresult(urls, domian):
+    """
+    输出结果并保存到文件
+
+    Args:
+        urls (list): URL列表
+        domian (str): 主域名
+    """
     if urls == None:
         return None
-    print("Find " + str(len(urls)) + " URL:")
+    print("找到 " + str(len(urls)) + " 个URL:")
     content_url = ""
     content_subdomain = ""
     for url in urls:
         content_url += url + "\n"
         print(url)
     subdomains = find_subdomain(urls, domian)
-    print("\nFind " + str(len(subdomains)) + " Subdomain:")
+    print("\n找到 " + str(len(subdomains)) + " 个子域名:")
     for subdomain in subdomains:
         content_subdomain += subdomain + "\n"
         print(subdomain)
     if args.outputurl != None:
         with open(args.outputurl, "a", encoding='utf-8') as fobject:
             fobject.write(content_url)
-        print("\nOutput " + str(len(urls)) + " urls")
-        print("Path:" + args.outputurl)
+        print("\n输出 " + str(len(urls)) + " 个URL")
+        print("路径:" + args.outputurl)
     if args.outputsubdomain != None:
         with open(args.outputsubdomain, "a", encoding='utf-8') as fobject:
             fobject.write(content_subdomain)
-        print("\nOutput " + str(len(subdomains)) + " subdomains")
-        print("Path:" + args.outputsubdomain)
+        print("\n输出 " + str(len(subdomains)) + " 个子域名")
+        print("路径:" + args.outputsubdomain)
 
 
 if __name__ == "__main__":
