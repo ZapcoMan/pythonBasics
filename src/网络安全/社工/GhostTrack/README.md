@@ -1,24 +1,24 @@
 # GhostTrack
-Useful tool to track location or mobile number, so this tool can be called osint or also information gathering
+用于追踪位置或手机号码的实用工具，因此此工具可以称为OSINT或信息收集工具
 
 <img src="https://github.com/HunxByts/GhostTrack/blob/main/asset/bn.png"/>
 
-New update :
-```Version 2.2```
+新更新：
+```版本 2.2```
 
-### Instalation on Linux (deb)
+### 在Linux (deb)上安装
 ```
 sudo apt-get install git
 sudo apt-get install python3
 ```
 
-### Instalation on Termux
+### 在Termux上安装
 ```
 pkg install git
 pkg install python3
 ```
 
-### Usage Tool
+### 使用工具
 ```
 git clone https://github.com/HunxByts/GhostTrack.git
 cd GhostTrack
@@ -26,28 +26,28 @@ pip3 install -r requirements.txt
 python3 GhostTR.py
 ```
 
-Display on the menu ```IP Tracker```
+菜单显示 ```IP追踪器```
 
 <img src="https://github.com/HunxByts/GhostTrack/blob/main/asset/ip.png " />
 
-on the IP Track menu, you can combo with the seeker tool to get the target IP
+在IP追踪菜单中，您可以与seeker工具配合使用以获取目标IP
 <details>
-<summary>:zap: Install Seeker :</summary>
-- <strong><a href="https://github.com/thewhiteh4t/seeker">Get Seeker</a></strong>
+<summary>:zap: 安装Seeker：</summary>
+- <strong><a href="https://github.com/thewhiteh4t/seeker">获取Seeker</a></strong>
 </details>
 
-Display on the menu ```Phone Tracker```
+菜单显示 ```手机追踪器```
 
 <img src="https://github.com/HunxByts/GhostTrack/blob/main/asset/phone.png" />
 
-on this menu you can search for information from the target phone number
+在此菜单中，您可以搜索目标手机号码的信息
 
-Display on the menu ```Username Tracker```
+菜单显示 ```用户名追踪器```
 
 <img src="https://github.com/HunxByts/GhostTrack/blob/main/asset/User.png"/>
-on this menu you can search for information from the target username on social media
+在此菜单中，您可以搜索目标社交媒体用户名的信息
 
 <details>
-<summary>:zap: Author :</summary>
+<summary>:zap: 作者：</summary>
 - <strong><a href="https://github.com/HunxByts">HunxByts</a></strong>
 </details>
