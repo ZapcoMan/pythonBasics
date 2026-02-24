@@ -1,3 +1,6 @@
+去重后的UP主关注列表:
+==================================================
+
 1. 央视新闻 - https://space.bilibili.com/456664753
 2. Liam造物集 - https://space.bilibili.com/3546883194620610
 3. DeeLMind - https://space.bilibili.com/282616786
@@ -671,3 +674,4 @@
 671. 学神科技 - https://space.bilibili.com/360229124
 672. 柒支笔 - https://space.bilibili.com/330851665
 
+总计: 672 个唯一的UP主
