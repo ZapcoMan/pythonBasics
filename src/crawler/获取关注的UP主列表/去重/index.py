@@ -70,7 +70,8 @@ def save_deduplicated_list(up_list, output_file):
         print(f"保存文件时出错: {e}")
         return False
 
-def main():
+
+if __name__ == "__main__":
     # 文件路径
     file1 = r'E:\python\Python_project\pythonBasics\src\crawler\获取关注的UP主列表\BeginningAll_bilibili_followingsList.txt'
     file2 = r'E:\python\Python_project\pythonBasics\src\crawler\获取关注的UP主列表\WallyVibe_bilibili_followings_List.txt'
@@ -113,7 +114,4 @@ def main():
     print(f"总记录数: {total_records}")
     print(f"唯一记录数: {unique_records}")
     print(f"重复记录数: {duplicate_count}")
-    print(f"重复率: {duplicate_count/total_records*100:.2f}%")
-
-if __name__ == "__main__":
-    main()
+    print(f"重复率: {duplicate_count / total_records * 100:.2f}%")
