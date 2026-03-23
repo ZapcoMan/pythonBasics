@@ -3,7 +3,7 @@ import random
 import requests
 
 # Bilibili API URL for fetching reply data
-Url = 'https://api.bilibili.com/x/v2/reply/wbi/main?oid=113655756687306&type=1&mode=2&pagination_str=%7B%22offset%22:%22%22%7D&plat=1&seek_rpid=&web_location=1315875&w_rid=e4daf57743e496a55b309acfdd0a9e71&wts=1734759477'
+Url = 'https://api.bilibili.com/x/v2/reply/wbi/main?oid=115677092512169&type=1&mode=3&pagination_str=%7B%22offset%22:%22%22%7D&plat=1&seek_rpid=&web_location=1315875&w_rid=f3f3779e36f2e7dee6095fd18cd0b3b6&wts=1774276504'
 
 # User-Agent 列表，用于模拟不同的浏览器请求
 user_agents = [
@@ -20,7 +20,7 @@ user_agents = [
 # 构造请求头，包含随机选择的User-Agent和Cookie信息
 headers = {
     'User-Agent': random.choice(user_agents),
-    'Cookie': 'buvid3=7C93E44A-C719-6970-D124-BC5EF99BF56951575infoc; b_nut=1716979951; _uuid=666D6255-BEF2-31E9-ADA10-8493AECFE103567005infoc; buvid4=6B2DB6B3-E845-7845-0D7D-0B2F894E4C0387063-024052910-IFYHw%2B%2B0jr49dnp%2FUT8KwA%3D%3D; enable_web_push=DISABLE; rpdid=|(kJk|R~lkR0J\'u~u~R|kR~J; header_theme_version=CLOSE; buvid_fp_plain=undefined; hit-dyn-v2=1; LIVE_BUVID=AUTO2917233493264529; DedeUserID=544166891; DedeUserID__ckMd5=ed1a512ca38f5634; fingerprint=68f1dd695365b2fefe6aa752774377d7; buvid_fp=68f1dd695365b2fefe6aa752774377d7; browser_resolution=1280-639; home_feed_column=4; CURRENT_FNVAL=16; PVID=3; CURRENT_QUALITY=64; bp_t_offset_544166891=1011755657688252416; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ4NjAxNDUsImlhdCI6MTczNDYwMDg4OCwicGx0IjotMX0.JFhbpYGewyeVcvMPuf1Z_pwqRCAMc9QHvm9tZMBC078; bili_ticket_expires=1734860088; SESSDATA=723116a3%2C1750152949%2C9ebb5%2Ac2CjDXKT05CWeJb_-kaEFK6ShLafDL40CeK-as4ueBdBRq_J3eG_jzSiBE-KexQUlL5xQSVm1DempoTWxzVWFiLW1NbzJRYXRUUEYwbkNiWEh6TzhrN1JvelpFMEpTZ0pZVkE5MVVEU1o3SW4yS1RxT1k0NE56Q2c5SExJRUxxcWs4c0J3dHVPQnV3IIEC; bili_jct=3f4a6807feb2e2e6ba416b2696bbc48f;'
+    'Cookie': 'buvid3=FD4ACF55-91A3-A459-A0DB-DA90BBAA05FC75428infoc; b_nut=1771763275; _uuid=FBEABAA3-E10CF-BC45-2418-B75B106B5887580244infoc; buvid_fp=3863b9b4df3df55879de9f6cfc34c840; buvid4=28826CB1-6960-F560-5246-3687B13BEAC584835-026022220-hYYTO9YdfwGYr9pHQiiuU6vMM0itERjpuOVL4siYW1wB2i4sA9sGzuJgnM5VjO0O; rpdid=0zbfAHP0Ty|VILTYSbF|4bY|3w1VU8zP; SESSDATA=00b6ac65%2C1787323867%2C2ea7d%2A22CjDs_Ry6CslJPgxAGvc9RcwrdpHvDx5W_0bTbmXnyOzOzbyvtCzMw77yHICa2J-C1jsSVktEM25iSDJ3Wkw3X3pXWmpaRWlMbkZySnU3UF96bEh3VHNFb1BXNmxoYVhkWXM0a3ZXT2p2cC1ZbXhYZWVibXR1akh3bGhzUThKcUdRR3Rjc25IMHNnIIEC; bili_jct=d41ce5b5fd53688682a21bfcb643e5a9; DedeUserID=544166891; DedeUserID__ckMd5=ed1a512ca38f5634; sid=77usnso0; theme-tip-show=SHOWED; theme-avatar-tip-show=SHOWED; theme-switch-show=SHOWED; theme_style=dark; CURRENT_QUALITY=80; hit-dyn-v2=1; PVID=1; LIVE_BUVID=AUTO8617720258274935; home_feed_column=5; bp_t_offset_544166891=1182941053968187392; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzQ1MjUzNDYsImlhdCI6MTc3NDI2NjA4NiwicGx0IjotMX0.J31oB-DKqP7-zR-z0T_JiFo3uGKyU8K4fgkNWiCr7Fs; bili_ticket_expires=1774525286; browser_resolution=2560-1271; CURRENT_FNVAL=4048; share_source_origin=COPY; bsource=share_source_copy_link; b_lsid=CB7DB197_19D1B1EE938'
 }
 
 # 发起GET请求，获取数据
