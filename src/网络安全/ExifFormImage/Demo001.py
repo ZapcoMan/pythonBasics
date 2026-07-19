@@ -57,7 +57,10 @@ def parse_gps_info(gps_raw):
     # 解析海拔
     if "GPSAltitude" in gps:
         alt = gps["GPSAltitude"]
-        altitude = float(alt[0]) / float(alt[1]) if alt[1] else float(alt)
+        if isinstance(alt, tuple) and len(alt) == 2:
+            altitude = float(alt[0]) / float(alt[1]) if alt[1] else float(alt[0])
+        else:
+            altitude = float(alt)
         if gps.get("GPSAltitudeRef") == 1:
             altitude = -altitude
 
