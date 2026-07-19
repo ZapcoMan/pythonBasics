@@ -72,6 +72,6 @@ def parse_query_result(result_str):
 
 
 if __name__ == '__main__':
-    qq_number = ""
+    qq_number = "172683008"
     result = qqNumberQueryBindingMobilePhone(qq_number)
     print(result)
