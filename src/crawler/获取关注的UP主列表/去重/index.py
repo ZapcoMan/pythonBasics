@@ -237,9 +237,10 @@ if __name__ == "__main__":
         print("=" * 40)
         
         # 文件路径
-        file1 = r'E:\python\Python_project\pythonBasics\src\crawler\获取关注的UP主列表\BeginningAll_bilibili_followingsList.txt'
-        file2 = r'E:\python\Python_project\pythonBasics\src\crawler\获取关注的UP主列表\WallyVibe_bilibili_followings_List.txt'
-        output_file = r'E:\python\Python_project\pythonBasics\src\crawler\获取关注的UP主列表\deduplicated_up_list.txt'
+        # E:\python\Python_project\01_My_Projects\pythonBasics\src\crawler\获取关注的UP主列表\去重\index.py
+        file1 = r'E:\python\Python_project\01_My_Projects\pythonBasics\src\crawler\获取关注的UP主列表\BeginningAll_bilibili_followingsList.txt'
+        file2 = r'E:\python\Python_project\01_My_Projects\pythonBasics\src\crawler\获取关注的UP主列表\WallyVibe_bilibili_followings_List.txt'
+        output_file = r'E:\python\Python_project\01_My_Projects\pythonBasics\src\crawler\获取关注的UP主列表\deduplicated_up_list.txt'
 
         print("开始读取UP主列表文件...")
 
