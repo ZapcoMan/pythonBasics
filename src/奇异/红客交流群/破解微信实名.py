@@ -22,7 +22,7 @@ last = input("请输入名字的最后一个字:").strip()
 
 names = [f"{first}{middle}{last}" for middle in valid_surnames]
 
-with open('文文查档.txt', 'w', encoding='utf-8') as f:
+with open('查档.txt', 'w', encoding='utf-8') as f:
     f.write('\n'.join(names))
 
 print(f"已生成{len(names)}个名字,保存至文文查档.txt")
