@@ -247,7 +247,7 @@ def run_demo(hao: AsymmetricRSA, message: str) -> None:
           f"(发送方私钥签名 / 接收方公钥加密)")
 
     artifact = hao.encrypt(message, alice_pub, sender_private_key=bob_priv)
-    print(f"最终加密结果(单件): {artifact[:76]}...")
+    print(f"最终加密结果(单件): {artifact}")
     print(f"单件长度          : {len(artifact)} 字符 "
           f"(内含: 封装的会话密钥 + nonce + 密文 + 签名)")
 

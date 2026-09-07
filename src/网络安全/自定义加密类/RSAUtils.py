@@ -307,6 +307,7 @@ if __name__ == "__main__":
         tool = RSAUtils(key_dir=tmp)
         packet = tool.encrypt("自动生成密钥对并加密 —— 工具类自检")
         print("密文包信息:", tool.peek(packet))
+        print("密文包全文:", packet)
         print("本机私钥  :", tool.list_keys())
         print("解密还原  :", tool.decrypt(packet))
         sig = tool.sign(b"contract text")
