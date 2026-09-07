@@ -8,7 +8,7 @@ RSA-2048 + OAEP + PSS + AES-GCM 混合加密（数字信封）
     1) 密钥要怎么做?
        非对称的密钥不是双方"约定"出来的，而是接收方在本地"生成一对":
             generate_keypair()  ->  私钥(打死不外传) + 公钥(可以满世界发)
-       私钥存成 name.vibe(可加口令)，公钥存成 name.pub.vibe。
+       私钥存成 name.vibe(可加口令)，公钥存成 name_pub.vibe。
        文件内容依然是标准的 PEM 文本，后缀只是我们自己套的"马甲"，
        不喜欢 .vibe 就改 KEY_SUFFIX 一行(比如 .bet / .key / .xyz)。
 
@@ -51,7 +51,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 # ---------------------------------------------------------------- 约定常量
 # 不喜欢 .pem？改这一行即可，例如 ".bet"，文件内容不受影响(PEM 文本不变)
 KEY_SUFFIX = ".vibe"
-PUB_SUFFIX = ".pub" + KEY_SUFFIX
+PUB_SUFFIX = "_pub" + KEY_SUFFIX         # 公钥: name_pub.vibe
 
 # 脚本所在目录，密钥文件默认落在这里
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -280,7 +280,7 @@ def run_demo(hao: AsymmetricRSA, message: str) -> None:
 def main() -> None:
     hao = AsymmetricRSA()
     print(f"非对称加密: RSA-{hao.key_size} + OAEP(SHA256) + PSS + AES-GCM 混合加密")
-    print(f"密钥文件后缀: {KEY_SUFFIX} / {PUB_SUFFIX}  (不喜欢？改 KEY_SUFFIX 一行)")
+    print(f"密钥文件: 私钥 name{KEY_SUFFIX} / 公钥 name{PUB_SUFFIX}  (不喜欢？改 KEY_SUFFIX 一行)")
 
     if "--demo" in sys.argv:
         run_demo(hao, "举头望明月，低头思故乡 —— 非对称加密测试")
