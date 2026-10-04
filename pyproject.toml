@@ -1,9 +1,13 @@
 [project]
-name = "pythonBasics"
-version = "3.0.0"
+name = "pythonbasics"
+version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = [
-
+authors = [
+    { name = "zapcoman", email = "3217277135@qq.com" }
 ]
+requires-python = ">=3.13"
+dependencies = []
+
+
+
