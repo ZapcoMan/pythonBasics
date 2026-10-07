@@ -1,3 +1,12 @@
+"""
+NPS 未授权访问漏洞检测脚本（Clash 自动切换融合版）
+
+原始作者: ifory
+Clash 自动切换融合: codervibe & ZapcoMan
+说明: 在原 NPS 未授权访问检测 POC 基础上，融合复用 crawler/clash_auto_switch_service
+      的 Clash 代理自动轮换服务，使扫描流量可经 Clash 出口并自动切换节点。
+"""
+
 import hashlib
 import json
 import os
@@ -180,7 +189,8 @@ def banner():
  |_| \_| .__/|___/  \____/|_| |_|\__,_|\__,_|\__|_| |_|\___/|_|  |_/___\___|\__,_| |_____/ \___\__,_|_| |_|
        | |                                                                                                 
        |_|                                                                                                                                                                                          
-    nps未授权访问漏洞检测脚本 v1.1          by:ifory                                        
+    nps未授权访问漏洞检测脚本 v1.1          原始作者: ifory
+    Clash 自动切换融合: codervibe & ZapcoMan                                        
 """)
 
 
