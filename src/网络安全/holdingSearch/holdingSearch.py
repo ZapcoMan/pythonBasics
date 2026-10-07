@@ -1,6 +1,7 @@
 # -*- coding = utf-8 -*-
 # @Time  : 2023/3/13 16:09
 # @Author: Ifory
+# @Modify: codervibe & ZapcoMan
 # @File  : aqc.py
 
 """
@@ -8,7 +9,7 @@
 
 【功能】
     获取对应公司在爱企查平台上的 50% 及以上控股企业名称数据。
-    部分代码参考自：ENScan（https://github.com/wgpsec/ENScan）
+    部分代码参考自：ENScan（https://github.com/wgpsec/ENScan） 【这个仓库已经被删除了】
 
 【使用方法】
     1、首先爱企查账号必须有爱企查会员权限。
@@ -272,6 +273,7 @@ class EnterInfoSearch(object):
 |_| |_|\___/ \_)____|_|_| |_|\___ (______/|_____)_____|_|   \____)_| |_|
                             (_____|                                     
                                                             by:foyaga
+                                    整理/修改: codervibe & ZapcoMan
         """)
         parser = argparse.ArgumentParser()
         parser.add_argument('-f', dest='file', help='导入文件批量查询')
